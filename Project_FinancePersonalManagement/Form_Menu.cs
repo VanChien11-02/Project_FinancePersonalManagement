@@ -40,7 +40,7 @@ namespace Project_FinancePersonalManagement
 
         private void Form_Menu_Load(object sender, EventArgs e)
         {
-            // Khi form mới mở lên: Tắt hết menu, hiện trạng thái chưa đăng nhập
+             // Khi form mới mở lên: Tắt hết menu, hiện trạng thái chưa đăng nhập
             ToggleMenu(false);
             lblUser.Text = "Chưa đăng nhập";
             lblStatus.Text = "Cơ sở dữ liệu: Chưa kết nối";
@@ -49,7 +49,7 @@ namespace Project_FinancePersonalManagement
 
         private void LoadDashboard()
         {
-            // Mở kết nối CSDL bằng LINQ
+              // Mở kết nối CSDL bằng LINQ
             using (DB_SystemDataContext db = new DB_SystemDataContext())
             {
                 try

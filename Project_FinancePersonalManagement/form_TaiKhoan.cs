@@ -91,7 +91,7 @@ namespace Project_FinancePersonalManagement
                         decimal soDuMin = userAccounts.Min(a => (decimal)a.Balance);
                         decimal soDuMax = userAccounts.Max(a => (decimal)a.Balance);
 
-                        // Đổ dữ liệu lên giao diện (Format N0 thêm dấu phẩy)
+                         // Đổ dữ liệu lên giao diện (Format N0 thêm dấu phẩy)
                         lblTongSoDu.Text = tongSoDu.ToString("N0") + " VNĐ";
                         lblSoDuTB.Text = soDuTB.ToString("N0") + " VNĐ";
                         lblSoDuMin.Text = soDuMin.ToString("N0") + " VNĐ";
