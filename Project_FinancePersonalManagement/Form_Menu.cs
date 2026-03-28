@@ -40,6 +40,7 @@ namespace Project_FinancePersonalManagement
 
         private void Form_Menu_Load(object sender, EventArgs e)
         {
+            //tét
              // Khi form mới mở lên: Tắt hết menu, hiện trạng thái chưa đăng nhập
             ToggleMenu(false);
             lblUser.Text = "Chưa đăng nhập";
