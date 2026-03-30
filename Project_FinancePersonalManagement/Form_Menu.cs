@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -16,112 +12,159 @@ namespace Project_FinancePersonalManagement
         private string currentUserID;
         private string currentUserName;
         private bool isLoggedIn = false;
+        private Button _activeNav;
 
         public Form_Menu()
         {
             InitializeComponent();
         }
 
-        // Bật/Tắt menu
-        private void ToggleMenu(bool status)
-        {
-            thốngKêToolStripMenuItem.Enabled = status;
-            tàiKhoànToolStripMenuItem.Enabled = status;
-            giaoDịchToolStripMenuItem.Enabled = status;
-            khoảnNợKhoànVayToolStripMenuItem.Enabled = status;
-            danhMụcToolStripMenuItem.Enabled = status;
-            ngânSáchToolStripMenuItem.Enabled = status;
-
-            đăngXuấtToolStripMenuItem.Visible = status;
-
-            đăngNhậpToolStripMenuItem.Visible = !status;
-            đăngKíToolStripMenuItem.Visible = !status;
-        }
-
+        //  LOAD / RESIZE
         private void Form_Menu_Load(object sender, EventArgs e)
         {
-            //tét
-             // Khi form mới mở lên: Tắt hết menu, hiện trạng thái chưa đăng nhập
-            ToggleMenu(false);
-            lblUser.Text = "Chưa đăng nhập";
-            lblStatus.Text = "Cơ sở dữ liệu: Chưa kết nối";
+            ToggleSidebarFeatures(false);
+            lblStatus.Text = "Sẵn sàng - chưa đăng nhập";
             time_clock.Start();
+            _activeNav = btnNav_Overview;
+            PositionUserChip();
         }
 
+        private void Form_Menu_Resize(object sender, EventArgs e)
+        {
+            PositionUserChip();
+        }
+
+        private void PositionUserChip()
+        {
+            pnlUserChip.Location = new Point(
+                pnlTopbar.Width - pnlUserChip.Width - 4, 8);
+        }
+
+        //  PAINT – stat card border
+        private void StatCard_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
+        {
+            var panel = (Panel)sender;
+            using (var pen = new Pen(Color.FromArgb(220, 220, 220), 1f))
+                e.Graphics.DrawRectangle(pen, 0, 0, panel.Width - 1, panel.Height - 1);
+        }
+
+        //  SIDEBAR HELPERS
+        private void ToggleSidebarFeatures(bool enabled)
+        {
+            btnNav_GiaoDich.Enabled = enabled;
+            btnNav_TaiKhoan.Enabled = enabled;
+            btnNav_ThongKe.Enabled = enabled;
+            btnNav_NganSach.Enabled = enabled;
+            btnNav_KhoanVay.Enabled = enabled;
+            btnNav_DanhMuc.Enabled = enabled;
+            btnNav_Overview.Enabled = enabled;
+
+            btnNav_DangXuat.Visible = enabled;
+            btnNav_DangNhap.Visible = !enabled;
+            btnNav_DangKy.Visible = !enabled;
+
+            Color disabledFg = Color.FromArgb(190, 190, 190);
+            Color enabledFg = Color.FromArgb(70, 70, 70);
+            foreach (Button btn in new[] {
+                btnNav_GiaoDich, btnNav_TaiKhoan, btnNav_ThongKe,
+                btnNav_NganSach, btnNav_KhoanVay, btnNav_DanhMuc, btnNav_Overview })
+            {
+                btn.ForeColor = enabled ? enabledFg : disabledFg;
+            }
+        }
+
+        private void SetActiveNav(Button btn)
+        {
+            if (_activeNav != null)
+            {
+                _activeNav.BackColor = Color.White;
+                _activeNav.ForeColor = Color.FromArgb(70, 70, 70);
+                _activeNav.Font = new Font("Segoe UI", 9.5f);
+            }
+            _activeNav = btn;
+            btn.BackColor = Color.FromArgb(232, 242, 253);
+            btn.ForeColor = Color.FromArgb(24, 95, 165);
+            btn.Font = new Font("Segoe UI", 9.5f, FontStyle.Bold);
+        }
+
+        //  DASHBOARD
         private void LoadDashboard()
         {
-              // Mở kết nối CSDL bằng LINQ
+            lblMonthYear.Text = "Tháng " + DateTime.Now.ToString("MM/yyyy");
+
             using (DB_SystemDataContext db = new DB_SystemDataContext())
             {
                 try
                 {
-                    // Lấy tháng và năm hiện tại của hệ thống để lọc dữ liệu
-                    int currentMonth = DateTime.Now.Month;
-                    int currentYear = DateTime.Now.Year;
+                    int m = DateTime.Now.Month, y = DateTime.Now.Year;
 
                     // TÍNH TỔNG SỐ DƯ (Tất cả các ví/tài khoản của user này)
-                    // Dùng (decimal?) để ép kiểu, phòng trường hợp user chưa có tài khoản nào thì Sum trả về null -> sẽ đổi thành 0
                     decimal totalBalance = db.Accounts
-                                             .Where(a => a.UserID == currentUserID)
-                                             .Sum(a => (decimal?)a.Balance) ?? 0;
+                        .Where(a => a.UserID == currentUserID)
+                        .Sum(a => (decimal?)a.Balance) ?? 0;
 
                     // TÍNH TỔNG THU
                     decimal totalIncome = db.Transactions
-                                            .Where(t => t.UserID == currentUserID
-                                                     && t.TransType == "Income"
-                                                     && t.TransDate.Value.Month == currentMonth
-                                                     && t.TransDate.Value.Year == currentYear)
-                                            .Sum(t => (decimal?)t.Amount) ?? 0;
+                        .Where(t => t.UserID == currentUserID
+                                 && t.TransType == "Income"
+                                 && t.TransDate.Value.Month == m
+                                 && t.TransDate.Value.Year == y)
+                        .Sum(t => (decimal?)t.Amount) ?? 0;
 
                     // TÍNH TỔNG CHI
                     decimal totalExpense = db.Transactions
-                                             .Where(t => t.UserID == currentUserID
-                                                      && t.TransType == "Expense"
-                                                      && t.TransDate.Value.Month == currentMonth
-                                                      && t.TransDate.Value.Year == currentYear)
-                                             .Sum(t => (decimal?)t.Amount) ?? 0;
+                        .Where(t => t.UserID == currentUserID
+                                 && t.TransType == "Expense"
+                                 && t.TransDate.Value.Month == m
+                                 && t.TransDate.Value.Year == y)
+                        .Sum(t => (decimal?)t.Amount) ?? 0;
 
-                    // load DỮ LIỆU LÊN GIAO DIỆN 
                     lblTotalBalance.Text = totalBalance.ToString("N0") + " VNĐ";
                     lblTotalIncome.Text = totalIncome.ToString("N0") + " VNĐ";
                     lblTotalExpense.Text = totalExpense.ToString("N0") + " VNĐ";
 
-                    // Dùng phép "Select" và tạo ra một object ẩn danh (anonymous type) để tự động đặt tên cột tiếng Việt cho đẹp
-                    var accountList = db.Accounts
-                                        .Where(a => a.UserID == currentUserID)
-                                        .Select(a => new
-                                        {
-                                            TenTaiKhoan = a.AccountName,
-                                            Loai = a.AccountType,
-                                            SoDu = a.Balance,
-                                            ChiTiet = a.BankDetail
-                                        })
-                                        .ToList();
+                    int incomeCount = db.Transactions.Count(t =>
+                        t.UserID == currentUserID && t.TransType == "Income"
+                        && t.TransDate.Value.Month == m && t.TransDate.Value.Year == y);
 
-                    // Gán dữ liệu vào DataGridView
+                    int expenseCount = db.Transactions.Count(t =>
+                        t.UserID == currentUserID && t.TransType == "Expense"
+                        && t.TransDate.Value.Month == m && t.TransDate.Value.Year == y);
+
+                    lblChangeBalance.Text = totalBalance > 0 ? "Tổng số dư hiện tại" : "Chưa có tài khoản";
+                    lblChangeIncome.Text = incomeCount > 0 ? incomeCount + " giao dịch thu tháng" + m : "Chưa có thu nhập";
+                    lblChangeExpense.Text = expenseCount > 0 ? expenseCount + " giao dịch chi tháng" + m: "Chưa có chi tiêu";
+
+                    var accountList = db.Accounts
+                        .Where(a => a.UserID == currentUserID)
+                        .Select(a => new {
+                            TenTaiKhoan = a.AccountName,
+                            Loai = a.AccountType,
+                            SoDu = a.Balance,
+                            ChiTiet = a.BankDetail
+                        }).ToList();
+
                     dgv_Accounts.DataSource = accountList;
 
-                    // Trang trí lại DataGridView
                     if (dgv_Accounts.Columns.Count > 0)
                     {
                         dgv_Accounts.Columns["TenTaiKhoan"].HeaderText = "Tên tài khoản";
                         dgv_Accounts.Columns["Loai"].HeaderText = "Phân loại";
-
-                        // Định dạng cột số dư có dấu phẩy tiền tệ
                         dgv_Accounts.Columns["SoDu"].HeaderText = "Số dư (VNĐ)";
                         dgv_Accounts.Columns["SoDu"].DefaultCellStyle.Format = "N0";
-
+                        dgv_Accounts.Columns["SoDu"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                         dgv_Accounts.Columns["ChiTiet"].HeaderText = "Chi tiết";
-
-                        // Ép cột Tên tài khoản tự động giãn rộng lấp đầy khoảng trống
                         dgv_Accounts.Columns["TenTaiKhoan"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
                         LoadChart();
                     }
+
+                    lblCardChartTitle.Text = "Cơ cấu chi tiêu - tháng " + m + "/" + y;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Lỗi khi tải dữ liệu Dashboard: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Loi khi tai Dashboard: " + ex.Message, "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -132,16 +175,15 @@ namespace Project_FinancePersonalManagement
             {
                 try
                 {
-                    int currentMonth = DateTime.Now.Month;
-                    int currentYear = DateTime.Now.Year;
+                    int m = DateTime.Now.Month, y = DateTime.Now.Year;
 
                     //  Dùng LINQ kết hợp (JOIN) bảng Transactions và Categories, sau đó Gom nhóm (GROUP BY)
                     var expenseData = (from t in db.Transactions
                                        join c in db.Categories on t.CategoryID equals c.CategoryID
                                        where t.UserID == currentUserID
                                           && t.TransType == "Expense"
-                                          && t.TransDate.Value.Month == currentMonth
-                                          && t.TransDate.Value.Year == currentYear
+                                          && t.TransDate.Value.Month == m
+                                          && t.TransDate.Value.Year == y
                                        group t by c.CategoryName into g
                                        select new
                                        {
@@ -152,35 +194,37 @@ namespace Project_FinancePersonalManagement
                     // Cấu hình xóa dữ liệu cũ của biểu đồ (nếu có)
                     chartChiTieu.Series.Clear();
                     chartChiTieu.Titles.Clear();
+                    chartChiTieu.ChartAreas[0].BackColor = Color.Transparent;
+                    chartChiTieu.BackColor = Color.Transparent;
+                    chartChiTieu.Legends[0].BackColor = Color.Transparent;
+                    chartChiTieu.Legends[0].BorderColor = Color.Transparent;
 
-                    // Thêm tiêu đề cho biểu đồ
-                    chartChiTieu.Titles.Add($"Cơ cấu chi tiêu tháng {currentMonth}/{currentYear}");
-                    chartChiTieu.Titles[0].Font = new Font("Arial", 12, FontStyle.Bold);
 
-                    // Tạo luồng dữ liệu mới (Series)
                     Series series = chartChiTieu.Series.Add("ChiTieuSeries");
                     series.ChartType = SeriesChartType.Doughnut;
-
-                    // hiển thị phần trăm trên biểu đồ
                     series.Label = "#PERCENT{P0}";
-
-                    // Khi chỉ còn số %, đưa nó vào TRONG miếng bánh nhìn sẽ gọn và sang hơn
                     series["PieLabelStyle"] = "Inside";
-                    series.Font = new Font("Arial", 9, FontStyle.Bold);
+                    series["DoughnutRadius"] = "55";
+                    series.Font = new Font("Segoe UI", 8.5f, FontStyle.Bold);
                     series.LabelForeColor = Color.White;
-
-                    // CHỈ HIỆN TÊN DANH MỤC Ở CHÚ THÍCH (Legend)
-                    // Khóa thuộc tính này lại để chú thích không bị ăn theo cái Label % ở trên
                     series.LegendText = "#VALX";
 
-                    // Đổ dữ liệu từ LINQ vào biểu đồ
+                    Color[] palette = {
+                        Color.FromArgb(29, 158, 117),
+                        Color.FromArgb(24, 95, 165),
+                        Color.FromArgb(239, 159, 39),
+                        Color.FromArgb(226, 75, 74),
+                        Color.FromArgb(83, 74, 183),
+                        Color.FromArgb(212, 85, 48)
+                    };
+
+                    int colorIdx = 0;
                     foreach (var item in expenseData)
                     {
-                        // Thêm dữ liệu và lấy ra vị trí (index) của miếng bánh vừa thêm
-                        int pointIndex = series.Points.AddXY(item.TenDanhMuc, item.TongTien);
-
-                        DataPoint point = series.Points[pointIndex];
-                        point.ToolTip = $"Tổng chi {item.TenDanhMuc}: {item.TongTien:N0} VNĐ";
+                        int idx = series.Points.AddXY(item.TenDanhMuc, item.TongTien);
+                        series.Points[idx].Color = palette[colorIdx % palette.Length];
+                        series.Points[idx].ToolTip = item.TenDanhMuc + ": " + item.TongTien.ToString("N0") + " d";
+                        colorIdx++;
                     }
                 }
                 catch (Exception ex)
@@ -190,118 +234,141 @@ namespace Project_FinancePersonalManagement
             }
         }
 
-        private void đăngNhậpToolStripMenuItem_Click(object sender, EventArgs e)
+        //  NAV BUTTON CLICK HANDLERS (Tổng quan)
+        private void btnNav_Overview_Click(object sender, EventArgs e)
+        {
+            SetActiveNav(btnNav_Overview);
+        }
+
+        private void btnNav_DangNhap_Click(object sender, EventArgs e)
         {
             Form formLogin = new form_Sign_In();
             if (formLogin.ShowDialog() == DialogResult.OK)
             {
-                // Nhận dữ liệu
                 currentUserID = ((form_Sign_In)formLogin).LoggedInUserID;
                 currentUserName = ((form_Sign_In)formLogin).LoggedInUserName;
                 isLoggedIn = true;
 
-                //  Cập nhật giao diện
-                lblUser.Text = $"Xin chào: {currentUserID} - {currentUserName}";
-                lblStatus.Text = "Cơ sở dữ liệu: Đã kết nối";
+                lblAvatarInitials.Text = GetInitials(currentUserName);
+                lblUserName.Text = currentUserName;
+                lblStatus.Text = "Đã đăng nhập  -  " + currentUserID;
 
-                // Mở khóa các menu
-                ToggleMenu(true);
-
-                // LOAD DỮ LIỆU LÊN DASHBOARD
-                LoadDashboard(); 
+                ToggleSidebarFeatures(true);
+                SetActiveNav(btnNav_Overview);
+                LoadDashboard();
             }
         }
 
-        private void thoátToolStripMenuItem_Click(object sender, EventArgs e)
+        private void btnNav_DangKy_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Bạn có chắc chắn muốn thoát không?", "Xác nhận thoát", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
-            {
-                Application.Exit();
-            }
+            new form_Sign_Up().ShowDialog();
         }
 
-        private void time_clock_Tick(object sender, EventArgs e)
+        private void btnNav_DangXuat_Click(object sender, EventArgs e)
         {
-            lblTime.Text = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-        }
-
-        private void đăngKíToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Form formSignUp = new form_Sign_Up();
-            formSignUp.ShowDialog();
-        }
-
-        private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Xác nhận trước khi đăng xuất
-            DialogResult result = MessageBox.Show("Bạn có chắc chắn muốn đăng xuất khỏi tài khoản này?", "Đăng xuất", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show(
+                "Bạn có muốn đăng xuất không", "Đăng xuất",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
-                // Xóa thông tin phiên làm việc
                 currentUserID = null;
                 currentUserName = null;
                 isLoggedIn = false;
 
-                // Tắt các menu tính năng
-                ToggleMenu(false);
+                lblAvatarInitials.Text = "--";
+                lblUserName.Text = "Chưa đăng nhập";
+                lblStatus.Text = "Sẵn sàng  -  Đã đăng xuất";
 
-                // Reset lại thanh StatusStrip
-                lblUser.Text = "Chưa đăng nhập";
-                lblStatus.Text = "Cơ sở dữ liệu: Đã ngắt kết nối";
+                ToggleSidebarFeatures(false);
+                SetActiveNav(btnNav_Overview);
 
-                // XÓA SẠCH DỮ LIỆU TRÊN DASHBOARD (Tránh người sau nhìn thấy)
                 lblTotalBalance.Text = "0 VNĐ";
                 lblTotalIncome.Text = "0 VNĐ";
                 lblTotalExpense.Text = "0 VNĐ";
-
-                dgv_Accounts.DataSource = null; // Xóa bảng
-                chartChiTieu.Series.Clear();   // Xóa biểu đồ
+                lblChangeBalance.Text = "";
+                lblChangeIncome.Text = "";
+                lblChangeExpense.Text = "";
+                dgv_Accounts.DataSource = null;
+                chartChiTieu.Series.Clear();
                 chartChiTieu.Titles.Clear();
             }
         }
 
-        public void RefreshMenu()
+        private void btnNav_Thoat_Click(object sender, EventArgs e)
         {
-            LoadChart();
+            var result = MessageBox.Show(
+                "Bạn có chắc chắn muốn thoát không?", "Xác nhận thoát",
+                MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+                Application.Exit();
+        }
+
+        private void btnNav_GiaoDich_Click(object sender, EventArgs e)
+        {
+            SetActiveNav(btnNav_GiaoDich);
+            new form_GiaoDich(currentUserID).ShowDialog();
+            SetActiveNav(btnNav_Overview);
             LoadDashboard();
         }
 
-        private void thốngKêToolStripMenuItem_Click(object sender, EventArgs e)
+        private void btnNav_TaiKhoan_Click(object sender, EventArgs e)
         {
-            Form formThongKe = new form_ThongKe(currentUserID);
-            formThongKe.ShowDialog();
+            SetActiveNav(btnNav_TaiKhoan);
+            new form_TaiKhoan(currentUserID).ShowDialog();
+            SetActiveNav(btnNav_Overview);
+            LoadDashboard();
         }
 
-        private void tàiKhoànToolStripMenuItem_Click(object sender, EventArgs e)
+        private void btnNav_ThongKe_Click(object sender, EventArgs e)
         {
-            Form formTaiKhoan = new form_TaiKhoan(currentUserID);
-            formTaiKhoan.ShowDialog();
+            SetActiveNav(btnNav_ThongKe);
+            new form_ThongKe(currentUserID).ShowDialog();
+            SetActiveNav(btnNav_Overview);
         }
 
-        private void giaoDịchToolStripMenuItem_Click(object sender, EventArgs e)
+        private void btnNav_NganSach_Click(object sender, EventArgs e)
         {
-            Form formGiaoDich = new form_GiaoDich(currentUserID);
-            formGiaoDich.ShowDialog();
+            SetActiveNav(btnNav_NganSach);
+            new frm_nganSach(currentUserID).ShowDialog();
+            SetActiveNav(btnNav_Overview);
         }
 
-        private void khoảnNợKhoànVayToolStripMenuItem_Click(object sender, EventArgs e)
+        private void btnNav_KhoanVay_Click(object sender, EventArgs e)
         {
-            Form formVay = new form_KhoanVay_ChoVay(currentUserID);
-            formVay.ShowDialog();
+            SetActiveNav(btnNav_KhoanVay);
+            new form_KhoanVay_ChoVay(currentUserID).ShowDialog();
+            SetActiveNav(btnNav_Overview);
         }
 
-        private void danhMụcToolStripMenuItem_Click(object sender, EventArgs e)
+        private void btnNav_DanhMuc_Click(object sender, EventArgs e)
         {
-            Form formDanhMuc = new frm_danhMuc(currentUserID);
-            formDanhMuc.ShowDialog();
+            SetActiveNav(btnNav_DanhMuc);
+            new frm_danhMuc(currentUserID).ShowDialog();
+            SetActiveNav(btnNav_Overview);
+            LoadDashboard();
         }
 
-        private void ngânSáchToolStripMenuItem_Click(object sender, EventArgs e)
+        //  TIMER
+        private void time_clock_Tick(object sender, EventArgs e)
         {
-            Form formNganSach = new frm_nganSach(currentUserID);
-            formNganSach.ShowDialog();
+            lblTime.Text = DateTime.Now.ToString("dd/MM/yyyy  HH:mm:ss");
+        }
+
+        //  PUBLIC REFRESH
+        public void RefreshMenu()
+        {
+            LoadDashboard();
+        }
+
+        //  HELPERS (hiển thị tên viết tắt trên avatar)
+        private static string GetInitials(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name)) return "--";
+            var parts = name.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 1)
+                return parts[0].Substring(0, Math.Min(2, parts[0].Length)).ToUpper();
+            return (parts[0][0].ToString() + parts[parts.Length - 1][0]).ToUpper();
         }
     }
 }

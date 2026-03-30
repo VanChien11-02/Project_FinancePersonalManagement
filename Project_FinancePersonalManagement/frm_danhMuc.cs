@@ -24,6 +24,7 @@ namespace Project_FinancePersonalManagement
 
         private void frm_danhMuc_Load(object sender, EventArgs e)
         {
+            rAll.Checked = true;
             LoadData();
         }
 

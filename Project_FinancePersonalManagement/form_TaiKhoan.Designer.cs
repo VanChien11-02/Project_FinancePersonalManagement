@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -38,7 +38,6 @@
             this.txt_TenNH = new System.Windows.Forms.TextBox();
             this.txt_TenTK = new System.Windows.Forms.TextBox();
             this.dgvTaiKhoan = new System.Windows.Forms.DataGridView();
-            this.btn_Xoa = new System.Windows.Forms.Button();
             this.btn_Thoat = new System.Windows.Forms.Button();
             this.btn_Them = new System.Windows.Forms.Button();
             this.btn_Sua = new System.Windows.Forms.Button();
@@ -58,6 +57,7 @@
             this.chartCoCau = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.btn_Reset = new System.Windows.Forms.Button();
             this.cbo_LoaiTK = new System.Windows.Forms.ComboBox();
+            this.btn_Xoa = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTaiKhoan)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -124,16 +124,6 @@
             this.dgvTaiKhoan.Size = new System.Drawing.Size(465, 309);
             this.dgvTaiKhoan.TabIndex = 8;
             this.dgvTaiKhoan.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTaiKhoan_CellClick);
-            // 
-            // btn_Xoa
-            // 
-            this.btn_Xoa.Location = new System.Drawing.Point(322, 201);
-            this.btn_Xoa.Name = "btn_Xoa";
-            this.btn_Xoa.Size = new System.Drawing.Size(104, 39);
-            this.btn_Xoa.TabIndex = 9;
-            this.btn_Xoa.Text = "Xóa";
-            this.btn_Xoa.UseVisualStyleBackColor = true;
-            this.btn_Xoa.Click += new System.EventHandler(this.btn_Xoa_Click);
             // 
             // btn_Thoat
             // 
@@ -292,17 +282,17 @@
             // 
             // chartCoCau
             // 
-            chartArea5.Name = "ChartArea1";
-            this.chartCoCau.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.chartCoCau.Legends.Add(legend5);
+            chartArea2.Name = "ChartArea1";
+            this.chartCoCau.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chartCoCau.Legends.Add(legend2);
             this.chartCoCau.Location = new System.Drawing.Point(514, 268);
             this.chartCoCau.Name = "chartCoCau";
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            this.chartCoCau.Series.Add(series5);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chartCoCau.Series.Add(series2);
             this.chartCoCau.Size = new System.Drawing.Size(388, 316);
             this.chartCoCau.TabIndex = 19;
             this.chartCoCau.Text = "chart1";
@@ -326,6 +316,16 @@
             this.cbo_LoaiTK.Size = new System.Drawing.Size(189, 28);
             this.cbo_LoaiTK.TabIndex = 21;
             this.cbo_LoaiTK.SelectedIndexChanged += new System.EventHandler(this.cbo_LoaiTK_SelectedIndexChanged);
+            // 
+            // btn_Xoa
+            // 
+            this.btn_Xoa.Location = new System.Drawing.Point(322, 201);
+            this.btn_Xoa.Name = "btn_Xoa";
+            this.btn_Xoa.Size = new System.Drawing.Size(104, 39);
+            this.btn_Xoa.TabIndex = 9;
+            this.btn_Xoa.Text = "Xóa";
+            this.btn_Xoa.UseVisualStyleBackColor = true;
+            this.btn_Xoa.Click += new System.EventHandler(this.btn_Xoa_Click);
             // 
             // form_TaiKhoan
             // 
@@ -377,7 +377,6 @@
         private System.Windows.Forms.TextBox txt_TenNH;
         private System.Windows.Forms.TextBox txt_TenTK;
         private System.Windows.Forms.DataGridView dgvTaiKhoan;
-        private System.Windows.Forms.Button btn_Xoa;
         private System.Windows.Forms.Button btn_Thoat;
         private System.Windows.Forms.Button btn_Them;
         private System.Windows.Forms.Button btn_Sua;
@@ -397,5 +396,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btn_Reset;
         private System.Windows.Forms.ComboBox cbo_LoaiTK;
+        private System.Windows.Forms.Button btn_Xoa;
     }
 }
