@@ -43,7 +43,7 @@ CREATE TABLE Debts (
     PaidAmount DECIMAL(18, 2) NOT NULL DEFAULT 0,       -- Tiền thanh toán 1 phần
 
 
-    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
     FOREIGN KEY (AccountID) REFERENCES Accounts(AccountID)
 );
 
@@ -77,7 +77,6 @@ CREATE TABLE Budgets (
 );
 
 
-USE PersonalFinanceDB
 INSERT INTO Users(UserID, Username, PasswordHash) VALUES
 ('USER001',N'chien','12345'),
 ('USER002',N'an','54321');
@@ -111,7 +110,7 @@ INSERT INTO Transactions(TransID, UserID,AccountID, CategoryID,DebtID, Amount, T
 
 ('TXN0005','USER001','ACC001',NULL,'DEB001',500000,'Expense','2026-03-05',N'Trả nợ'),
 
-('TXN0006','USER001','ACC001',NULL,'DEB002',1000000,'Income','2026-03-06',N'Được trả nợ')
+('TXN0006','USER001','ACC001',NULL,'DEB002',1000000,'Income','2026-03-06',N'Được trả nợ'),
 
 ('TXN0007','USER001','ACC001','C001',NULL,5000000,'Income','2026-01-02',N'Lương tháng 1');
 
