@@ -562,9 +562,9 @@
             this.lblTotalExpense.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(163)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.lblTotalExpense.Location = new System.Drawing.Point(14, 28);
             this.lblTotalExpense.Name = "lblTotalExpense";
-            this.lblTotalExpense.Size = new System.Drawing.Size(83, 36);
+            this.lblTotalExpense.Size = new System.Drawing.Size(94, 36);
             this.lblTotalExpense.TabIndex = 1;
-            this.lblTotalExpense.Text = "0 vnđ";
+            this.lblTotalExpense.Text = "0 VNĐ";
             // 
             // lblTitleExpense
             // 
@@ -608,9 +608,9 @@
             this.lblTotalIncome.ForeColor = System.Drawing.Color.Black;
             this.lblTotalIncome.Location = new System.Drawing.Point(14, 28);
             this.lblTotalIncome.Name = "lblTotalIncome";
-            this.lblTotalIncome.Size = new System.Drawing.Size(83, 36);
+            this.lblTotalIncome.Size = new System.Drawing.Size(94, 36);
             this.lblTotalIncome.TabIndex = 1;
-            this.lblTotalIncome.Text = "0 vnđ";
+            this.lblTotalIncome.Text = "0 VNĐ";
             // 
             // lblTitleIncome
             // 
@@ -655,9 +655,9 @@
             this.lblTotalBalance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(110)))), ((int)(((byte)(80)))));
             this.lblTotalBalance.Location = new System.Drawing.Point(14, 28);
             this.lblTotalBalance.Name = "lblTotalBalance";
-            this.lblTotalBalance.Size = new System.Drawing.Size(83, 36);
+            this.lblTotalBalance.Size = new System.Drawing.Size(94, 36);
             this.lblTotalBalance.TabIndex = 1;
-            this.lblTotalBalance.Text = "0 vnđ";
+            this.lblTotalBalance.Text = "0 VNĐ";
             // 
             // lblTitleBalance
             // 

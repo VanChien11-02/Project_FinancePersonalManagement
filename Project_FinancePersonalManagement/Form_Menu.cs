@@ -98,10 +98,12 @@ namespace Project_FinancePersonalManagement
                 {
                     int m = DateTime.Now.Month, y = DateTime.Now.Year;
 
+                    //Tổng số dư
                     decimal totalBalance = db.Accounts
                         .Where(a => a.UserID == currentUserID)
                         .Sum(a => (decimal?)a.Balance) ?? 0;
 
+                    //tổng thu nhập tháng hiện tại
                     decimal totalIncome = db.Transactions
                         .Where(t => t.UserID == currentUserID
                                  && t.TransType == "Income"
@@ -109,6 +111,7 @@ namespace Project_FinancePersonalManagement
                                  && t.TransDate.Value.Year == y)
                         .Sum(t => (decimal?)t.Amount) ?? 0;
 
+                    // tông chi tiêu tháng hiện tại
                     decimal totalExpense = db.Transactions
                         .Where(t => t.UserID == currentUserID
                                  && t.TransType == "Expense"
@@ -116,9 +119,9 @@ namespace Project_FinancePersonalManagement
                                  && t.TransDate.Value.Year == y)
                         .Sum(t => (decimal?)t.Amount) ?? 0;
 
-                    lblTotalBalance.Text = totalBalance.ToString("N0") + " vnđ";
-                    lblTotalIncome.Text = totalIncome.ToString("N0") + " vnđ";
-                    lblTotalExpense.Text = totalExpense.ToString("N0") + " vnđ";
+                    lblTotalBalance.Text = totalBalance.ToString("N0") + " VNĐ";
+                    lblTotalIncome.Text = totalIncome.ToString("N0") + " VNĐ";
+                    lblTotalExpense.Text = totalExpense.ToString("N0") + " VNĐ";
 
                     int incomeCount = db.Transactions.Count(t =>
                         t.UserID == currentUserID && t.TransType == "Income"
@@ -147,7 +150,7 @@ namespace Project_FinancePersonalManagement
                     {
                         dgv_Accounts.Columns["TenTaiKhoan"].HeaderText = "Tên tài khoản";
                         dgv_Accounts.Columns["Loai"].HeaderText = "Phân loại";
-                        dgv_Accounts.Columns["SoDu"].HeaderText = "Số dư (vnđ)";
+                        dgv_Accounts.Columns["SoDu"].HeaderText = "Số dư (VNĐ)";
                         dgv_Accounts.Columns["SoDu"].DefaultCellStyle.Format = "N0";
                         dgv_Accounts.Columns["SoDu"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                         dgv_Accounts.Columns["ChiTiet"].HeaderText = "Chi tiết";
