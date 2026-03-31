@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Drawing;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace Project_FinancePersonalManagement
 {
@@ -10,9 +12,34 @@ namespace Project_FinancePersonalManagement
         public form_Sign_Up()
         {
             InitializeComponent();
-            txt_Name.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) txt_Pass.Focus(); };
-            txt_Pass.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) txt_PassConfirm.Focus(); };
-            txt_PassConfirm.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) btn_Accept_Click(s, e); };
+            
+            txt_Name.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true;
+                    e.Handled = true;
+                    txt_Pass.Focus();
+                }
+            };
+            txt_Pass.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true;
+                    e.Handled = true;
+                    txt_PassConfirm.Focus();
+                }
+            };
+            txt_PassConfirm.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    e.SuppressKeyPress = true;
+                    e.Handled = true;
+                    btn_Accept_Click(s, e);
+                }
+            };
         }
 
         // Đăng ký
@@ -20,7 +47,7 @@ namespace Project_FinancePersonalManagement
         {
             string username = txt_Name.Text.Trim();
             string password = txt_Pass.Text.Trim();
-            string confirm = txt_PassConfirm.Text;
+            string confirm = txt_PassConfirm.Text.Trim();
 
             // Reset lỗi
             lbl_NameError.Text = "";
@@ -124,9 +151,9 @@ namespace Project_FinancePersonalManagement
         // Kiểm tra tên đăng nhập realtime
         private void txt_Name_TextChanged(object sender, EventArgs e)
         {
-            string v = txt_Name.Text.Trim();
-            if (v.Length == 0) { lbl_NameError.Text = ""; return; }
-            if (v.Length < 3)
+            string username = txt_Name.Text.Trim();
+            if (username.Length == 0) { lbl_NameError.Text = ""; return; }
+            if (username.Length < 3)
             {
                 lbl_NameError.Text = "Cần ít nhất 3 ký tự.";
                 lbl_NameError.ForeColor = Color.FromArgb(194, 35, 35);
@@ -141,9 +168,9 @@ namespace Project_FinancePersonalManagement
         // Kiểm tra khớp mật khẩu realtime
         private void txt_PassConfirm_TextChanged(object sender, EventArgs e)
         {
-            if (txt_PassConfirm.Text.Length == 0) { lbl_MatchMsg.Text = ""; return; }
+            if (txt_PassConfirm.Text.Trim().Length == 0) { lbl_MatchMsg.Text = ""; return; }
 
-            if (txt_PassConfirm.Text == txt_Pass.Text)
+            if (txt_PassConfirm.Text.Trim() == txt_Pass.Text.Trim())
             {
                 lbl_MatchMsg.Text = "✓ Mật khẩu khớp";
                 lbl_MatchMsg.ForeColor = Color.FromArgb(29, 158, 117);
