@@ -23,6 +23,13 @@ namespace Project_FinancePersonalManagement
         // Đăng nhập 
         private void btn_Accept_Click(object sender, EventArgs e)
         {
+
+            //default để test (bỏ qua phần đăng nhập tạm thời)
+            LoggedInUserID = "USER001";
+            LoggedInUserName = "chien";
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+            /*
             string username = txt_Name.Text.Trim();
             string passwordHash = txt_Pass.Text.Trim();
 
@@ -62,7 +69,9 @@ namespace Project_FinancePersonalManagement
             {
                 lbl_Error.Text = "Lỗi hệ thống: " + ex.Message;
             }
+            */
         }
+       
 
         // Thoát
         private void btn_Exit_Click(object sender, EventArgs e)

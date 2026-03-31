@@ -55,8 +55,8 @@ namespace Project_FinancePersonalManagement
 
                     if (cbo_LoaiDM.Items.Count == 0)
                     {
-                        cbo_LoaiDM.Items.Add("Expense");
-                        cbo_LoaiDM.Items.Add("Income");
+                        cbo_LoaiDM.Items.Add("Chi Tiêu");
+                        cbo_LoaiDM.Items.Add("Thu Nhập");
                         cbo_LoaiDM.SelectedIndex = 0;
                     }
 

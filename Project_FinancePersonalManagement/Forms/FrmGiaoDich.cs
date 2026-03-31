@@ -80,6 +80,16 @@ namespace Project_FinancePersonalManagement
                         cbo_ChuyenDenTK.DataSource = tkListDest;
                         cbo_ChuyenDenTK.DisplayMember = "AccountName";
                         cbo_ChuyenDenTK.ValueMember = "AccountID";
+
+                        // Hiển thị số dư mặc định cho tài khoản đầu tiên (nếu có)
+                        if (tkList.Any())
+                        {
+                            // Chọn tài khoản đầu tiên để UI show mặc định
+                            cbo_TaiKhoan.SelectedIndex = 0;
+
+                            var firstAcc = tkList[0];
+                            txt_SoDu.Text = (firstAcc.Balance.HasValue ? firstAcc.Balance.Value.ToString("N0") : "0") + " VNĐ";
+                        }
                     }
 
                     // Nạp cứng 2 loại giao dịch
