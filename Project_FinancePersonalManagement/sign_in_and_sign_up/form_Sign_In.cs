@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace Project_FinancePersonalManagement
@@ -14,50 +10,77 @@ namespace Project_FinancePersonalManagement
     {
         public string LoggedInUserID { get; private set; }
         public string LoggedInUserName { get; private set; }
+
         public form_Sign_In()
         {
             InitializeComponent();
+            // Nhấn Enter để chuyển field hoặc submit
+            txt_Name.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) txt_Pass.Focus(); };
+            txt_Pass.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) btn_Accept_Click(s, e); };
         }
 
+        // Đăng nhập 
         private void btn_Accept_Click(object sender, EventArgs e)
         {
             string username = txt_Name.Text.Trim();
-            string password = txt_Pass.Text.Trim();
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            string passwordHash = txt_Pass.Text.Trim();
+
+            lbl_Error.Text = "";
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(txt_Pass.Text))
             {
-                // Dùng LINQ để tìm User có Username và Password khớp với TextBox
-                var user = db.Users.FirstOrDefault(u => u.Username == username && u.PasswordHash == password);
+                lbl_Error.Text = "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu.";
+                return;
+            }
 
-                if (user != null)
+            try
+            {
+                using (DB_SystemDataContext db = new DB_SystemDataContext())
                 {
-                    // Đăng nhập thành công! Gán dữ liệu vào 2 biến public
-                    LoggedInUserID = user.UserID;
-                    LoggedInUserName = user.Username;
+                    var user = db.Users.FirstOrDefault(
+                        u => u.Username == username && u.PasswordHash == passwordHash);
 
-                    // Báo hiệu thành công và đóng form đăng nhập
-                    MessageBox.Show($"Đăng nhập thành công! Chào mừng {LoggedInUserName}.", "Thành công", MessageBoxButtons.OK);
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
+                    if (user != null)
+                    {
+                        LoggedInUserID = user.UserID;
+                        LoggedInUserName = user.Username;
+                        MessageBox.Show($"Đăng nhập thành công! Chào mừng {LoggedInUserName}.", "Thành công", MessageBoxButtons.OK);
+                        this.DialogResult = DialogResult.OK;
+                        this.Close();
+                    }
+                    else
+                    {
+                        lbl_Error.Text = "Tên đăng nhập hoặc mật khẩu không chính xác.";
+                        txt_Name.Clear();
+                        txt_Pass.Clear();
+                        txt_Name.Focus();
+                    }
                 }
-                else
-                {
-                    // Đăng nhập thất bại
-                    MessageBox.Show("Tên đăng nhập hoặc mật khẩu không chính xác!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    txt_Name.Clear();
-                    txt_Pass.Clear();
-                    txt_Pass.Focus();
-                }
+            }
+            catch (Exception ex)
+            {
+                lbl_Error.Text = "Lỗi hệ thống: " + ex.Message;
             }
         }
 
+        // Thoát
         private void btn_Exit_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Bạn có chắc chắn muốn hủy đăng nhập không?", "Xác nhận", MessageBoxButtons.YesNo);
+            var result = MessageBox.Show(
+                "Bạn có chắc chắn muốn thoát không?",
+                "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
             if (result == DialogResult.Yes)
             {
                 this.DialogResult = DialogResult.Cancel;
                 this.Close();
             }
+        }
+
+        // Hiện / ẩn mật khẩu
+        private void btn_ShowPass_Click(object sender, EventArgs e)
+        {
+            txt_Pass.PasswordChar = (txt_Pass.PasswordChar == '\0') ? '*' : '\0';
         }
     }
 }
