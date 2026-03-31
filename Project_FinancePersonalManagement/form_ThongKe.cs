@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -14,142 +11,122 @@ namespace Project_FinancePersonalManagement
     public partial class form_ThongKe : Form
     {
         private string currentUserID;
+
         public form_ThongKe(string UserID)
         {
             InitializeComponent();
-
             currentUserID = UserID;
         }
 
-        private void btn_Exit_Click(object sender, EventArgs e)
+        private void form_ThongKe_Load(object sender, EventArgs e)
         {
-            this.Close();
+            // Thiết lập ngày mặc định
+            DateTime today = DateTime.Today;
+            dtpTuNgay.Value = new DateTime(today.Year, today.Month, 1);
+            dtpDenNgay.Value = today;
+
+            // Tự động nhấn nút Lọc khi form bật lên
+            btn_Filter.PerformClick();
         }
 
         private void btn_Filter_Click(object sender, EventArgs e)
         {
             DateTime tuNgay = dtpTuNgay.Value.Date;
-
             DateTime denNgay = dtpDenNgay.Value.Date.AddDays(1).AddTicks(-1);
 
             using (DB_SystemDataContext db = new DB_SystemDataContext())
             {
                 try
                 {
-                    // BIỂU ĐỒ NỢ / VAY (chartNoVay)
-                    // Dùng LINQ lọc các khoản nợ ĐANG HOẠT ĐỘNG (Active) và được tạo trong khoảng thời gian đã chọn
-                    var debtStats = db.Debts
-                        .Where(d => d.UserID == currentUserID
-                                 && d.Status == "Active"
-                                 && d.StartDate >= tuNgay
-                                 && d.StartDate <= denNgay)
-                        .GroupBy(d => d.DebtType)
-                        .Select(g => new
-                        {
-                            LoaiNo = g.Key,
-                            TongTien = g.Sum(x => x.Amount)
-                        }).ToList();
-
-                    // Xóa dữ liệu cũ
-                    chartNoVay.Series.Clear();
-
-                    // Tạo Series mới dạng bánh Doughnut
-                    Series seriesNoVay = chartNoVay.Series.Add("NoVaySeries");
-                    seriesNoVay.ChartType = SeriesChartType.Doughnut;
-
-                    // Trang trí giống biểu đồ Dashboard hôm trước
-                    seriesNoVay.Label = "#PERCENT{P0}";
-                    seriesNoVay["PieLabelStyle"] = "Inside";
-                    seriesNoVay.Font = new Font("Arial", 9, FontStyle.Bold);
-                    seriesNoVay.LabelForeColor = Color.White;
-                    seriesNoVay.LegendText = "#VALX"; // Hiện tên ở phần chú thích
-
-                    // Đổ dữ liệu vào biểu đồ
-                    foreach (var item in debtStats)
-                    {
-                        int pIndex = seriesNoVay.Points.AddXY(item.LoaiNo, item.TongTien);
-
-                        // Thêm Tooltip để khi rê chuột vào sẽ thấy số tiền cụ thể
-                        seriesNoVay.Points[pIndex].ToolTip = $"{item.LoaiNo}: {item.TongTien:N0} VNĐ";
-
-                        // Đổi màu cho dễ nhận diện (Đi vay màu Đỏ, Cho mượn màu Xanh)
-                        if (item.LoaiNo.Contains("Đi vay"))
-                            seriesNoVay.Points[pIndex].Color = Color.Tomato;
-                        else
-                            seriesNoVay.Points[pIndex].Color = Color.MediumSeaGreen;
-                    }
-
                     var transList = db.Transactions
                               .Where(t => t.UserID == currentUserID && t.TransDate >= tuNgay && t.TransDate <= denNgay)
-                              .ToList(); // Kéo về RAM xử lý cho mượt
+                              .ToList();
 
-                    // BIỂU ĐỒ THU NHẬP VÀ CHI TIÊU (Line Chart)
-                    // Gom nhóm giao dịch theo từng Ngày
+                    // BIỂU ĐỒ THU NHẬP VÀ CHI TIÊU (Spline Chart)
                     var dailyStats = transList
                         .GroupBy(t => t.TransDate.Value.Date)
                         .Select(g => new
                         {
-                            NgayGoc = g.Key, // Giữ lại kiểu DateTime để sắp xếp cho đúng
-                            NgayHienThi = g.Key.ToString("dd/MM"), // Cắt ra dạng chuỗi chỉ để hiển thị
+                            NgayGoc = g.Key,
+                            NgayHienThi = g.Key.ToString("dd/MM"),
                             Thu = g.Where(x => x.TransType == "Income").Sum(x => x.Amount),
                             Chi = g.Where(x => x.TransType == "Expense").Sum(x => x.Amount)
-                        })
-                        .OrderBy(x => x.NgayGoc) // SẮP XẾP CHUẨN: Xếp theo thời gian thực tế
-                        .ToList();
+                        }).OrderBy(x => x.NgayGoc).ToList();
 
                     chartThuChi.Series.Clear();
-
-                    // (Mẹo UI) Ép biểu đồ hiển thị ĐẦY ĐỦ các ngày trên trục X, không bị nhảy cóc hay lẩn khuất
                     chartThuChi.ChartAreas[0].AxisX.Interval = 1;
 
-                    // Đường Xanh lá (Thu)
                     Series sThu = chartThuChi.Series.Add("Thu Nhập");
-                    sThu.ChartType = SeriesChartType.Line;
+                    sThu.ChartType = SeriesChartType.Spline;
                     sThu.BorderWidth = 3;
-                    sThu.Color = Color.MediumSeaGreen;
+                    sThu.Color = Color.FromArgb(46, 204, 113); // Màu xanh lá (#2ECC71)
                     sThu.MarkerStyle = MarkerStyle.Circle;
+                    sThu.MarkerSize = 7;
 
-                    // Đường Đỏ (Chi)
                     Series sChi = chartThuChi.Series.Add("Chi Tiêu");
-                    sChi.ChartType = SeriesChartType.Line;
+                    sChi.ChartType = SeriesChartType.Spline;
                     sChi.BorderWidth = 3;
-                    sChi.Color = Color.Tomato;
+                    sChi.Color = Color.FromArgb(231, 76, 60); // Màu đỏ (#E74C3C)
                     sChi.MarkerStyle = MarkerStyle.Circle;
+                    sChi.MarkerSize = 7;
 
                     foreach (var item in dailyStats)
                     {
-                        // Nhét cái biến NgayHienThi (dạng dd/MM) vào biểu đồ
                         sThu.Points.AddXY(item.NgayHienThi, item.Thu);
                         sChi.Points.AddXY(item.NgayHienThi, item.Chi);
                     }
 
                     // BIỂU ĐỒ THU NHẬP THEO THÁNG (Column Chart)
-                    // Lọc ra các khoản Thu và gom nhóm theo Tháng/Năm
-                    chartThuNhapThang.Legends[0].Enabled = false;
+                    chartThuNhapThang.Legends[0].Enabled = false; // Ẩn chú thích (vì chỉ có 1 cột thu nhập)
                     var monthlyIncome = transList
                         .Where(t => t.TransType == "Income")
                         .GroupBy(t => new { t.TransDate.Value.Year, t.TransDate.Value.Month })
                         .Select(g => new
                         {
-                            Thang = $"T{g.Key.Month}/{g.Key.Year}", // VD: T3/2026
+                            Thang = $"T{g.Key.Month}/{g.Key.Year}",
                             Thu = g.Sum(x => x.Amount)
-                        })
-                        .OrderBy(x => x.Thang).ToList();
+                        }).OrderBy(x => x.Thang).ToList();
 
                     chartThuNhapThang.Series.Clear();
                     Series sThuThang = chartThuNhapThang.Series.Add("Thu Nhập Tháng");
                     sThuThang.ChartType = SeriesChartType.Column;
-                    sThuThang.Color = Color.DodgerBlue;
-
-                    // Bật hiển thị số tiền trên đầu cột
-                    //sThuThang.IsValueShownAsLabel = true;
-                    //sThuThang.LabelFormat = "{0:N0}";
+                    sThuThang.Color = Color.FromArgb(52, 152, 219); // Xanh dương tươi
+                    sThuThang["PixelPointWidth"] = "45"; // Tránh cột bị phình to
 
                     foreach (var item in monthlyIncome)
                     {
-                        sThuThang.Points.AddXY(item.Thang, item.Thu);
+                        int pIndex = sThuThang.Points.AddXY(item.Thang, item.Thu);
+                        sThuThang.Points[pIndex].ToolTip = $"{item.Thang}: {item.Thu:N0} VNĐ";
                     }
 
+                    // BIỂU ĐỒ NỢ / VAY (Doughnut Chart)
+                    var debtStats = db.Debts
+                        .Where(d => d.UserID == currentUserID && d.Status == "Active" && d.StartDate >= tuNgay && d.StartDate <= denNgay)
+                        .GroupBy(d => d.DebtType)
+                        .Select(g => new { LoaiNo = g.Key, TongTien = g.Sum(x => x.Amount) })
+                        .ToList();
+
+                    chartNoVay.Series.Clear();
+
+                    Series seriesNoVay = chartNoVay.Series.Add("NoVaySeries");
+                    seriesNoVay.ChartType = SeriesChartType.Doughnut;
+                    seriesNoVay["DoughnutRadius"] = "50";
+                    seriesNoVay.Label = "#PERCENT{P0}";
+                    seriesNoVay["PieLabelStyle"] = "Inside";
+                    seriesNoVay.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+                    seriesNoVay.LabelForeColor = Color.White;
+                    seriesNoVay.LegendText = "#VALX"; // Hiện tên ở phần chú thích
+
+                    foreach (var item in debtStats)
+                    {
+                        int pIndex = seriesNoVay.Points.AddXY(item.LoaiNo, item.TongTien);
+                        seriesNoVay.Points[pIndex].ToolTip = $"{item.LoaiNo}: {item.TongTien:N0} VNĐ";
+
+                        if (item.LoaiNo.Contains("Đi vay"))
+                            seriesNoVay.Points[pIndex].Color = Color.FromArgb(231, 76, 60);
+                        else
+                            seriesNoVay.Points[pIndex].Color = Color.FromArgb(46, 204, 113);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -158,14 +135,9 @@ namespace Project_FinancePersonalManagement
             }
         }
 
-        private void form_ThongKe_Load(object sender, EventArgs e)
+        private void btn_Exit_Click(object sender, EventArgs e)
         {
-            DateTime today = DateTime.Today;
-            dtpTuNgay.Value = new DateTime(today.Year, today.Month, 1); // Ngày đầu tiên của tháng hiện tại
-
-            dtpDenNgay.Value = today;
-
-            btn_Filter.PerformClick();
+            this.Close();
         }
 
         public void RefreshThongKe()
