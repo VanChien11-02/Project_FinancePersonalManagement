@@ -360,7 +360,7 @@
             // 
             this.lblAppSub.AutoSize = true;
             this.lblAppSub.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblAppSub.ForeColor = System.Drawing.Color.Gray;
+            this.lblAppSub.ForeColor = System.Drawing.Color.DimGray;
             this.lblAppSub.Location = new System.Drawing.Point(18, 36);
             this.lblAppSub.Name = "lblAppSub";
             this.lblAppSub.Size = new System.Drawing.Size(185, 21);
@@ -549,7 +549,7 @@
             // 
             this.lblChangeExpense.AutoSize = true;
             this.lblChangeExpense.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblChangeExpense.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.lblChangeExpense.ForeColor = System.Drawing.Color.Black;
             this.lblChangeExpense.Location = new System.Drawing.Point(16, 56);
             this.lblChangeExpense.Name = "lblChangeExpense";
             this.lblChangeExpense.Size = new System.Drawing.Size(0, 21);
@@ -570,7 +570,7 @@
             // 
             this.lblTitleExpense.AutoSize = true;
             this.lblTitleExpense.Font = new System.Drawing.Font("Segoe UI", 7.5F);
-            this.lblTitleExpense.ForeColor = System.Drawing.Color.Gray;
+            this.lblTitleExpense.ForeColor = System.Drawing.Color.Black;
             this.lblTitleExpense.Location = new System.Drawing.Point(16, 10);
             this.lblTitleExpense.Name = "lblTitleExpense";
             this.lblTitleExpense.Size = new System.Drawing.Size(121, 20);
@@ -595,7 +595,7 @@
             // 
             this.lblChangeIncome.AutoSize = true;
             this.lblChangeIncome.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblChangeIncome.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.lblChangeIncome.ForeColor = System.Drawing.Color.Black;
             this.lblChangeIncome.Location = new System.Drawing.Point(16, 56);
             this.lblChangeIncome.Name = "lblChangeIncome";
             this.lblChangeIncome.Size = new System.Drawing.Size(0, 21);
@@ -605,7 +605,7 @@
             // 
             this.lblTotalIncome.AutoSize = true;
             this.lblTotalIncome.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblTotalIncome.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(95)))), ((int)(((byte)(165)))));
+            this.lblTotalIncome.ForeColor = System.Drawing.Color.Black;
             this.lblTotalIncome.Location = new System.Drawing.Point(14, 28);
             this.lblTotalIncome.Name = "lblTotalIncome";
             this.lblTotalIncome.Size = new System.Drawing.Size(83, 36);
@@ -616,7 +616,7 @@
             // 
             this.lblTitleIncome.AutoSize = true;
             this.lblTitleIncome.Font = new System.Drawing.Font("Segoe UI", 7.5F);
-            this.lblTitleIncome.ForeColor = System.Drawing.Color.Gray;
+            this.lblTitleIncome.ForeColor = System.Drawing.Color.Black;
             this.lblTitleIncome.Location = new System.Drawing.Point(16, 10);
             this.lblTitleIncome.Name = "lblTitleIncome";
             this.lblTitleIncome.Size = new System.Drawing.Size(136, 20);
@@ -641,7 +641,7 @@
             // 
             this.lblChangeBalance.AutoSize = true;
             this.lblChangeBalance.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblChangeBalance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.lblChangeBalance.ForeColor = System.Drawing.Color.Black;
             this.lblChangeBalance.Location = new System.Drawing.Point(16, 56);
             this.lblChangeBalance.Name = "lblChangeBalance";
             this.lblChangeBalance.Size = new System.Drawing.Size(124, 21);
@@ -663,7 +663,7 @@
             // 
             this.lblTitleBalance.AutoSize = true;
             this.lblTitleBalance.Font = new System.Drawing.Font("Segoe UI", 7.5F);
-            this.lblTitleBalance.ForeColor = System.Drawing.Color.Gray;
+            this.lblTitleBalance.ForeColor = System.Drawing.Color.Black;
             this.lblTitleBalance.Location = new System.Drawing.Point(16, 10);
             this.lblTitleBalance.Name = "lblTitleBalance";
             this.lblTitleBalance.Size = new System.Drawing.Size(98, 20);
@@ -730,12 +730,12 @@
             // 
             this.lblMonthYear.AutoSize = true;
             this.lblMonthYear.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblMonthYear.ForeColor = System.Drawing.Color.Gray;
+            this.lblMonthYear.ForeColor = System.Drawing.Color.DimGray;
             this.lblMonthYear.Location = new System.Drawing.Point(2, 32);
             this.lblMonthYear.Name = "lblMonthYear";
-            this.lblMonthYear.Size = new System.Drawing.Size(124, 23);
+            this.lblMonthYear.Size = new System.Drawing.Size(120, 23);
             this.lblMonthYear.TabIndex = 1;
-            this.lblMonthYear.Text = "Tháng 04/2026";
+            this.lblMonthYear.Text = "Tháng --/2026";
             // 
             // lblPageTitle
             // 
@@ -782,6 +782,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.MinimumSize = new System.Drawing.Size(900, 550);
             this.Name = "Form_Menu";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PFinanceVN - Quản lý tài chính cá nhân";
             this.Load += new System.EventHandler(this.Form_Menu_Load);
             this.Resize += new System.EventHandler(this.Form_Menu_Resize);
