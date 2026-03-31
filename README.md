@@ -25,3 +25,7 @@ sign in
 
 Update UI/UX on form Thong Ke
 <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/97845f07-6045-444d-ba58-0ae379d7ae80" />
+
+Update UI/UX on form Giao Dich
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/08df3a13-71dc-407b-9699-0d42123ba106" />
+
