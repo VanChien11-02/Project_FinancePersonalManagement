@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
+using Project_FinancePersonalManagement.Data;
 
 namespace Project_FinancePersonalManagement
 {
-    public partial class form_Sign_Up : Form
+    public partial class FrmRegister : Form
     {
-        public form_Sign_Up()
+        public FrmRegister()
         {
             InitializeComponent();
             txt_Name.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) txt_Pass.Focus(); };
@@ -52,7 +53,7 @@ namespace Project_FinancePersonalManagement
                 return;
             }
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 if (db.Users.Any(u => u.Username == username))
                 {

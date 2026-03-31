@@ -1,6 +1,6 @@
 ﻿namespace Project_FinancePersonalManagement
 {
-    partial class form_ThongKe
+    partial class FrmThongKe
     {
         /// <summary>
         /// Required designer variable.

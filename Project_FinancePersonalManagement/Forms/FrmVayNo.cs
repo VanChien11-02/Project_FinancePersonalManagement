@@ -7,14 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Project_FinancePersonalManagement.Data;
 
 namespace Project_FinancePersonalManagement
 {
-    public partial class form_KhoanVay_ChoVay : Form
+    public partial class FrmVayNo : Form
     {
         private string currentUserID;
         private string currentDebtlID;
-        public form_KhoanVay_ChoVay(string UserID)
+        public FrmVayNo(string UserID)
         {
             InitializeComponent();
             currentUserID = UserID;
@@ -22,7 +23,7 @@ namespace Project_FinancePersonalManagement
 
         private void LoadData()
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -102,7 +103,7 @@ namespace Project_FinancePersonalManagement
 
         private void form_KhoanVay_ChoVay_Load(object sender, EventArgs e)
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 bool hasAccounts = db.Accounts.Any(a => a.UserID == currentUserID);
                 if (!hasAccounts)
@@ -123,25 +124,25 @@ namespace Project_FinancePersonalManagement
 
         private void btn_Thoat_Click(object sender, EventArgs e)
         {
-            Form_Menu frmMenu = Application.OpenForms.OfType<Form_Menu>().FirstOrDefault();
+            FrmMainMenu frmMenu = Application.OpenForms.OfType<FrmMainMenu>().FirstOrDefault();
             if (frmMenu != null)
             {
                 frmMenu.RefreshMenu();
             }
 
-            form_TaiKhoan frmTaiKhoan = Application.OpenForms.OfType<form_TaiKhoan>().FirstOrDefault();
+            FrmTaiKhoan frmTaiKhoan = Application.OpenForms.OfType<FrmTaiKhoan>().FirstOrDefault();
             if (frmTaiKhoan != null)
             {
                 frmTaiKhoan.RefreshTaiKhoan();
             }
 
-            form_ThongKe frmThongKe = Application.OpenForms.OfType<form_ThongKe>().FirstOrDefault();
+            FrmThongKe frmThongKe = Application.OpenForms.OfType<FrmThongKe>().FirstOrDefault();
             if (frmThongKe != null)
             {
                 frmThongKe.RefreshThongKe();
             }
             
-            form_GiaoDich form_GiaoDich = Application.OpenForms.OfType<form_GiaoDich>().FirstOrDefault();
+            FrmGiaoDich form_GiaoDich = Application.OpenForms.OfType<FrmGiaoDich>().FirstOrDefault();
             if (form_GiaoDich != null)
             {
                 form_GiaoDich.RefreshGiaoDich();
@@ -191,7 +192,7 @@ namespace Project_FinancePersonalManagement
 
                 cbo_TaiKhoan.Text = row.Cells["TaiKhoan"].Value.ToString();
 
-                using (DB_SystemDataContext db = new DB_SystemDataContext())
+                using (AppDatabaseDataContext db = new AppDatabaseDataContext())
                 {
                     var d = db.Debts.SingleOrDefault(x => x.DebtID == currentDebtlID);
                     if (d != null)
@@ -233,7 +234,7 @@ namespace Project_FinancePersonalManagement
             string loaiVay = rb_ToiVay.Checked ? "Đi vay" : "Cho mượn";
             string maTK = cbo_TaiKhoan.SelectedValue.ToString();
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -319,7 +320,7 @@ namespace Project_FinancePersonalManagement
             string loaiVayMoi = rb_ToiVay.Checked ? "Đi vay" : "Cho mượn";
             string maTKMoi = cbo_TaiKhoan.SelectedValue.ToString();
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 var d = db.Debts.SingleOrDefault(x => x.DebtID == currentDebtlID);
                 if (d != null)
@@ -385,7 +386,7 @@ namespace Project_FinancePersonalManagement
 
             if (MessageBox.Show($"Xác nhận thanh toán số tiền {tienThanhToan:N0} VNĐ?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                using (DB_SystemDataContext db = new DB_SystemDataContext())
+                using (AppDatabaseDataContext db = new AppDatabaseDataContext())
                 {
                     var d = db.Debts.SingleOrDefault(x => x.DebtID == currentDebtlID);
                     if (d != null && d.Status == "Active")
@@ -531,7 +532,7 @@ namespace Project_FinancePersonalManagement
         {
             if (cbo_TaiKhoan.SelectedValue != null && cbo_TaiKhoan.SelectedValue is string maTK)
             {
-                using (DB_SystemDataContext db = new DB_SystemDataContext())
+                using (AppDatabaseDataContext db = new AppDatabaseDataContext())
                 {
                     var acc = db.Accounts.SingleOrDefault(a => a.AccountID == maTK);
                     if (acc != null)

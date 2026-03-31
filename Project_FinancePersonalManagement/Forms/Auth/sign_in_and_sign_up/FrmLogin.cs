@@ -3,15 +3,16 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 using System.Windows.Forms;
+using Project_FinancePersonalManagement.Data;
 
 namespace Project_FinancePersonalManagement
 {
-    public partial class form_Sign_In : Form
+    public partial class FrmLogin : Form
     {
         public string LoggedInUserID { get; private set; }
         public string LoggedInUserName { get; private set; }
 
-        public form_Sign_In()
+        public FrmLogin()
         {
             InitializeComponent();
             // Nhấn Enter để chuyển field hoặc submit
@@ -35,7 +36,7 @@ namespace Project_FinancePersonalManagement
 
             try
             {
-                using (DB_SystemDataContext db = new DB_SystemDataContext())
+                using (AppDatabaseDataContext db = new AppDatabaseDataContext())
                 {
                     var user = db.Users.FirstOrDefault(
                         u => u.Username == username && u.PasswordHash == passwordHash);

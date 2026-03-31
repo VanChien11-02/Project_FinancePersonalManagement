@@ -1,6 +1,6 @@
 ﻿namespace Project_FinancePersonalManagement
 {
-    partial class frm_nganSach
+    partial class FrmNganSach
     {
         /// <summary>
         /// Required designer variable.

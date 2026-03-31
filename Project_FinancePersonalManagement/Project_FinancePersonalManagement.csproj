@@ -48,87 +48,87 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DB_System.designer.cs">
+    <Compile Include="Data\AppDatabase.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DB_System.dbml</DependentUpon>
+      <DependentUpon>AppDatabase.dbml</DependentUpon>
     </Compile>
-    <Compile Include="form_GiaoDich.cs">
+    <Compile Include="Forms\FrmGiaoDich.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form_GiaoDich.Designer.cs">
-      <DependentUpon>form_GiaoDich.cs</DependentUpon>
+    <Compile Include="Forms\FrmGiaoDich.Designer.cs">
+      <DependentUpon>FrmGiaoDich.cs</DependentUpon>
     </Compile>
-    <Compile Include="form_KhoanVay_ChoVay.cs">
+    <Compile Include="Forms\FrmVayNo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form_KhoanVay_ChoVay.Designer.cs">
-      <DependentUpon>form_KhoanVay_ChoVay.cs</DependentUpon>
+    <Compile Include="Forms\FrmVayNo.Designer.cs">
+      <DependentUpon>FrmVayNo.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form_Menu.cs">
+    <Compile Include="Forms\FrmMainMenu.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_Menu.Designer.cs">
-      <DependentUpon>Form_Menu.cs</DependentUpon>
+    <Compile Include="Forms\FrmMainMenu.Designer.cs">
+      <DependentUpon>FrmMainMenu.cs</DependentUpon>
     </Compile>
-    <Compile Include="form_TaiKhoan.cs">
+    <Compile Include="Forms\FrmTaiKhoan.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form_TaiKhoan.Designer.cs">
-      <DependentUpon>form_TaiKhoan.cs</DependentUpon>
+    <Compile Include="Forms\FrmTaiKhoan.Designer.cs">
+      <DependentUpon>FrmTaiKhoan.cs</DependentUpon>
     </Compile>
-    <Compile Include="form_ThongKe.cs">
+    <Compile Include="Forms\FrmThongKe.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="form_ThongKe.Designer.cs">
-      <DependentUpon>form_ThongKe.cs</DependentUpon>
+    <Compile Include="Forms\FrmThongKe.Designer.cs">
+      <DependentUpon>FrmThongKe.cs</DependentUpon>
     </Compile>
-    <Compile Include="frm_danhMuc.cs">
+    <Compile Include="Forms\FrmDanhMuc.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frm_danhMuc.Designer.cs">
-      <DependentUpon>frm_danhMuc.cs</DependentUpon>
+    <Compile Include="Forms\FrmDanhMuc.Designer.cs">
+      <DependentUpon>FrmDanhMuc.cs</DependentUpon>
     </Compile>
-    <Compile Include="frm_nganSach.cs">
+    <Compile Include="Forms\FrmNganSach.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="frm_nganSach.Designer.cs">
-      <DependentUpon>frm_nganSach.cs</DependentUpon>
+    <Compile Include="Forms\FrmNganSach.Designer.cs">
+      <DependentUpon>FrmNganSach.cs</DependentUpon>
     </Compile>
-    <Compile Include="sign_in_and_sign_up\form_Sign_Up.cs">
+    <Compile Include="Forms\Auth\sign_in_and_sign_up\FrmRegister.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="sign_in_and_sign_up\form_Sign_Up.Designer.cs">
-      <DependentUpon>form_Sign_Up.cs</DependentUpon>
+    <Compile Include="Forms\Auth\sign_in_and_sign_up\FrmRegister.Designer.cs">
+      <DependentUpon>FrmRegister.cs</DependentUpon>
     </Compile>
-    <Compile Include="sign_in_and_sign_up\form_Sign_In.cs">
+    <Compile Include="Forms\Auth\sign_in_and_sign_up\FrmLogin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="sign_in_and_sign_up\form_Sign_In.Designer.cs">
-      <DependentUpon>form_Sign_In.cs</DependentUpon>
+    <Compile Include="Forms\Auth\sign_in_and_sign_up\FrmLogin.Designer.cs">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="form_GiaoDich.resx">
-      <DependentUpon>form_GiaoDich.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FrmGiaoDich.resx">
+      <DependentUpon>FrmGiaoDich.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form_KhoanVay_ChoVay.resx">
-      <DependentUpon>form_KhoanVay_ChoVay.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FrmVayNo.resx">
+      <DependentUpon>FrmVayNo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_Menu.resx">
-      <DependentUpon>Form_Menu.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FrmMainMenu.resx">
+      <DependentUpon>FrmMainMenu.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form_TaiKhoan.resx">
-      <DependentUpon>form_TaiKhoan.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FrmTaiKhoan.resx">
+      <DependentUpon>FrmTaiKhoan.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="form_ThongKe.resx">
-      <DependentUpon>form_ThongKe.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FrmThongKe.resx">
+      <DependentUpon>FrmThongKe.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frm_danhMuc.resx">
-      <DependentUpon>frm_danhMuc.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FrmDanhMuc.resx">
+      <DependentUpon>FrmDanhMuc.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frm_nganSach.resx">
-      <DependentUpon>frm_nganSach.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FrmNganSach.resx">
+      <DependentUpon>FrmNganSach.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -139,19 +139,19 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="sign_in_and_sign_up\form_Sign_In.resx">
-      <DependentUpon>form_Sign_In.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Auth\sign_in_and_sign_up\FrmLogin.resx">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="sign_in_and_sign_up\form_Sign_Up.resx">
-      <DependentUpon>form_Sign_Up.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\Auth\sign_in_and_sign_up\FrmRegister.resx">
+      <DependentUpon>FrmRegister.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="DB_System.dbml">
+    <None Include="Data\AppDatabase.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>DB_System.designer.cs</LastGenOutput>
+      <LastGenOutput>AppDatabase.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="DB_System.dbml.layout">
-      <DependentUpon>DB_System.dbml</DependentUpon>
+    <None Include="Data\AppDatabase.dbml.layout">
+      <DependentUpon>AppDatabase.dbml</DependentUpon>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -170,7 +170,10 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DatabaseScripts\01_Init_DB.sql" />
+    <Content Include="DatabaseScripts\01_InitialSchema.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,6 +1,6 @@
 ﻿namespace Project_FinancePersonalManagement
 {
-    partial class form_Sign_Up
+    partial class FrmRegister
     {
         private System.ComponentModel.IContainer components = null;
 

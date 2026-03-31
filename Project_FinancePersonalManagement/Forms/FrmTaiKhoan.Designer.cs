@@ -1,6 +1,6 @@
 ﻿namespace Project_FinancePersonalManagement
 {
-    partial class form_TaiKhoan
+    partial class FrmTaiKhoan
     {
         /// <summary>
         /// Required designer variable.

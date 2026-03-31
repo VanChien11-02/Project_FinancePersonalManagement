@@ -1,6 +1,6 @@
 ﻿namespace Project_FinancePersonalManagement
 {
-    partial class form_KhoanVay_ChoVay
+    partial class FrmVayNo
     {
         /// <summary>
         /// Required designer variable.

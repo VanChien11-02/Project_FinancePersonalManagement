@@ -8,15 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using Project_FinancePersonalManagement.Data;
 
 namespace Project_FinancePersonalManagement
 {
-    public partial class frm_nganSach : Form
+    public partial class FrmNganSach : Form
     {
         private string currentUserId;
         private string currentBudgetID = ""; // Dùng biến ẩn để quản lý Sửa/Xóa
 
-        public frm_nganSach(string UserID)
+        public FrmNganSach(string UserID)
         {
             InitializeComponent();
             currentUserId = UserID;
@@ -36,7 +37,7 @@ namespace Project_FinancePersonalManagement
         // LOAD COMBOBOX DANH MỤC
         void LoadComboBoxDanhMuc()
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 var danhMucList = db.Categories.Where(c => c.UserID == currentUserId).ToList();
 
@@ -49,7 +50,7 @@ namespace Project_FinancePersonalManagement
         //LOAD DỮ LIỆU LÊN BẢNG 
         void LoadData()
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -92,7 +93,7 @@ namespace Project_FinancePersonalManagement
 
         void LoadChart()
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -122,7 +123,7 @@ namespace Project_FinancePersonalManagement
                     budgetChart.ChartAreas[0].AxisX.Title = "Danh mục";
                     budgetChart.ChartAreas[0].AxisY.Title = "Số tiền";
                 }
-                catch (Exception ex) { }
+                catch (Exception) { }
             }
         }
 
@@ -154,7 +155,7 @@ namespace Project_FinancePersonalManagement
 
             string maDM = cbo_DanhMuc.SelectedValue.ToString();
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 // Chặn việc tạo 2 ngân sách Ăn uống trong cùng 1 tháng/năm
                 bool isExist = db.Budgets.Any(b => b.UserID == currentUserId && b.CategoryID == maDM && b.Month == thang && b.Year == nam);
@@ -200,7 +201,7 @@ namespace Project_FinancePersonalManagement
             if (!int.TryParse(txt_thang.Text.Trim(), out int thang) || thang < 1 || thang > 12) return;
             if (!int.TryParse(txt_nam.Text.Trim(), out int nam) || nam < 2000) return;
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 var bd = db.Budgets.SingleOrDefault(x => x.BudgetID == currentBudgetID);
                 if (bd != null)
@@ -225,7 +226,7 @@ namespace Project_FinancePersonalManagement
 
             if (MessageBox.Show("Bạn có chắc muốn xóa ngân sách này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                using (DB_SystemDataContext db = new DB_SystemDataContext())
+                using (AppDatabaseDataContext db = new AppDatabaseDataContext())
                 {
                     var bd = db.Budgets.SingleOrDefault(x => x.BudgetID == currentBudgetID);
                     if (bd != null)
@@ -253,24 +254,24 @@ namespace Project_FinancePersonalManagement
 
         private void btn_thoat_Click(object sender, EventArgs e)
         {
-            Form_Menu frmMenu = Application.OpenForms.OfType<Form_Menu>().FirstOrDefault();
+            FrmMainMenu frmMenu = Application.OpenForms.OfType<FrmMainMenu>().FirstOrDefault();
             if (frmMenu != null)
             {
                 frmMenu.RefreshMenu();
             }
 
-            form_TaiKhoan frmTaiKhoan = Application.OpenForms.OfType<form_TaiKhoan>().FirstOrDefault();
+            FrmTaiKhoan frmTaiKhoan = Application.OpenForms.OfType<FrmTaiKhoan>().FirstOrDefault();
             if (frmTaiKhoan != null)
             {
                 frmTaiKhoan.RefreshTaiKhoan();
             }
 
-            form_ThongKe frmThongKe = Application.OpenForms.OfType<form_ThongKe>().FirstOrDefault();
+            FrmThongKe frmThongKe = Application.OpenForms.OfType<FrmThongKe>().FirstOrDefault();
             if (frmThongKe != null)
             {
                 frmThongKe.RefreshThongKe();
             }
-            form_GiaoDich frmGiaoDich = Application.OpenForms.OfType<form_GiaoDich>().FirstOrDefault();
+            FrmGiaoDich frmGiaoDich = Application.OpenForms.OfType<FrmGiaoDich>().FirstOrDefault();
             if (frmGiaoDich != null)
             {
                 frmGiaoDich.RefreshGiaoDich();

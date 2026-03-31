@@ -1,6 +1,6 @@
 ﻿namespace Project_FinancePersonalManagement
 {
-    partial class frm_danhMuc
+    partial class FrmDanhMuc
     {
         /// <summary>
         /// Required designer variable.

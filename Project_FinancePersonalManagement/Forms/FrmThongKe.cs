@@ -8,13 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using Project_FinancePersonalManagement.Data;
 
 namespace Project_FinancePersonalManagement
 {
-    public partial class form_ThongKe : Form
+    public partial class FrmThongKe : Form
     {
         private string currentUserID;
-        public form_ThongKe(string UserID)
+        public FrmThongKe(string UserID)
         {
             InitializeComponent();
 
@@ -32,7 +33,7 @@ namespace Project_FinancePersonalManagement
 
             DateTime denNgay = dtpDenNgay.Value.Date.AddDays(1).AddTicks(-1);
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {

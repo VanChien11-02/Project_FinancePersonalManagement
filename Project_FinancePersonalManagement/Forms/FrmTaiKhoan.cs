@@ -8,14 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using Project_FinancePersonalManagement.Data;
 
 namespace Project_FinancePersonalManagement
 {
-    public partial class form_TaiKhoan : Form
+    public partial class FrmTaiKhoan : Form
     {
         private string currentUserID;
         private string selectedAccountID; // Biến lưu ID tài khoản đang được chọn trong DataGridView
-        public form_TaiKhoan(string UserID)
+        public FrmTaiKhoan(string UserID)
         {
             InitializeComponent();
             currentUserID = UserID;
@@ -35,7 +36,7 @@ namespace Project_FinancePersonalManagement
             }
 
             // NẠP DỮ LIỆU TỪ SQL VÀO DATAGRIDVIEW
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -75,7 +76,7 @@ namespace Project_FinancePersonalManagement
 
         private void LoadThongKe()
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -115,7 +116,7 @@ namespace Project_FinancePersonalManagement
 
         private void LoadChart()
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -220,7 +221,7 @@ namespace Project_FinancePersonalManagement
                 return;
             }
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -298,7 +299,7 @@ namespace Project_FinancePersonalManagement
                 return;
             }
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -357,7 +358,7 @@ namespace Project_FinancePersonalManagement
 
             if (dr == DialogResult.Yes)
             {
-                using (DB_SystemDataContext db = new DB_SystemDataContext())
+                using (AppDatabaseDataContext db = new AppDatabaseDataContext())
                 {
                     try
                     {
@@ -424,13 +425,13 @@ namespace Project_FinancePersonalManagement
 
         private void btn_Thoat_Click(object sender, EventArgs e)
         {
-            Form_Menu frmMenu = Application.OpenForms.OfType<Form_Menu>().FirstOrDefault();
+            FrmMainMenu frmMenu = Application.OpenForms.OfType<FrmMainMenu>().FirstOrDefault();
             if (frmMenu != null)
             {
                 frmMenu.RefreshMenu();
             }
 
-            form_ThongKe frmThongKe = Application.OpenForms.OfType<form_ThongKe>().FirstOrDefault();
+            FrmThongKe frmThongKe = Application.OpenForms.OfType<FrmThongKe>().FirstOrDefault();
             if (frmThongKe != null)
             {
                 frmThongKe.RefreshThongKe();

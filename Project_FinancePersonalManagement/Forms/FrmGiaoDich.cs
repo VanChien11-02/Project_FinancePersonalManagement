@@ -8,14 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
+using Project_FinancePersonalManagement.Data;
 
 namespace Project_FinancePersonalManagement
 {
-    public partial class form_GiaoDich : Form
+    public partial class FrmGiaoDich : Form
     {
         private string currentUserID;
         private string currentTransID = "";
-        public form_GiaoDich(string UserID)
+        public FrmGiaoDich(string UserID)
         {
             InitializeComponent();
             currentUserID = UserID;
@@ -27,7 +28,7 @@ namespace Project_FinancePersonalManagement
 
             string loaiGD = cbo_LoaiGD.SelectedItem.ToString(); // Thu, Chi, hoặc Chuyển tiền
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 if (loaiGD == "Chuyển tiền")
                 {
@@ -60,7 +61,7 @@ namespace Project_FinancePersonalManagement
 
         private void LoadData()
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -143,7 +144,7 @@ namespace Project_FinancePersonalManagement
 
         private void form_GiaoDich_Load(object sender, EventArgs e)
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 bool hasAccounts = db.Accounts.Any(a => a.UserID == currentUserID);
                 if (!hasAccounts)
@@ -196,7 +197,7 @@ namespace Project_FinancePersonalManagement
             }
 
             // XỬ LÝ DATABASE
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -297,7 +298,7 @@ namespace Project_FinancePersonalManagement
         {
             if (cbo_TaiKhoan.SelectedValue != null && cbo_TaiKhoan.SelectedValue is string maTK)
             {
-                using (DB_SystemDataContext db = new DB_SystemDataContext())
+                using (AppDatabaseDataContext db = new AppDatabaseDataContext())
                 {
                     var acc = db.Accounts.SingleOrDefault(a => a.AccountID == maTK);
                     if (acc != null)
@@ -310,19 +311,19 @@ namespace Project_FinancePersonalManagement
 
         private void btn_Thoat_Click(object sender, EventArgs e)
         {
-            Form_Menu frmMenu = Application.OpenForms.OfType<Form_Menu>().FirstOrDefault();
+            FrmMainMenu frmMenu = Application.OpenForms.OfType<FrmMainMenu>().FirstOrDefault();
             if (frmMenu != null)
             {
                 frmMenu.RefreshMenu();
             }
 
-            form_TaiKhoan frmTaiKhoan = Application.OpenForms.OfType<form_TaiKhoan>().FirstOrDefault();
+            FrmTaiKhoan frmTaiKhoan = Application.OpenForms.OfType<FrmTaiKhoan>().FirstOrDefault();
             if (frmTaiKhoan != null)
             {
                 frmTaiKhoan.RefreshTaiKhoan();
             }
 
-            form_ThongKe frmThongKe = Application.OpenForms.OfType<form_ThongKe>().FirstOrDefault();
+            FrmThongKe frmThongKe = Application.OpenForms.OfType<FrmThongKe>().FirstOrDefault();
             if (frmThongKe != null)
             {
                 frmThongKe.RefreshThongKe();
@@ -374,7 +375,7 @@ namespace Project_FinancePersonalManagement
 
         private void btn_Loc_Click(object sender, EventArgs e)
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 DateTime tuNgay = dtp_TuNgay.Value.Date;
                 DateTime denNgay = dtp_DenNgay.Value.Date;
@@ -421,7 +422,7 @@ namespace Project_FinancePersonalManagement
             if (MessageBox.Show("Bạn có chắc chắn muốn xóa giao dịch này?\nTiền trong ví sẽ được hoàn lại tự động.",
                                 "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                using (DB_SystemDataContext db = new DB_SystemDataContext())
+                using (AppDatabaseDataContext db = new AppDatabaseDataContext())
                 {
                     var t = db.Transactions.SingleOrDefault(x => x.TransID == currentTransID);
                     if (t != null)
@@ -465,7 +466,7 @@ namespace Project_FinancePersonalManagement
 
             if (!decimal.TryParse(txt_Tien.Text.Trim(), out decimal soTien) || soTien <= 0) return;
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 var t = db.Transactions.SingleOrDefault(x => x.TransID == currentTransID);
                 if (t != null)

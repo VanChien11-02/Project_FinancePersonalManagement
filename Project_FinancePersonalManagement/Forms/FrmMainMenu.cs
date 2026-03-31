@@ -4,17 +4,18 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using Project_FinancePersonalManagement.Data;
 
 namespace Project_FinancePersonalManagement
 {
-    public partial class Form_Menu : Form
+    public partial class FrmMainMenu : Form
     {
         private string currentUserID;
         private string currentUserName;
         private bool isLoggedIn = false;
         private Button _activeNav;
 
-        public Form_Menu()
+        public FrmMainMenu()
         {
             InitializeComponent();
         }
@@ -92,7 +93,7 @@ namespace Project_FinancePersonalManagement
         {
             lblMonthYear.Text = "Tháng " + DateTime.Now.ToString("MM/yyyy");
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -171,7 +172,7 @@ namespace Project_FinancePersonalManagement
 
         private void LoadChart()
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -242,11 +243,11 @@ namespace Project_FinancePersonalManagement
 
         private void btnNav_DangNhap_Click(object sender, EventArgs e)
         {
-            Form formLogin = new form_Sign_In();
+            Form formLogin = new FrmLogin();
             if (formLogin.ShowDialog() == DialogResult.OK)
             {
-                currentUserID = ((form_Sign_In)formLogin).LoggedInUserID;
-                currentUserName = ((form_Sign_In)formLogin).LoggedInUserName;
+                currentUserID = ((FrmLogin)formLogin).LoggedInUserID;
+                currentUserName = ((FrmLogin)formLogin).LoggedInUserName;
                 isLoggedIn = true;
 
                 lblAvatarInitials.Text = GetInitials(currentUserName);
@@ -261,7 +262,7 @@ namespace Project_FinancePersonalManagement
 
         private void btnNav_DangKy_Click(object sender, EventArgs e)
         {
-            new form_Sign_Up().ShowDialog();
+            new FrmRegister().ShowDialog();
         }
 
         private void btnNav_DangXuat_Click(object sender, EventArgs e)
@@ -307,7 +308,7 @@ namespace Project_FinancePersonalManagement
         private void btnNav_GiaoDich_Click(object sender, EventArgs e)
         {
             SetActiveNav(btnNav_GiaoDich);
-            new form_GiaoDich(currentUserID).ShowDialog();
+            new FrmGiaoDich(currentUserID).ShowDialog();
             SetActiveNav(btnNav_Overview);
             LoadDashboard();
         }
@@ -315,7 +316,7 @@ namespace Project_FinancePersonalManagement
         private void btnNav_TaiKhoan_Click(object sender, EventArgs e)
         {
             SetActiveNav(btnNav_TaiKhoan);
-            new form_TaiKhoan(currentUserID).ShowDialog();
+            new FrmTaiKhoan(currentUserID).ShowDialog();
             SetActiveNav(btnNav_Overview);
             LoadDashboard();
         }
@@ -323,28 +324,28 @@ namespace Project_FinancePersonalManagement
         private void btnNav_ThongKe_Click(object sender, EventArgs e)
         {
             SetActiveNav(btnNav_ThongKe);
-            new form_ThongKe(currentUserID).ShowDialog();
+            new FrmThongKe(currentUserID).ShowDialog();
             SetActiveNav(btnNav_Overview);
         }
 
         private void btnNav_NganSach_Click(object sender, EventArgs e)
         {
             SetActiveNav(btnNav_NganSach);
-            new frm_nganSach(currentUserID).ShowDialog();
+            new FrmNganSach(currentUserID).ShowDialog();
             SetActiveNav(btnNav_Overview);
         }
 
         private void btnNav_KhoanVay_Click(object sender, EventArgs e)
         {
             SetActiveNav(btnNav_KhoanVay);
-            new form_KhoanVay_ChoVay(currentUserID).ShowDialog();
+            new FrmVayNo(currentUserID).ShowDialog();
             SetActiveNav(btnNav_Overview);
         }
 
         private void btnNav_DanhMuc_Click(object sender, EventArgs e)
         {
             SetActiveNav(btnNav_DanhMuc);
-            new frm_danhMuc(currentUserID).ShowDialog();
+            new FrmDanhMuc(currentUserID).ShowDialog();
             SetActiveNav(btnNav_Overview);
             LoadDashboard();
         }

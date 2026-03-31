@@ -7,15 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Project_FinancePersonalManagement.Data;
 
 namespace Project_FinancePersonalManagement
 {
-    public partial class frm_danhMuc : Form
+    public partial class FrmDanhMuc : Form
     {
         private string currentUserId;
         private string currentCategoryID = "";
 
-        public frm_danhMuc(string UserID)
+        public FrmDanhMuc(string UserID)
         {
             InitializeComponent();
             currentUserId = UserID;
@@ -31,7 +32,7 @@ namespace Project_FinancePersonalManagement
         // HÀM LOAD DỮ LIỆU & LỌC
         void LoadData()
         {
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -88,7 +89,7 @@ namespace Project_FinancePersonalManagement
                 return;
             }
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
@@ -140,7 +141,7 @@ namespace Project_FinancePersonalManagement
             string id = currentCategoryID;
             if (string.IsNullOrEmpty(id)) return;
 
-            using (DB_SystemDataContext db = new DB_SystemDataContext())
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 var c = db.Categories.SingleOrDefault(v => v.CategoryID == id);
                 if (c != null)
@@ -164,7 +165,7 @@ namespace Project_FinancePersonalManagement
 
             if (MessageBox.Show("Bạn có chắc chắn muốn xóa danh mục này không?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                using (DB_SystemDataContext db = new DB_SystemDataContext())
+                using (AppDatabaseDataContext db = new AppDatabaseDataContext())
                 {
                     try
                     {
@@ -201,24 +202,24 @@ namespace Project_FinancePersonalManagement
 
         private void btn_thoat_Click(object sender, EventArgs e)
         {
-            Form_Menu frmMenu = Application.OpenForms.OfType<Form_Menu>().FirstOrDefault();
+            FrmMainMenu frmMenu = Application.OpenForms.OfType<FrmMainMenu>().FirstOrDefault();
             if (frmMenu != null)
             {
                 frmMenu.RefreshMenu();
             }
 
-            form_TaiKhoan frmTaiKhoan = Application.OpenForms.OfType<form_TaiKhoan>().FirstOrDefault();
+            FrmTaiKhoan frmTaiKhoan = Application.OpenForms.OfType<FrmTaiKhoan>().FirstOrDefault();
             if (frmTaiKhoan != null)
             {
                 frmTaiKhoan.RefreshTaiKhoan();
             }
 
-            form_ThongKe frmThongKe = Application.OpenForms.OfType<form_ThongKe>().FirstOrDefault();
+            FrmThongKe frmThongKe = Application.OpenForms.OfType<FrmThongKe>().FirstOrDefault();
             if (frmThongKe != null)
             {
                 frmThongKe.RefreshThongKe();
             }
-            form_GiaoDich frmGiaoDich = Application.OpenForms.OfType<form_GiaoDich>().FirstOrDefault();
+            FrmGiaoDich frmGiaoDich = Application.OpenForms.OfType<FrmGiaoDich>().FirstOrDefault();
             if (frmGiaoDich != null)
             {
                 frmGiaoDich.RefreshGiaoDich();

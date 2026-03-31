@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Project_FinancePersonalManagement
+namespace Project_FinancePersonalManagement.Data
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -23,7 +23,7 @@ namespace Project_FinancePersonalManagement
 	
 	
 	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="PersonalFinanceDB")]
-	public partial class DB_SystemDataContext : System.Data.Linq.DataContext
+	public partial class AppDatabaseDataContext : System.Data.Linq.DataContext
 	{
 		
 		private static System.Data.Linq.Mapping.MappingSource mappingSource = new AttributeMappingSource();
@@ -39,42 +39,42 @@ namespace Project_FinancePersonalManagement
     partial void InsertCategory(Category instance);
     partial void UpdateCategory(Category instance);
     partial void DeleteCategory(Category instance);
+    partial void InsertDebt(Debt instance);
+    partial void UpdateDebt(Debt instance);
+    partial void DeleteDebt(Debt instance);
     partial void InsertTransaction(Transaction instance);
     partial void UpdateTransaction(Transaction instance);
     partial void DeleteTransaction(Transaction instance);
     partial void InsertUser(User instance);
     partial void UpdateUser(User instance);
     partial void DeleteUser(User instance);
-    partial void InsertDebt(Debt instance);
-    partial void UpdateDebt(Debt instance);
-    partial void DeleteDebt(Debt instance);
     #endregion
 		
-		public DB_SystemDataContext() : 
+		public AppDatabaseDataContext() : 
 				base(global::Project_FinancePersonalManagement.Properties.Settings.Default.PersonalFinanceDBConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public DB_SystemDataContext(string connection) : 
+		public AppDatabaseDataContext(string connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public DB_SystemDataContext(System.Data.IDbConnection connection) : 
+		public AppDatabaseDataContext(System.Data.IDbConnection connection) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public DB_SystemDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public AppDatabaseDataContext(string connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
 		}
 		
-		public DB_SystemDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
+		public AppDatabaseDataContext(System.Data.IDbConnection connection, System.Data.Linq.Mapping.MappingSource mappingSource) : 
 				base(connection, mappingSource)
 		{
 			OnCreated();
@@ -104,6 +104,14 @@ namespace Project_FinancePersonalManagement
 			}
 		}
 		
+		public System.Data.Linq.Table<Debt> Debts
+		{
+			get
+			{
+				return this.GetTable<Debt>();
+			}
+		}
+		
 		public System.Data.Linq.Table<Transaction> Transactions
 		{
 			get
@@ -117,14 +125,6 @@ namespace Project_FinancePersonalManagement
 			get
 			{
 				return this.GetTable<User>();
-			}
-		}
-		
-		public System.Data.Linq.Table<Debt> Debts
-		{
-			get
-			{
-				return this.GetTable<Debt>();
 			}
 		}
 	}
@@ -147,9 +147,9 @@ namespace Project_FinancePersonalManagement
 		
 		private string _BankDetail;
 		
-		private EntitySet<Transaction> _Transactions;
-		
 		private EntitySet<Debt> _Debts;
+		
+		private EntitySet<Transaction> _Transactions;
 		
 		private EntityRef<User> _User;
 		
@@ -173,8 +173,8 @@ namespace Project_FinancePersonalManagement
 		
 		public Account()
 		{
-			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
 			this._Debts = new EntitySet<Debt>(new Action<Debt>(this.attach_Debts), new Action<Debt>(this.detach_Debts));
+			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
 			this._User = default(EntityRef<User>);
 			OnCreated();
 		}
@@ -303,19 +303,6 @@ namespace Project_FinancePersonalManagement
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Account_Transaction", Storage="_Transactions", ThisKey="AccountID", OtherKey="AccountID")]
-		public EntitySet<Transaction> Transactions
-		{
-			get
-			{
-				return this._Transactions;
-			}
-			set
-			{
-				this._Transactions.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Account_Debt", Storage="_Debts", ThisKey="AccountID", OtherKey="AccountID")]
 		public EntitySet<Debt> Debts
 		{
@@ -326,6 +313,19 @@ namespace Project_FinancePersonalManagement
 			set
 			{
 				this._Debts.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Account_Transaction", Storage="_Transactions", ThisKey="AccountID", OtherKey="AccountID")]
+		public EntitySet<Transaction> Transactions
+		{
+			get
+			{
+				return this._Transactions;
+			}
+			set
+			{
+				this._Transactions.Assign(value);
 			}
 		}
 		
@@ -383,18 +383,6 @@ namespace Project_FinancePersonalManagement
 			}
 		}
 		
-		private void attach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.Account = this;
-		}
-		
-		private void detach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.Account = null;
-		}
-		
 		private void attach_Debts(Debt entity)
 		{
 			this.SendPropertyChanging();
@@ -402,6 +390,18 @@ namespace Project_FinancePersonalManagement
 		}
 		
 		private void detach_Debts(Debt entity)
+		{
+			this.SendPropertyChanging();
+			entity.Account = null;
+		}
+		
+		private void attach_Transactions(Transaction entity)
+		{
+			this.SendPropertyChanging();
+			entity.Account = this;
+		}
+		
+		private void detach_Transactions(Transaction entity)
 		{
 			this.SendPropertyChanging();
 			entity.Account = null;
@@ -927,6 +927,418 @@ namespace Project_FinancePersonalManagement
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Debts")]
+	public partial class Debt : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _DebtID;
+		
+		private string _UserID;
+		
+		private string _PersonName;
+		
+		private decimal _Amount;
+		
+		private System.Nullable<double> _InterestRate;
+		
+		private System.Nullable<System.DateTime> _StartDate;
+		
+		private System.Nullable<System.DateTime> _DueDate;
+		
+		private string _DebtType;
+		
+		private string _Status;
+		
+		private string _AccountID;
+		
+		private decimal _PaidAmount;
+		
+		private EntitySet<Transaction> _Transactions;
+		
+		private EntityRef<Account> _Account;
+		
+		private EntityRef<User> _User;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnDebtIDChanging(string value);
+    partial void OnDebtIDChanged();
+    partial void OnUserIDChanging(string value);
+    partial void OnUserIDChanged();
+    partial void OnPersonNameChanging(string value);
+    partial void OnPersonNameChanged();
+    partial void OnAmountChanging(decimal value);
+    partial void OnAmountChanged();
+    partial void OnInterestRateChanging(System.Nullable<double> value);
+    partial void OnInterestRateChanged();
+    partial void OnStartDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnStartDateChanged();
+    partial void OnDueDateChanging(System.Nullable<System.DateTime> value);
+    partial void OnDueDateChanged();
+    partial void OnDebtTypeChanging(string value);
+    partial void OnDebtTypeChanged();
+    partial void OnStatusChanging(string value);
+    partial void OnStatusChanged();
+    partial void OnAccountIDChanging(string value);
+    partial void OnAccountIDChanged();
+    partial void OnPaidAmountChanging(decimal value);
+    partial void OnPaidAmountChanged();
+    #endregion
+		
+		public Debt()
+		{
+			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
+			this._Account = default(EntityRef<Account>);
+			this._User = default(EntityRef<User>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DebtID", DbType="VarChar(7) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string DebtID
+		{
+			get
+			{
+				return this._DebtID;
+			}
+			set
+			{
+				if ((this._DebtID != value))
+				{
+					this.OnDebtIDChanging(value);
+					this.SendPropertyChanging();
+					this._DebtID = value;
+					this.SendPropertyChanged("DebtID");
+					this.OnDebtIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="VarChar(7) NOT NULL", CanBeNull=false)]
+		public string UserID
+		{
+			get
+			{
+				return this._UserID;
+			}
+			set
+			{
+				if ((this._UserID != value))
+				{
+					if (this._User.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUserIDChanging(value);
+					this.SendPropertyChanging();
+					this._UserID = value;
+					this.SendPropertyChanged("UserID");
+					this.OnUserIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PersonName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string PersonName
+		{
+			get
+			{
+				return this._PersonName;
+			}
+			set
+			{
+				if ((this._PersonName != value))
+				{
+					this.OnPersonNameChanging(value);
+					this.SendPropertyChanging();
+					this._PersonName = value;
+					this.SendPropertyChanged("PersonName");
+					this.OnPersonNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Decimal(18,2) NOT NULL")]
+		public decimal Amount
+		{
+			get
+			{
+				return this._Amount;
+			}
+			set
+			{
+				if ((this._Amount != value))
+				{
+					this.OnAmountChanging(value);
+					this.SendPropertyChanging();
+					this._Amount = value;
+					this.SendPropertyChanged("Amount");
+					this.OnAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InterestRate", DbType="Float")]
+		public System.Nullable<double> InterestRate
+		{
+			get
+			{
+				return this._InterestRate;
+			}
+			set
+			{
+				if ((this._InterestRate != value))
+				{
+					this.OnInterestRateChanging(value);
+					this.SendPropertyChanging();
+					this._InterestRate = value;
+					this.SendPropertyChanged("InterestRate");
+					this.OnInterestRateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> StartDate
+		{
+			get
+			{
+				return this._StartDate;
+			}
+			set
+			{
+				if ((this._StartDate != value))
+				{
+					this.OnStartDateChanging(value);
+					this.SendPropertyChanging();
+					this._StartDate = value;
+					this.SendPropertyChanged("StartDate");
+					this.OnStartDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DueDate", DbType="DateTime")]
+		public System.Nullable<System.DateTime> DueDate
+		{
+			get
+			{
+				return this._DueDate;
+			}
+			set
+			{
+				if ((this._DueDate != value))
+				{
+					this.OnDueDateChanging(value);
+					this.SendPropertyChanging();
+					this._DueDate = value;
+					this.SendPropertyChanged("DueDate");
+					this.OnDueDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DebtType", DbType="NVarChar(20) NOT NULL", CanBeNull=false)]
+		public string DebtType
+		{
+			get
+			{
+				return this._DebtType;
+			}
+			set
+			{
+				if ((this._DebtType != value))
+				{
+					this.OnDebtTypeChanging(value);
+					this.SendPropertyChanging();
+					this._DebtType = value;
+					this.SendPropertyChanged("DebtType");
+					this.OnDebtTypeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="NVarChar(20)")]
+		public string Status
+		{
+			get
+			{
+				return this._Status;
+			}
+			set
+			{
+				if ((this._Status != value))
+				{
+					this.OnStatusChanging(value);
+					this.SendPropertyChanging();
+					this._Status = value;
+					this.SendPropertyChanged("Status");
+					this.OnStatusChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountID", DbType="VarChar(7)")]
+		public string AccountID
+		{
+			get
+			{
+				return this._AccountID;
+			}
+			set
+			{
+				if ((this._AccountID != value))
+				{
+					if (this._Account.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnAccountIDChanging(value);
+					this.SendPropertyChanging();
+					this._AccountID = value;
+					this.SendPropertyChanged("AccountID");
+					this.OnAccountIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaidAmount", DbType="Decimal(18,2) NOT NULL")]
+		public decimal PaidAmount
+		{
+			get
+			{
+				return this._PaidAmount;
+			}
+			set
+			{
+				if ((this._PaidAmount != value))
+				{
+					this.OnPaidAmountChanging(value);
+					this.SendPropertyChanging();
+					this._PaidAmount = value;
+					this.SendPropertyChanged("PaidAmount");
+					this.OnPaidAmountChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Debt_Transaction", Storage="_Transactions", ThisKey="DebtID", OtherKey="DebtID")]
+		public EntitySet<Transaction> Transactions
+		{
+			get
+			{
+				return this._Transactions;
+			}
+			set
+			{
+				this._Transactions.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Account_Debt", Storage="_Account", ThisKey="AccountID", OtherKey="AccountID", IsForeignKey=true)]
+		public Account Account
+		{
+			get
+			{
+				return this._Account.Entity;
+			}
+			set
+			{
+				Account previousValue = this._Account.Entity;
+				if (((previousValue != value) 
+							|| (this._Account.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Account.Entity = null;
+						previousValue.Debts.Remove(this);
+					}
+					this._Account.Entity = value;
+					if ((value != null))
+					{
+						value.Debts.Add(this);
+						this._AccountID = value.AccountID;
+					}
+					else
+					{
+						this._AccountID = default(string);
+					}
+					this.SendPropertyChanged("Account");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Debt", Storage="_User", ThisKey="UserID", OtherKey="UserID", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.Debts.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.Debts.Add(this);
+						this._UserID = value.UserID;
+					}
+					else
+					{
+						this._UserID = default(string);
+					}
+					this.SendPropertyChanged("User");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Transactions(Transaction entity)
+		{
+			this.SendPropertyChanging();
+			entity.Debt = this;
+		}
+		
+		private void detach_Transactions(Transaction entity)
+		{
+			this.SendPropertyChanging();
+			entity.Debt = null;
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Transactions")]
 	public partial class Transaction : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -955,9 +1367,9 @@ namespace Project_FinancePersonalManagement
 		
 		private EntityRef<Category> _Category;
 		
-		private EntityRef<User> _User;
-		
 		private EntityRef<Debt> _Debt;
+		
+		private EntityRef<User> _User;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -987,8 +1399,8 @@ namespace Project_FinancePersonalManagement
 		{
 			this._Account = default(EntityRef<Account>);
 			this._Category = default(EntityRef<Category>);
-			this._User = default(EntityRef<User>);
 			this._Debt = default(EntityRef<Debt>);
+			this._User = default(EntityRef<User>);
 			OnCreated();
 		}
 		
@@ -1256,40 +1668,6 @@ namespace Project_FinancePersonalManagement
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Transaction", Storage="_User", ThisKey="UserID", OtherKey="UserID", IsForeignKey=true)]
-		public User User
-		{
-			get
-			{
-				return this._User.Entity;
-			}
-			set
-			{
-				User previousValue = this._User.Entity;
-				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User.Entity = null;
-						previousValue.Transactions.Remove(this);
-					}
-					this._User.Entity = value;
-					if ((value != null))
-					{
-						value.Transactions.Add(this);
-						this._UserID = value.UserID;
-					}
-					else
-					{
-						this._UserID = default(string);
-					}
-					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Debt_Transaction", Storage="_Debt", ThisKey="DebtID", OtherKey="DebtID", IsForeignKey=true)]
 		public Debt Debt
 		{
@@ -1320,6 +1698,40 @@ namespace Project_FinancePersonalManagement
 						this._DebtID = default(string);
 					}
 					this.SendPropertyChanged("Debt");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Transaction", Storage="_User", ThisKey="UserID", OtherKey="UserID", IsForeignKey=true)]
+		public User User
+		{
+			get
+			{
+				return this._User.Entity;
+			}
+			set
+			{
+				User previousValue = this._User.Entity;
+				if (((previousValue != value) 
+							|| (this._User.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._User.Entity = null;
+						previousValue.Transactions.Remove(this);
+					}
+					this._User.Entity = value;
+					if ((value != null))
+					{
+						value.Transactions.Add(this);
+						this._UserID = value.UserID;
+					}
+					else
+					{
+						this._UserID = default(string);
+					}
+					this.SendPropertyChanged("User");
 				}
 			}
 		}
@@ -1363,9 +1775,9 @@ namespace Project_FinancePersonalManagement
 		
 		private EntitySet<Category> _Categories;
 		
-		private EntitySet<Transaction> _Transactions;
-		
 		private EntitySet<Debt> _Debts;
+		
+		private EntitySet<Transaction> _Transactions;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -1384,8 +1796,8 @@ namespace Project_FinancePersonalManagement
 			this._Accounts = new EntitySet<Account>(new Action<Account>(this.attach_Accounts), new Action<Account>(this.detach_Accounts));
 			this._Budgets = new EntitySet<Budget>(new Action<Budget>(this.attach_Budgets), new Action<Budget>(this.detach_Budgets));
 			this._Categories = new EntitySet<Category>(new Action<Category>(this.attach_Categories), new Action<Category>(this.detach_Categories));
-			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
 			this._Debts = new EntitySet<Debt>(new Action<Debt>(this.attach_Debts), new Action<Debt>(this.detach_Debts));
+			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
 			OnCreated();
 		}
 		
@@ -1488,19 +1900,6 @@ namespace Project_FinancePersonalManagement
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Transaction", Storage="_Transactions", ThisKey="UserID", OtherKey="UserID")]
-		public EntitySet<Transaction> Transactions
-		{
-			get
-			{
-				return this._Transactions;
-			}
-			set
-			{
-				this._Transactions.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Debt", Storage="_Debts", ThisKey="UserID", OtherKey="UserID")]
 		public EntitySet<Debt> Debts
 		{
@@ -1511,6 +1910,19 @@ namespace Project_FinancePersonalManagement
 			set
 			{
 				this._Debts.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Transaction", Storage="_Transactions", ThisKey="UserID", OtherKey="UserID")]
+		public EntitySet<Transaction> Transactions
+		{
+			get
+			{
+				return this._Transactions;
+			}
+			set
+			{
+				this._Transactions.Assign(value);
 			}
 		}
 		
@@ -1570,18 +1982,6 @@ namespace Project_FinancePersonalManagement
 			entity.User = null;
 		}
 		
-		private void attach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = this;
-		}
-		
-		private void detach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.User = null;
-		}
-		
 		private void attach_Debts(Debt entity)
 		{
 			this.SendPropertyChanging();
@@ -1593,417 +1993,17 @@ namespace Project_FinancePersonalManagement
 			this.SendPropertyChanging();
 			entity.User = null;
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Debts")]
-	public partial class Debt : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private string _DebtID;
-		
-		private string _UserID;
-		
-		private string _PersonName;
-		
-		private decimal _Amount;
-		
-		private System.Nullable<double> _InterestRate;
-		
-		private System.Nullable<System.DateTime> _StartDate;
-		
-		private System.Nullable<System.DateTime> _DueDate;
-		
-		private string _DebtType;
-		
-		private string _Status;
-		
-		private string _AccountID;
-		
-		private decimal _PaidAmount;
-		
-		private EntitySet<Transaction> _Transactions;
-		
-		private EntityRef<User> _User;
-		
-		private EntityRef<Account> _Account;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnDebtIDChanging(string value);
-    partial void OnDebtIDChanged();
-    partial void OnUserIDChanging(string value);
-    partial void OnUserIDChanged();
-    partial void OnPersonNameChanging(string value);
-    partial void OnPersonNameChanged();
-    partial void OnAmountChanging(decimal value);
-    partial void OnAmountChanged();
-    partial void OnInterestRateChanging(System.Nullable<double> value);
-    partial void OnInterestRateChanged();
-    partial void OnStartDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnStartDateChanged();
-    partial void OnDueDateChanging(System.Nullable<System.DateTime> value);
-    partial void OnDueDateChanged();
-    partial void OnDebtTypeChanging(string value);
-    partial void OnDebtTypeChanged();
-    partial void OnStatusChanging(string value);
-    partial void OnStatusChanged();
-    partial void OnAccountIDChanging(string value);
-    partial void OnAccountIDChanged();
-    partial void OnPaidAmountChanging(decimal value);
-    partial void OnPaidAmountChanged();
-    #endregion
-		
-		public Debt()
-		{
-			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
-			this._User = default(EntityRef<User>);
-			this._Account = default(EntityRef<Account>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DebtID", DbType="VarChar(7) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
-		public string DebtID
-		{
-			get
-			{
-				return this._DebtID;
-			}
-			set
-			{
-				if ((this._DebtID != value))
-				{
-					this.OnDebtIDChanging(value);
-					this.SendPropertyChanging();
-					this._DebtID = value;
-					this.SendPropertyChanged("DebtID");
-					this.OnDebtIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserID", DbType="VarChar(7) NOT NULL", CanBeNull=false)]
-		public string UserID
-		{
-			get
-			{
-				return this._UserID;
-			}
-			set
-			{
-				if ((this._UserID != value))
-				{
-					if (this._User.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnUserIDChanging(value);
-					this.SendPropertyChanging();
-					this._UserID = value;
-					this.SendPropertyChanged("UserID");
-					this.OnUserIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PersonName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
-		public string PersonName
-		{
-			get
-			{
-				return this._PersonName;
-			}
-			set
-			{
-				if ((this._PersonName != value))
-				{
-					this.OnPersonNameChanging(value);
-					this.SendPropertyChanging();
-					this._PersonName = value;
-					this.SendPropertyChanged("PersonName");
-					this.OnPersonNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Amount", DbType="Decimal(18,2) NOT NULL")]
-		public decimal Amount
-		{
-			get
-			{
-				return this._Amount;
-			}
-			set
-			{
-				if ((this._Amount != value))
-				{
-					this.OnAmountChanging(value);
-					this.SendPropertyChanging();
-					this._Amount = value;
-					this.SendPropertyChanged("Amount");
-					this.OnAmountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_InterestRate", DbType="Float")]
-		public System.Nullable<double> InterestRate
-		{
-			get
-			{
-				return this._InterestRate;
-			}
-			set
-			{
-				if ((this._InterestRate != value))
-				{
-					this.OnInterestRateChanging(value);
-					this.SendPropertyChanging();
-					this._InterestRate = value;
-					this.SendPropertyChanged("InterestRate");
-					this.OnInterestRateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_StartDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> StartDate
-		{
-			get
-			{
-				return this._StartDate;
-			}
-			set
-			{
-				if ((this._StartDate != value))
-				{
-					this.OnStartDateChanging(value);
-					this.SendPropertyChanging();
-					this._StartDate = value;
-					this.SendPropertyChanged("StartDate");
-					this.OnStartDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DueDate", DbType="DateTime")]
-		public System.Nullable<System.DateTime> DueDate
-		{
-			get
-			{
-				return this._DueDate;
-			}
-			set
-			{
-				if ((this._DueDate != value))
-				{
-					this.OnDueDateChanging(value);
-					this.SendPropertyChanging();
-					this._DueDate = value;
-					this.SendPropertyChanged("DueDate");
-					this.OnDueDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DebtType", DbType="NVarChar(20) NOT NULL", CanBeNull=false)]
-		public string DebtType
-		{
-			get
-			{
-				return this._DebtType;
-			}
-			set
-			{
-				if ((this._DebtType != value))
-				{
-					this.OnDebtTypeChanging(value);
-					this.SendPropertyChanging();
-					this._DebtType = value;
-					this.SendPropertyChanged("DebtType");
-					this.OnDebtTypeChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Status", DbType="NVarChar(20)")]
-		public string Status
-		{
-			get
-			{
-				return this._Status;
-			}
-			set
-			{
-				if ((this._Status != value))
-				{
-					this.OnStatusChanging(value);
-					this.SendPropertyChanging();
-					this._Status = value;
-					this.SendPropertyChanged("Status");
-					this.OnStatusChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AccountID", DbType="VarChar(7)")]
-		public string AccountID
-		{
-			get
-			{
-				return this._AccountID;
-			}
-			set
-			{
-				if ((this._AccountID != value))
-				{
-					if (this._Account.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnAccountIDChanging(value);
-					this.SendPropertyChanging();
-					this._AccountID = value;
-					this.SendPropertyChanged("AccountID");
-					this.OnAccountIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PaidAmount", DbType="Decimal(18,2) NOT NULL")]
-		public decimal PaidAmount
-		{
-			get
-			{
-				return this._PaidAmount;
-			}
-			set
-			{
-				if ((this._PaidAmount != value))
-				{
-					this.OnPaidAmountChanging(value);
-					this.SendPropertyChanging();
-					this._PaidAmount = value;
-					this.SendPropertyChanged("PaidAmount");
-					this.OnPaidAmountChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Debt_Transaction", Storage="_Transactions", ThisKey="DebtID", OtherKey="DebtID")]
-		public EntitySet<Transaction> Transactions
-		{
-			get
-			{
-				return this._Transactions;
-			}
-			set
-			{
-				this._Transactions.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="User_Debt", Storage="_User", ThisKey="UserID", OtherKey="UserID", IsForeignKey=true)]
-		public User User
-		{
-			get
-			{
-				return this._User.Entity;
-			}
-			set
-			{
-				User previousValue = this._User.Entity;
-				if (((previousValue != value) 
-							|| (this._User.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._User.Entity = null;
-						previousValue.Debts.Remove(this);
-					}
-					this._User.Entity = value;
-					if ((value != null))
-					{
-						value.Debts.Add(this);
-						this._UserID = value.UserID;
-					}
-					else
-					{
-						this._UserID = default(string);
-					}
-					this.SendPropertyChanged("User");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Account_Debt", Storage="_Account", ThisKey="AccountID", OtherKey="AccountID", IsForeignKey=true)]
-		public Account Account
-		{
-			get
-			{
-				return this._Account.Entity;
-			}
-			set
-			{
-				Account previousValue = this._Account.Entity;
-				if (((previousValue != value) 
-							|| (this._Account.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Account.Entity = null;
-						previousValue.Debts.Remove(this);
-					}
-					this._Account.Entity = value;
-					if ((value != null))
-					{
-						value.Debts.Add(this);
-						this._AccountID = value.AccountID;
-					}
-					else
-					{
-						this._AccountID = default(string);
-					}
-					this.SendPropertyChanged("Account");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
 		
 		private void attach_Transactions(Transaction entity)
 		{
 			this.SendPropertyChanging();
-			entity.Debt = this;
+			entity.User = this;
 		}
 		
 		private void detach_Transactions(Transaction entity)
 		{
 			this.SendPropertyChanging();
-			entity.Debt = null;
+			entity.User = null;
 		}
 	}
 }

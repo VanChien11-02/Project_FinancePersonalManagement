@@ -1,6 +1,6 @@
 ﻿namespace Project_FinancePersonalManagement
 {
-    partial class Form_Menu
+    partial class FrmMainMenu
     {
         private System.ComponentModel.IContainer components = null;
 
