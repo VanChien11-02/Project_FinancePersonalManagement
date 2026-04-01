@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Project_FinancePersonalManagement.Data;
+using Project_FinancePersonalManagement.Properties;
 
 namespace Project_FinancePersonalManagement
 {
@@ -21,6 +22,16 @@ namespace Project_FinancePersonalManagement
         public FrmMainMenu()
         {
             InitializeComponent();
+            Image originalImage = Properties.Resources.ic_settings;
+
+            Bitmap resizedImage = new Bitmap(originalImage, new Size(30, 30));
+            btnNav_Settings.Image = resizedImage;
+
+            btnNav_Settings.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnNav_Settings.TextAlign = ContentAlignment.MiddleLeft;
+            btnNav_Settings.ImageAlign = ContentAlignment.MiddleLeft;
+
+            //btnNav_Settings.Padding = new Padding(10, 0, 0, 0);
         }
 
         //  LOAD / RESIZE
