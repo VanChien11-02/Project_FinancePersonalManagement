@@ -50,6 +50,7 @@ namespace Project_FinancePersonalManagement
 
                     if (user != null)
                     {
+                        // Đăng nhập thành công! Gán dữ liệu vào 2 biến public
                         LoggedInUserID = user.UserID;
                         LoggedInUserName = user.Username;
                         MessageBox.Show($"Đăng nhập thành công! Chào mừng {LoggedInUserName}.", "Thành công", MessageBoxButtons.OK);

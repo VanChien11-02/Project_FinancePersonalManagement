@@ -126,7 +126,7 @@ namespace Project_FinancePersonalManagement
                 {
                     int m = date.Month, y = date.Year;
 
-                    // TÍNH TỔNG SỐ DƯ (Tất cả các ví/tài khoản của user này)
+                    //Tổng số dư
                     decimal totalBalance = db.Accounts
                         .Where(a => a.UserID == currentUserID)
                         .Sum(a => (decimal?)a.Balance) ?? 0;
@@ -245,7 +245,6 @@ namespace Project_FinancePersonalManagement
                     chartChiTieu.Legends[0].BackColor = Color.Transparent;
                     chartChiTieu.Legends[0].BorderColor = Color.Transparent;
 
-
                     Series series = chartChiTieu.Series.Add("ChiTieuSeries");
                     series.ChartType = SeriesChartType.Doughnut;
                     series.Label = "#PERCENT{P0}";
@@ -280,7 +279,7 @@ namespace Project_FinancePersonalManagement
             }
         }
 
-        //  NAV BUTTON CLICK HANDLERS (Tổng quan)
+        //  NAV BUTTON CLICK HANDLERS
         private void btnNav_Overview_Click(object sender, EventArgs e)
         {
             SetActiveNav(btnNav_Overview);
@@ -332,9 +331,9 @@ namespace Project_FinancePersonalManagement
                 ToggleSidebarFeatures(false);
                 SetActiveNav(btnNav_Overview);
 
-                lblTotalBalance.Text = "0 VNĐ";
-                lblTotalIncome.Text = "0 VNĐ";
-                lblTotalExpense.Text = "0 VNĐ";
+                lblTotalBalance.Text = "0 vnđ";
+                lblTotalIncome.Text = "0 vnđ";
+                lblTotalExpense.Text = "0 vnđ";
                 lblChangeBalance.Text = "";
                 lblChangeIncome.Text = "";
                 lblChangeExpense.Text = "";
@@ -410,7 +409,7 @@ namespace Project_FinancePersonalManagement
             LoadDashboard();
         }
 
-        //  HELPERS (hiển thị tên viết tắt trên avatar)
+        //  HELPERS
         private static string GetInitials(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return "--";
