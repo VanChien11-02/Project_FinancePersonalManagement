@@ -265,8 +265,21 @@ namespace Project_FinancePersonalManagement
                 var d = db.Debts.SingleOrDefault(x => x.DebtID == currentDebtlID);
                 if (d != null)
                 {
-                    decimal tienLai = Math.Round(d.Amount * (decimal)(d.InterestRate / 100.0), 0);
+                    // TÍNH LÃI SUẤT THEO SỐ THÁNG VAY
+                    DateTime ngayVay = d.StartDate ?? DateTime.Now;
+                    DateTime hanTra = d.DueDate ?? DateTime.Now;
+
+                    // Tính số ngày vay thực tế
+                    double soNgayVay = (hanTra.Date - ngayVay.Date).TotalDays;
+                    if (soNgayVay <= 0) soNgayVay = 1; // Vay trả trong ngày thì tính tối thiểu 1 ngày lãi
+
+                    // Quy đổi ra số tháng (tương đối 30 ngày/tháng)
+                    decimal soThang = (decimal)(soNgayVay / 30.0);
+
+                    // Công thức chuẩn: Gốc * (% Lãi / 100) * Số tháng
+                    decimal tienLai = Math.Round(d.Amount * (decimal)(d.InterestRate / 100.0) * soThang, 0);
                     decimal tongNo = d.Amount + tienLai;
+
                     decimal conLai = tongNo - d.PaidAmount;
                     txt_TienCanThanhToan.Text = conLai.ToString("N0");
                     txt_TienThanhToan.Text = conLai.ToString("N0");
@@ -496,8 +509,16 @@ namespace Project_FinancePersonalManagement
                         var acc = db.Accounts.SingleOrDefault(a => a.AccountID == cbo_TaiKhoan.SelectedValue.ToString());
                         if (acc == null) return;
 
-                        // TÍNH TOÁN LÀM TRÒN SỐ
-                        decimal tienLai = Math.Round(d.Amount * (decimal)(d.InterestRate / 100.0), 0);
+                        // TÍNH LÃI SUẤT THEO SỐ THÁNG VAY ĐỂ THANH TOÁN
+                        DateTime ngayVay = d.StartDate ?? DateTime.Now;
+                        DateTime hanTra = d.DueDate ?? DateTime.Now;
+
+                        double soNgayVay = (hanTra.Date - ngayVay.Date).TotalDays;
+                        if (soNgayVay <= 0) soNgayVay = 1;
+
+                        decimal soThang = (decimal)(soNgayVay / 30.0);
+                        decimal tienLai = Math.Round(d.Amount * (decimal)(d.InterestRate / 100.0) * soThang, 0);
+
                         decimal tongNo = d.Amount + tienLai;
                         decimal tienConLai = Math.Round(tongNo - d.PaidAmount, 0);
 
