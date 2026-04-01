@@ -132,7 +132,6 @@
             // btnNav_Thoat
             // 
             this.btnNav_Thoat.BackColor = System.Drawing.Color.White;
-            this.btnNav_Thoat.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNav_Thoat.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNav_Thoat.FlatAppearance.BorderSize = 0;
             this.btnNav_Thoat.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
@@ -152,7 +151,6 @@
             // btnNav_DangXuat
             // 
             this.btnNav_DangXuat.BackColor = System.Drawing.Color.White;
-            this.btnNav_DangXuat.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNav_DangXuat.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNav_DangXuat.FlatAppearance.BorderSize = 0;
             this.btnNav_DangXuat.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
@@ -173,7 +171,6 @@
             // btnNav_DangKy
             // 
             this.btnNav_DangKy.BackColor = System.Drawing.Color.White;
-            this.btnNav_DangKy.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNav_DangKy.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNav_DangKy.FlatAppearance.BorderSize = 0;
             this.btnNav_DangKy.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
@@ -188,12 +185,10 @@
             this.btnNav_DangKy.Text = "  Đăng ký";
             this.btnNav_DangKy.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnNav_DangKy.UseVisualStyleBackColor = false;
-            this.btnNav_DangKy.Click += new System.EventHandler(this.btnNav_DangKy_Click);
             // 
             // btnNav_DangNhap
             // 
             this.btnNav_DangNhap.BackColor = System.Drawing.Color.White;
-            this.btnNav_DangNhap.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNav_DangNhap.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNav_DangNhap.FlatAppearance.BorderSize = 0;
             this.btnNav_DangNhap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
@@ -213,7 +208,6 @@
             // btnNav_KhoanVay
             // 
             this.btnNav_KhoanVay.BackColor = System.Drawing.Color.White;
-            this.btnNav_KhoanVay.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNav_KhoanVay.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNav_KhoanVay.FlatAppearance.BorderSize = 0;
             this.btnNav_KhoanVay.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
@@ -233,7 +227,6 @@
             // btnNav_NganSach
             // 
             this.btnNav_NganSach.BackColor = System.Drawing.Color.White;
-            this.btnNav_NganSach.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNav_NganSach.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNav_NganSach.FlatAppearance.BorderSize = 0;
             this.btnNav_NganSach.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
@@ -253,7 +246,6 @@
             // btnNav_ThongKe
             // 
             this.btnNav_ThongKe.BackColor = System.Drawing.Color.White;
-            this.btnNav_ThongKe.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNav_ThongKe.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNav_ThongKe.FlatAppearance.BorderSize = 0;
             this.btnNav_ThongKe.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
@@ -273,7 +265,6 @@
             // btnNav_GiaoDich
             // 
             this.btnNav_GiaoDich.BackColor = System.Drawing.Color.White;
-            this.btnNav_GiaoDich.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNav_GiaoDich.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNav_GiaoDich.FlatAppearance.BorderSize = 0;
             this.btnNav_GiaoDich.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
@@ -293,7 +284,6 @@
             // btnNav_Overview
             // 
             this.btnNav_Overview.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(242)))), ((int)(((byte)(253)))));
-            this.btnNav_Overview.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNav_Overview.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNav_Overview.FlatAppearance.BorderSize = 0;
             this.btnNav_Overview.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
@@ -328,7 +318,7 @@
             this.lblAppSub.ForeColor = System.Drawing.Color.DimGray;
             this.lblAppSub.Location = new System.Drawing.Point(18, 36);
             this.lblAppSub.Name = "lblAppSub";
-            this.lblAppSub.Size = new System.Drawing.Size(185, 21);
+            this.lblAppSub.Size = new System.Drawing.Size(138, 13);
             this.lblAppSub.TabIndex = 0;
             this.lblAppSub.Text = "Quản lý tài chính cá nhân";
             // 
@@ -339,7 +329,7 @@
             this.lblAppName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblAppName.Location = new System.Drawing.Point(16, 12);
             this.lblAppName.Name = "lblAppName";
-            this.lblAppName.Size = new System.Drawing.Size(137, 30);
+            this.lblAppName.Size = new System.Drawing.Size(93, 20);
             this.lblAppName.TabIndex = 1;
             this.lblAppName.Text = "PFinanceVN";
             // 
@@ -412,14 +402,14 @@
             this.dgv_Accounts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_Accounts.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dgv_Accounts.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.dgv_Accounts.Location = new System.Drawing.Point(12, 36);
+            this.dgv_Accounts.Location = new System.Drawing.Point(12, 27);
             this.dgv_Accounts.Name = "dgv_Accounts";
             this.dgv_Accounts.ReadOnly = true;
             this.dgv_Accounts.RowHeadersVisible = false;
             this.dgv_Accounts.RowHeadersWidth = 62;
             this.dgv_Accounts.RowTemplate.Height = 32;
             this.dgv_Accounts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Accounts.Size = new System.Drawing.Size(486, 372);
+            this.dgv_Accounts.Size = new System.Drawing.Size(486, 381);
             this.dgv_Accounts.TabIndex = 0;
             // 
             // lblCardAccTitle
@@ -430,7 +420,7 @@
             this.lblCardAccTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblCardAccTitle.Location = new System.Drawing.Point(12, 8);
             this.lblCardAccTitle.Name = "lblCardAccTitle";
-            this.lblCardAccTitle.Size = new System.Drawing.Size(205, 28);
+            this.lblCardAccTitle.Size = new System.Drawing.Size(142, 19);
             this.lblCardAccTitle.TabIndex = 1;
             this.lblCardAccTitle.Text = "Danh sách tài khoản";
             // 
@@ -461,14 +451,14 @@
             legend1.IsTextAutoFit = false;
             legend1.Name = "Legend1";
             this.chartChiTieu.Legends.Add(legend1);
-            this.chartChiTieu.Location = new System.Drawing.Point(12, 36);
+            this.chartChiTieu.Location = new System.Drawing.Point(12, 27);
             this.chartChiTieu.Name = "chartChiTieu";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chartChiTieu.Series.Add(series1);
-            this.chartChiTieu.Size = new System.Drawing.Size(316, 372);
+            this.chartChiTieu.Size = new System.Drawing.Size(316, 381);
             this.chartChiTieu.TabIndex = 0;
             // 
             // lblCardChartTitle
@@ -479,7 +469,7 @@
             this.lblCardChartTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblCardChartTitle.Location = new System.Drawing.Point(12, 8);
             this.lblCardChartTitle.Name = "lblCardChartTitle";
-            this.lblCardChartTitle.Size = new System.Drawing.Size(254, 28);
+            this.lblCardChartTitle.Size = new System.Drawing.Size(176, 19);
             this.lblCardChartTitle.TabIndex = 1;
             this.lblCardChartTitle.Text = "Cơ cấu chi tiêu tháng này";
             // 
@@ -517,7 +507,7 @@
             this.lblChangeExpense.ForeColor = System.Drawing.Color.Black;
             this.lblChangeExpense.Location = new System.Drawing.Point(16, 56);
             this.lblChangeExpense.Name = "lblChangeExpense";
-            this.lblChangeExpense.Size = new System.Drawing.Size(0, 21);
+            this.lblChangeExpense.Size = new System.Drawing.Size(0, 13);
             this.lblChangeExpense.TabIndex = 0;
             // 
             // lblTotalExpense
@@ -527,7 +517,7 @@
             this.lblTotalExpense.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(163)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.lblTotalExpense.Location = new System.Drawing.Point(14, 28);
             this.lblTotalExpense.Name = "lblTotalExpense";
-            this.lblTotalExpense.Size = new System.Drawing.Size(94, 36);
+            this.lblTotalExpense.Size = new System.Drawing.Size(66, 25);
             this.lblTotalExpense.TabIndex = 1;
             this.lblTotalExpense.Text = "0 VNĐ";
             // 
@@ -538,7 +528,7 @@
             this.lblTitleExpense.ForeColor = System.Drawing.Color.Black;
             this.lblTitleExpense.Location = new System.Drawing.Point(16, 10);
             this.lblTitleExpense.Name = "lblTitleExpense";
-            this.lblTitleExpense.Size = new System.Drawing.Size(121, 20);
+            this.lblTitleExpense.Size = new System.Drawing.Size(79, 12);
             this.lblTitleExpense.TabIndex = 2;
             this.lblTitleExpense.Text = "CHI TIÊU THÁNG";
             // 
@@ -563,7 +553,7 @@
             this.lblChangeIncome.ForeColor = System.Drawing.Color.Black;
             this.lblChangeIncome.Location = new System.Drawing.Point(16, 56);
             this.lblChangeIncome.Name = "lblChangeIncome";
-            this.lblChangeIncome.Size = new System.Drawing.Size(0, 21);
+            this.lblChangeIncome.Size = new System.Drawing.Size(0, 13);
             this.lblChangeIncome.TabIndex = 0;
             // 
             // lblTotalIncome
@@ -573,7 +563,7 @@
             this.lblTotalIncome.ForeColor = System.Drawing.Color.Black;
             this.lblTotalIncome.Location = new System.Drawing.Point(14, 28);
             this.lblTotalIncome.Name = "lblTotalIncome";
-            this.lblTotalIncome.Size = new System.Drawing.Size(94, 36);
+            this.lblTotalIncome.Size = new System.Drawing.Size(66, 25);
             this.lblTotalIncome.TabIndex = 1;
             this.lblTotalIncome.Text = "0 VNĐ";
             // 
@@ -584,7 +574,7 @@
             this.lblTitleIncome.ForeColor = System.Drawing.Color.Black;
             this.lblTitleIncome.Location = new System.Drawing.Point(16, 10);
             this.lblTitleIncome.Name = "lblTitleIncome";
-            this.lblTitleIncome.Size = new System.Drawing.Size(136, 20);
+            this.lblTitleIncome.Size = new System.Drawing.Size(88, 12);
             this.lblTitleIncome.TabIndex = 2;
             this.lblTitleIncome.Text = "THU NHẬP THÁNG";
             // 
@@ -609,7 +599,7 @@
             this.lblChangeBalance.ForeColor = System.Drawing.Color.Black;
             this.lblChangeBalance.Location = new System.Drawing.Point(16, 56);
             this.lblChangeBalance.Name = "lblChangeBalance";
-            this.lblChangeBalance.Size = new System.Drawing.Size(124, 21);
+            this.lblChangeBalance.Size = new System.Drawing.Size(94, 13);
             this.lblChangeBalance.TabIndex = 0;
             this.lblChangeBalance.Text = "Chưa đăng nhập";
             // 
@@ -620,7 +610,7 @@
             this.lblTotalBalance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(110)))), ((int)(((byte)(80)))));
             this.lblTotalBalance.Location = new System.Drawing.Point(14, 28);
             this.lblTotalBalance.Name = "lblTotalBalance";
-            this.lblTotalBalance.Size = new System.Drawing.Size(94, 36);
+            this.lblTotalBalance.Size = new System.Drawing.Size(66, 25);
             this.lblTotalBalance.TabIndex = 1;
             this.lblTotalBalance.Text = "0 VNĐ";
             // 
@@ -631,7 +621,7 @@
             this.lblTitleBalance.ForeColor = System.Drawing.Color.Black;
             this.lblTitleBalance.Location = new System.Drawing.Point(16, 10);
             this.lblTitleBalance.Name = "lblTitleBalance";
-            this.lblTitleBalance.Size = new System.Drawing.Size(98, 20);
+            this.lblTitleBalance.Size = new System.Drawing.Size(65, 12);
             this.lblTitleBalance.TabIndex = 2;
             this.lblTitleBalance.Text = "TỒNG SỐ DƯ";
             // 
@@ -655,7 +645,7 @@
             this.btn_MonthYear.AutoSize = true;
             this.btn_MonthYear.Location = new System.Drawing.Point(366, 20);
             this.btn_MonthYear.Name = "btn_MonthYear";
-            this.btn_MonthYear.Size = new System.Drawing.Size(61, 25);
+            this.btn_MonthYear.Size = new System.Drawing.Size(41, 15);
             this.btn_MonthYear.TabIndex = 5;
             this.btn_MonthYear.Text = "Tháng";
             // 
@@ -730,7 +720,7 @@
             this.lblMonthYear.ForeColor = System.Drawing.Color.DimGray;
             this.lblMonthYear.Location = new System.Drawing.Point(2, 32);
             this.lblMonthYear.Name = "lblMonthYear";
-            this.lblMonthYear.Size = new System.Drawing.Size(120, 23);
+            this.lblMonthYear.Size = new System.Drawing.Size(83, 15);
             this.lblMonthYear.TabIndex = 1;
             this.lblMonthYear.Text = "Tháng --/2026";
             // 
@@ -741,7 +731,7 @@
             this.lblPageTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblPageTitle.Location = new System.Drawing.Point(0, 6);
             this.lblPageTitle.Name = "lblPageTitle";
-            this.lblPageTitle.Size = new System.Drawing.Size(147, 36);
+            this.lblPageTitle.Size = new System.Drawing.Size(104, 25);
             this.lblPageTitle.TabIndex = 2;
             this.lblPageTitle.Text = "Tổng quan";
             // 
@@ -768,15 +758,9 @@
             this.lblStatus.Text = "Sẵn sàng - chưa đăng nhập";
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // time_clock
-            // 
-            this.time_clock.Enabled = true;
-            this.time_clock.Interval = 1000;
-            this.time_clock.Tick += new System.EventHandler(this.time_clock_Tick);
-            // 
             // FrmMainMenu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1100, 620);
@@ -785,7 +769,6 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.MinimumSize = new System.Drawing.Size(900, 550);
             this.Name = "FrmMainMenu";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PFinanceVN - Quản lý tài chính cá nhân";
             this.Load += new System.EventHandler(this.Form_Menu_Load);
             this.Resize += new System.EventHandler(this.Form_Menu_Resize);
