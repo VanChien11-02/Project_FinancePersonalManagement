@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Project_FinancePersonalManagement.Data;
-using Project_FinancePersonalManagement.Properties;
 
 namespace Project_FinancePersonalManagement
 {
@@ -19,19 +18,23 @@ namespace Project_FinancePersonalManagement
         // NEW: giữ trạng thái tháng đang xem trên Dashboard
         private DateTime currentViewDate;
 
+        // NEW: context menu cho nút Thiết lập
+        private ContextMenuStrip cmsSettings;
+
         public FrmMainMenu()
         {
             InitializeComponent();
             Image originalImage = Properties.Resources.ic_settings;
 
             Bitmap resizedImage = new Bitmap(originalImage, new Size(30, 30));
+
             btnNav_Settings.Image = resizedImage;
 
             btnNav_Settings.TextImageRelation = TextImageRelation.ImageBeforeText;
             btnNav_Settings.TextAlign = ContentAlignment.MiddleLeft;
             btnNav_Settings.ImageAlign = ContentAlignment.MiddleLeft;
 
-            //btnNav_Settings.Padding = new Padding(10, 0, 0, 0);
+            btnNav_Settings.Padding = new Padding(10, 0, 0, 0);
         }
 
         //  LOAD / RESIZE
@@ -46,6 +49,9 @@ namespace Project_FinancePersonalManagement
             // KHỞI TẠO trạng thái xem: mặc định là tháng hiện tại
             currentViewDate = DateTime.Now;
             lblMonthYear.Text = "Tháng " + currentViewDate.ToString("MM/yyyy");
+
+            // KHỞI TẠO menu cho nút Thiết lập (btnNav_Settings phải do bạn thêm trong Designer)
+            SetupSettingsMenu();
         }
 
         private void Form_Menu_Resize(object sender, EventArgs e)
@@ -70,13 +76,14 @@ namespace Project_FinancePersonalManagement
         //  SIDEBAR HELPERS
         private void ToggleSidebarFeatures(bool enabled)
         {
+            // Lưu ý: btnNav_TaiKhoan và btnNav_DanhMuc được gỡ khỏi Designer => không thao tác trực tiếp ở đây
             btnNav_GiaoDich.Enabled = enabled;
-            btnNav_TaiKhoan.Enabled = enabled;
             btnNav_ThongKe.Enabled = enabled;
             btnNav_NganSach.Enabled = enabled;
             btnNav_KhoanVay.Enabled = enabled;
-            btnNav_DanhMuc.Enabled = enabled;
             btnNav_Overview.Enabled = enabled;
+            if (btnNav_Settings != null)
+                btnNav_Settings.Enabled = enabled;
 
             btnNav_DangXuat.Visible = enabled;
             btnNav_DangNhap.Visible = !enabled;
@@ -84,10 +91,16 @@ namespace Project_FinancePersonalManagement
 
             Color disabledFg = Color.FromArgb(190, 190, 190);
             Color enabledFg = Color.FromArgb(70, 70, 70);
-            foreach (Button btn in new[] {
-                btnNav_GiaoDich, btnNav_TaiKhoan, btnNav_ThongKe,
-                btnNav_NganSach, btnNav_KhoanVay, btnNav_DanhMuc, btnNav_Overview })
+
+            Button[] navButtons = new[] {
+                btnNav_GiaoDich, btnNav_ThongKe,
+                btnNav_NganSach, btnNav_KhoanVay,
+                btnNav_Overview, btnNav_Settings
+            };
+
+            foreach (Button btn in navButtons)
             {
+                if (btn == null) continue;
                 btn.ForeColor = enabled ? enabledFg : disabledFg;
             }
         }
@@ -101,9 +114,12 @@ namespace Project_FinancePersonalManagement
                 _activeNav.Font = new Font("Segoe UI", 9.5f);
             }
             _activeNav = btn;
-            btn.BackColor = Color.FromArgb(232, 242, 253);
-            btn.ForeColor = Color.FromArgb(24, 95, 165);
-            btn.Font = new Font("Segoe UI", 9.5f, FontStyle.Bold);
+            if (btn != null)
+            {
+                btn.BackColor = Color.FromArgb(232, 242, 253);
+                btn.ForeColor = Color.FromArgb(24, 95, 165);
+                btn.Font = new Font("Segoe UI", 9.5f, FontStyle.Bold);
+            }
         }
 
         //  DASHBOARD
@@ -118,7 +134,7 @@ namespace Project_FinancePersonalManagement
         // NEW: Hàm tải dữ liệu Dashboard theo tháng/năm được truyền vào
         private void LoadDashboardData(DateTime date)
         {
-            btn_MonthYear.Text = "Tháng " + date.ToString("MM/yyyy");
+            lblMonthYear.Text = "Tháng " + date.ToString("MM/yyyy");
 
             using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
@@ -126,7 +142,7 @@ namespace Project_FinancePersonalManagement
                 {
                     int m = date.Month, y = date.Year;
 
-                    //Tổng số dư
+                    // TÍNH TỔNG SỐ DƯ (Tất cả các ví/tài khoản của user này)
                     decimal totalBalance = db.Accounts
                         .Where(a => a.UserID == currentUserID)
                         .Sum(a => (decimal?)a.Balance) ?? 0;
@@ -245,6 +261,7 @@ namespace Project_FinancePersonalManagement
                     chartChiTieu.Legends[0].BackColor = Color.Transparent;
                     chartChiTieu.Legends[0].BorderColor = Color.Transparent;
 
+
                     Series series = chartChiTieu.Series.Add("ChiTieuSeries");
                     series.ChartType = SeriesChartType.Doughnut;
                     series.Label = "#PERCENT{P0}";
@@ -279,7 +296,7 @@ namespace Project_FinancePersonalManagement
             }
         }
 
-        //  NAV BUTTON CLICK HANDLERS
+        //  NAV BUTTON CLICK HANDLERS (Tổng quan)
         private void btnNav_Overview_Click(object sender, EventArgs e)
         {
             SetActiveNav(btnNav_Overview);
@@ -331,9 +348,9 @@ namespace Project_FinancePersonalManagement
                 ToggleSidebarFeatures(false);
                 SetActiveNav(btnNav_Overview);
 
-                lblTotalBalance.Text = "0 vnđ";
-                lblTotalIncome.Text = "0 vnđ";
-                lblTotalExpense.Text = "0 vnđ";
+                lblTotalBalance.Text = "0 VNĐ";
+                lblTotalIncome.Text = "0 VNĐ";
+                lblTotalExpense.Text = "0 VNĐ";
                 lblChangeBalance.Text = "";
                 lblChangeIncome.Text = "";
                 lblChangeExpense.Text = "";
@@ -360,13 +377,16 @@ namespace Project_FinancePersonalManagement
             LoadDashboard(); // vẫn tương thích; LoadDashboard sẽ dùng currentViewDate
         }
 
+        /*
         private void btnNav_TaiKhoan_Click(object sender, EventArgs e)
         {
+            // phương thức này có thể còn giữ nếu bạn thích gọi trực tiếp từ nơi khác
             SetActiveNav(btnNav_TaiKhoan);
             new FrmTaiKhoan(currentUserID).ShowDialog();
             SetActiveNav(btnNav_Overview);
-            LoadDashboard();
+            LoadDashboardData(currentViewDate);
         }
+        */
 
         private void btnNav_ThongKe_Click(object sender, EventArgs e)
         {
@@ -389,12 +409,48 @@ namespace Project_FinancePersonalManagement
             SetActiveNav(btnNav_Overview);
         }
 
-        private void btnNav_DanhMuc_Click(object sender, EventArgs e)
+        // NEW: Thiết lập menu cho nút Settings
+        private void SetupSettingsMenu()
         {
-            SetActiveNav(btnNav_DanhMuc);
-            new FrmDanhMuc(currentUserID).ShowDialog();
+            cmsSettings = new ContextMenuStrip();
+            var miAccounts = new ToolStripMenuItem("Quản lý Tài khoản");
+            miAccounts.Click += MenuManageAccounts_Click;
+            var miCategories = new ToolStripMenuItem("Quản lý Danh mục");
+            miCategories.Click += MenuManageCategories_Click;
+            cmsSettings.Items.AddRange(new ToolStripItem[] { miAccounts, miCategories });
+
+            if (btnNav_Settings != null)
+            {
+                // Show menu khi click hoặc gán ContextMenuStrip để hiển thị khi right-click
+                btnNav_Settings.Click += (s, e) =>
+                {
+                    cmsSettings.Show(btnNav_Settings, new Point(0, btnNav_Settings.Height));
+                };
+
+                // Gán icon từ Resources (nếu bạn đã thêm vào Project Resources)
+                // Ví dụ resource name là ic_settings: Properties.Resources.ic_settings
+                // Nếu bạn đã thêm icon, bỏ comment dòng sau:
+                // btnNav_Settings.Image = Properties.Resources.ic_settings;
+                // btnNav_Settings.ImageAlign = ContentAlignment.MiddleLeft;
+            }
+        }
+
+        // Khi người dùng chọn "Quản lý Tài khoản"
+        private void MenuManageAccounts_Click(object sender, EventArgs e)
+        {
+            // Mở form quản lý tài khoản theo cùng chuẩn các nút khác
             SetActiveNav(btnNav_Overview);
-            LoadDashboard();
+            new FrmTaiKhoan(currentUserID).ShowDialog();
+            // Khi đóng, refresh dashboard để cập nhật thay đổi
+            LoadDashboardData(currentViewDate);
+        }
+
+        // Khi người dùng chọn "Quản lý Danh mục"
+        private void MenuManageCategories_Click(object sender, EventArgs e)
+        {
+            SetActiveNav(btnNav_Overview);
+            new FrmDanhMuc(currentUserID).ShowDialog();
+            LoadDashboardData(currentViewDate);
         }
 
         //  TIMER
@@ -409,7 +465,7 @@ namespace Project_FinancePersonalManagement
             LoadDashboard();
         }
 
-        //  HELPERS
+        //  HELPERS (hiển thị tên viết tắt trên avatar)
         private static string GetInitials(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return "--";
@@ -420,7 +476,6 @@ namespace Project_FinancePersonalManagement
         }
 
         // NEW: Sự kiện cho các nút mũi tên (người dùng sẽ thêm Button và gán event này)
-        // Gợi ý: đặt tên button là btnPrevMonth và btnNextMonth, và gán event handlers bên dưới.
         private void btnPrevMonth_Click(object sender, EventArgs e)
         {
             currentViewDate = currentViewDate.AddMonths(-1);
