@@ -16,13 +16,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.time_clock = new System.Windows.Forms.Timer(this.components);
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.pnlSidebarBottom = new System.Windows.Forms.Panel();
             this.btnNav_Thoat = new System.Windows.Forms.Button();
@@ -61,6 +60,9 @@
             this.lblTotalBalance = new System.Windows.Forms.Label();
             this.lblTitleBalance = new System.Windows.Forms.Label();
             this.pnlTopbar = new System.Windows.Forms.Panel();
+            this.btn_MonthYear = new System.Windows.Forms.Label();
+            this.btnNextMonth = new System.Windows.Forms.Button();
+            this.btnPrevMonth = new System.Windows.Forms.Button();
             this.pnlUserChip = new System.Windows.Forms.Panel();
             this.lblTime = new System.Windows.Forms.Label();
             this.lblUserName = new System.Windows.Forms.Label();
@@ -69,6 +71,7 @@
             this.lblPageTitle = new System.Windows.Forms.Label();
             this.pnlStatusBar = new System.Windows.Forms.Panel();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.time_clock = new System.Windows.Forms.Timer(this.components);
             this.pnlSidebar.SuspendLayout();
             this.pnlSidebarBottom.SuspendLayout();
             this.pnlLogo.SuspendLayout();
@@ -86,12 +89,6 @@
             this.pnlUserChip.SuspendLayout();
             this.pnlStatusBar.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // time_clock
-            // 
-            this.time_clock.Enabled = true;
-            this.time_clock.Interval = 1000;
-            this.time_clock.Tick += new System.EventHandler(this.time_clock_Tick);
             // 
             // pnlSidebar
             // 
@@ -421,29 +418,29 @@
             // 
             this.dgv_Accounts.AllowUserToAddRows = false;
             this.dgv_Accounts.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
-            this.dgv_Accounts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
+            this.dgv_Accounts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgv_Accounts.BackgroundColor = System.Drawing.Color.White;
             this.dgv_Accounts.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgv_Accounts.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgv_Accounts.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(246)))), ((int)(((byte)(248)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv_Accounts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(246)))), ((int)(((byte)(248)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_Accounts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dgv_Accounts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(252)))));
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(95)))), ((int)(((byte)(165)))));
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv_Accounts.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(252)))));
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(95)))), ((int)(((byte)(165)))));
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv_Accounts.DefaultCellStyle = dataGridViewCellStyle6;
             this.dgv_Accounts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_Accounts.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dgv_Accounts.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
@@ -485,24 +482,24 @@
             // chartChiTieu
             // 
             this.chartChiTieu.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.BorderWidth = 0;
-            chartArea1.Name = "ChartArea1";
-            this.chartChiTieu.ChartAreas.Add(chartArea1);
+            chartArea2.BackColor = System.Drawing.Color.Transparent;
+            chartArea2.BorderWidth = 0;
+            chartArea2.Name = "ChartArea1";
+            this.chartChiTieu.ChartAreas.Add(chartArea2);
             this.chartChiTieu.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.BackColor = System.Drawing.Color.Transparent;
-            legend1.BorderColor = System.Drawing.Color.Transparent;
-            legend1.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            legend1.IsTextAutoFit = false;
-            legend1.Name = "Legend1";
-            this.chartChiTieu.Legends.Add(legend1);
+            legend2.BackColor = System.Drawing.Color.Transparent;
+            legend2.BorderColor = System.Drawing.Color.Transparent;
+            legend2.Font = new System.Drawing.Font("Segoe UI", 8.5F);
+            legend2.IsTextAutoFit = false;
+            legend2.Name = "Legend1";
+            this.chartChiTieu.Legends.Add(legend2);
             this.chartChiTieu.Location = new System.Drawing.Point(12, 27);
             this.chartChiTieu.Name = "chartChiTieu";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chartChiTieu.Series.Add(series1);
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chartChiTieu.Series.Add(series2);
             this.chartChiTieu.Size = new System.Drawing.Size(316, 381);
             this.chartChiTieu.TabIndex = 0;
             // 
@@ -673,6 +670,9 @@
             // pnlTopbar
             // 
             this.pnlTopbar.BackColor = System.Drawing.Color.Transparent;
+            this.pnlTopbar.Controls.Add(this.btn_MonthYear);
+            this.pnlTopbar.Controls.Add(this.btnNextMonth);
+            this.pnlTopbar.Controls.Add(this.btnPrevMonth);
             this.pnlTopbar.Controls.Add(this.pnlUserChip);
             this.pnlTopbar.Controls.Add(this.lblMonthYear);
             this.pnlTopbar.Controls.Add(this.lblPageTitle);
@@ -681,6 +681,35 @@
             this.pnlTopbar.Name = "pnlTopbar";
             this.pnlTopbar.Size = new System.Drawing.Size(850, 54);
             this.pnlTopbar.TabIndex = 2;
+            // 
+            // btn_MonthYear
+            // 
+            this.btn_MonthYear.AutoSize = true;
+            this.btn_MonthYear.Location = new System.Drawing.Point(366, 20);
+            this.btn_MonthYear.Name = "btn_MonthYear";
+            this.btn_MonthYear.Size = new System.Drawing.Size(41, 15);
+            this.btn_MonthYear.TabIndex = 5;
+            this.btn_MonthYear.Text = "Tháng";
+            // 
+            // btnNextMonth
+            // 
+            this.btnNextMonth.Location = new System.Drawing.Point(468, 16);
+            this.btnNextMonth.Name = "btnNextMonth";
+            this.btnNextMonth.Size = new System.Drawing.Size(75, 23);
+            this.btnNextMonth.TabIndex = 4;
+            this.btnNextMonth.Text = "sau";
+            this.btnNextMonth.UseVisualStyleBackColor = true;
+            this.btnNextMonth.Click += new System.EventHandler(this.btnNextMonth_Click);
+            // 
+            // btnPrevMonth
+            // 
+            this.btnPrevMonth.Location = new System.Drawing.Point(264, 16);
+            this.btnPrevMonth.Name = "btnPrevMonth";
+            this.btnPrevMonth.Size = new System.Drawing.Size(75, 23);
+            this.btnPrevMonth.TabIndex = 3;
+            this.btnPrevMonth.Text = "trước";
+            this.btnPrevMonth.UseVisualStyleBackColor = true;
+            this.btnPrevMonth.Click += new System.EventHandler(this.btnPrevMonth_Click);
             // 
             // pnlUserChip
             // 
@@ -771,6 +800,12 @@
             this.lblStatus.Text = "Sẵn sàng - chưa đăng nhập";
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // time_clock
+            // 
+            this.time_clock.Enabled = true;
+            this.time_clock.Interval = 1000;
+            this.time_clock.Tick += new System.EventHandler(this.time_clock_Tick);
+            // 
             // FrmMainMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -813,8 +848,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Timer time_clock;
         private System.Windows.Forms.Panel pnlSidebar;
         private System.Windows.Forms.Panel pnlLogo;
         private System.Windows.Forms.Label lblAppName;
@@ -862,5 +895,9 @@
         private System.Windows.Forms.Panel pnlStatusBar;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Label lblUser;
+        private System.Windows.Forms.Label btn_MonthYear;
+        private System.Windows.Forms.Button btnNextMonth;
+        private System.Windows.Forms.Button btnPrevMonth;
+        private System.Windows.Forms.Timer time_clock;
     }
 }

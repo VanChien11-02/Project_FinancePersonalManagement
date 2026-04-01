@@ -15,6 +15,9 @@ namespace Project_FinancePersonalManagement
         private bool isLoggedIn = false;
         private Button _activeNav;
 
+        // NEW: giữ trạng thái tháng đang xem trên Dashboard
+        private DateTime currentViewDate;
+
         public FrmMainMenu()
         {
             InitializeComponent();
@@ -28,6 +31,10 @@ namespace Project_FinancePersonalManagement
             time_clock.Start();
             _activeNav = btnNav_Overview;
             PositionUserChip();
+
+            // KHỞI TẠO trạng thái xem: mặc định là tháng hiện tại
+            currentViewDate = DateTime.Now;
+            lblMonthYear.Text = "Tháng " + currentViewDate.ToString("MM/yyyy");
         }
 
         private void Form_Menu_Resize(object sender, EventArgs e)
@@ -89,33 +96,44 @@ namespace Project_FinancePersonalManagement
         }
 
         //  DASHBOARD
+        // Wrapper để tương thích các chỗ gọi cũ
         private void LoadDashboard()
         {
-            lblMonthYear.Text = "Tháng " + DateTime.Now.ToString("MM/yyyy");
+            if (currentViewDate == default(DateTime))
+                currentViewDate = DateTime.Now;
+            LoadDashboardData(currentViewDate);
+        }
+
+        // NEW: Hàm tải dữ liệu Dashboard theo tháng/năm được truyền vào
+        private void LoadDashboardData(DateTime date)
+        {
+            btn_MonthYear.Text = "Tháng " + date.ToString("MM/yyyy");
 
             using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
-                    int m = DateTime.Now.Month, y = DateTime.Now.Year;
+                    int m = date.Month, y = date.Year;
 
                     // TÍNH TỔNG SỐ DƯ (Tất cả các ví/tài khoản của user này)
                     decimal totalBalance = db.Accounts
                         .Where(a => a.UserID == currentUserID)
                         .Sum(a => (decimal?)a.Balance) ?? 0;
 
-                    // TÍNH TỔNG THU
+                    // TÍNH TỔNG THU trong tháng
                     decimal totalIncome = db.Transactions
                         .Where(t => t.UserID == currentUserID
                                  && t.TransType == "Income"
+                                 && t.TransDate.HasValue
                                  && t.TransDate.Value.Month == m
                                  && t.TransDate.Value.Year == y)
                         .Sum(t => (decimal?)t.Amount) ?? 0;
 
-                    // TÍNH TỔNG CHI
+                    // TÍNH TỔNG CHI trong tháng
                     decimal totalExpense = db.Transactions
                         .Where(t => t.UserID == currentUserID
                                  && t.TransType == "Expense"
+                                 && t.TransDate.HasValue
                                  && t.TransDate.Value.Month == m
                                  && t.TransDate.Value.Year == y)
                         .Sum(t => (decimal?)t.Amount) ?? 0;
@@ -126,15 +144,30 @@ namespace Project_FinancePersonalManagement
 
                     int incomeCount = db.Transactions.Count(t =>
                         t.UserID == currentUserID && t.TransType == "Income"
-                        && t.TransDate.Value.Month == m && t.TransDate.Value.Year == y);
+                        && t.TransDate.HasValue && t.TransDate.Value.Month == m && t.TransDate.Value.Year == y);
 
                     int expenseCount = db.Transactions.Count(t =>
                         t.UserID == currentUserID && t.TransType == "Expense"
-                        && t.TransDate.Value.Month == m && t.TransDate.Value.Year == y);
+                        && t.TransDate.HasValue && t.TransDate.Value.Month == m && t.TransDate.Value.Year == y);
 
-                    lblChangeBalance.Text = totalBalance > 0 ? "Tổng số dư hiện tại" : "Chưa có tài khoản";
-                    lblChangeIncome.Text = incomeCount > 0 ? incomeCount + " giao dịch thu tháng" + m : "Chưa có thu nhập";
-                    lblChangeExpense.Text = expenseCount > 0 ? expenseCount + " giao dịch chi tháng" + m: "Chưa có chi tiêu";
+                    // Hiển thị trạng thái và đổi màu nếu tháng đó bị âm (chi > thu)
+                    decimal monthNet = totalIncome - totalExpense;
+                    if (incomeCount == 0 && expenseCount == 0)
+                    {
+                        lblChangeBalance.Text = "Chưa có giao dịch trong tháng";
+                        lblChangeBalance.ForeColor = Color.FromArgb(70, 70, 70);
+                    }
+                    else
+                    {
+                        lblChangeBalance.Text = (monthNet >= 0)
+                            ? "Thặng dư tháng: " + monthNet.ToString("N0") + " VNĐ"
+                            : "Thâm hụt tháng: " + Math.Abs(monthNet).ToString("N0") + " VNĐ";
+
+                        lblChangeBalance.ForeColor = monthNet < 0 ? Color.Red : Color.FromArgb(70, 70, 70);
+                    }
+
+                    lblChangeIncome.Text = incomeCount > 0 ? incomeCount + " giao dịch thu tháng " + m : "Chưa có thu nhập";
+                    lblChangeExpense.Text = expenseCount > 0 ? expenseCount + " giao dịch chi tháng " + m : "Chưa có chi tiêu";
 
                     var accountList = db.Accounts
                         .Where(a => a.UserID == currentUserID)
@@ -157,32 +190,34 @@ namespace Project_FinancePersonalManagement
                         dgv_Accounts.Columns["ChiTiet"].HeaderText = "Chi tiết";
                         dgv_Accounts.Columns["TenTaiKhoan"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-                        LoadChart();
+                        // Tải lại biểu đồ theo tháng được chọn
+                        LoadChart(date);
                     }
 
                     lblCardChartTitle.Text = "Cơ cấu chi tiêu - tháng " + m + "/" + y;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Loi khi tai Dashboard: " + ex.Message, "Lỗi",
+                    MessageBox.Show("Lỗi khi tải Dashboard: " + ex.Message, "Lỗi",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
-        private void LoadChart()
+        // MODIFIED: LoadChart nhận DateTime để lọc theo tháng/năm
+        private void LoadChart(DateTime date)
         {
             using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
-                    int m = DateTime.Now.Month, y = DateTime.Now.Year;
+                    int m = date.Month, y = date.Year;
 
-                    //  Dùng LINQ kết hợp (JOIN) bảng Transactions và Categories, sau đó Gom nhóm (GROUP BY)
                     var expenseData = (from t in db.Transactions
                                        join c in db.Categories on t.CategoryID equals c.CategoryID
                                        where t.UserID == currentUserID
                                           && t.TransType == "Expense"
+                                          && t.TransDate.HasValue
                                           && t.TransDate.Value.Month == m
                                           && t.TransDate.Value.Year == y
                                        group t by c.CategoryName into g
@@ -192,7 +227,6 @@ namespace Project_FinancePersonalManagement
                                            TongTien = g.Sum(x => x.Amount)
                                        }).ToList();
 
-                    // Cấu hình xóa dữ liệu cũ của biểu đồ (nếu có)
                     chartChiTieu.Series.Clear();
                     chartChiTieu.Titles.Clear();
                     chartChiTieu.ChartAreas[0].BackColor = Color.Transparent;
@@ -256,7 +290,10 @@ namespace Project_FinancePersonalManagement
 
                 ToggleSidebarFeatures(true);
                 SetActiveNav(btnNav_Overview);
-                LoadDashboard();
+
+                // Khi đăng nhập đặt lại ngày xem về tháng hiện tại
+                currentViewDate = DateTime.Now;
+                LoadDashboardData(currentViewDate);
             }
         }
 
@@ -310,7 +347,7 @@ namespace Project_FinancePersonalManagement
             SetActiveNav(btnNav_GiaoDich);
             new FrmGiaoDich(currentUserID).ShowDialog();
             SetActiveNav(btnNav_Overview);
-            LoadDashboard();
+            LoadDashboard(); // vẫn tương thích; LoadDashboard sẽ dùng currentViewDate
         }
 
         private void btnNav_TaiKhoan_Click(object sender, EventArgs e)
@@ -370,6 +407,20 @@ namespace Project_FinancePersonalManagement
             if (parts.Length == 1)
                 return parts[0].Substring(0, Math.Min(2, parts[0].Length)).ToUpper();
             return (parts[0][0].ToString() + parts[parts.Length - 1][0]).ToUpper();
+        }
+
+        // NEW: Sự kiện cho các nút mũi tên (người dùng sẽ thêm Button và gán event này)
+        // Gợi ý: đặt tên button là btnPrevMonth và btnNextMonth, và gán event handlers bên dưới.
+        private void btnPrevMonth_Click(object sender, EventArgs e)
+        {
+            currentViewDate = currentViewDate.AddMonths(-1);
+            LoadDashboardData(currentViewDate);
+        }
+
+        private void btnNextMonth_Click(object sender, EventArgs e)
+        {
+            currentViewDate = currentViewDate.AddMonths(1);
+            LoadDashboardData(currentViewDate);
         }
     }
 }
