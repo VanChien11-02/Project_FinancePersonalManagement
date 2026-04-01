@@ -2,7 +2,8 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
+using System.IO;
+// using OfficeOpenXml; // Cài thư viện EPPlus từ NuGet rồi bỏ comment dòng này để xuất Excel
 using Project_FinancePersonalManagement.Data;
 
 namespace Project_FinancePersonalManagement
@@ -11,6 +12,9 @@ namespace Project_FinancePersonalManagement
     {
         private string currentUserID;
         private string currentTransID = "";
+
+        // Biến lưu trữ tháng đang xem trên UI
+        private DateTime currentViewMonth = DateTime.Now;
 
         private static readonly Color C_Green = Color.FromArgb(15, 110, 80);
         private static readonly Color C_Blue = Color.FromArgb(24, 95, 165);
@@ -21,6 +25,9 @@ namespace Project_FinancePersonalManagement
         {
             InitializeComponent();
             currentUserID = UserID;
+            dtp_NgayGD.ValueChanged += (s, e) => UpdateRemainingBudgetDisplay();
+            cbo_DanhMuc.SelectedIndexChanged += (s, e) => UpdateRemainingBudgetDisplay();
+            cbo_LoaiGD.SelectedIndexChanged += (s, e) => UpdateRemainingBudgetDisplay();
         }
 
         private void FilterBar_Paint(object sender, PaintEventArgs e)
@@ -74,10 +81,14 @@ namespace Project_FinancePersonalManagement
             dtp_DenNgay.Value = DateTime.Now;
             dtp_TuNgay.Value = new DateTime(today.Year, today.Month, 1);
 
+            // Cập nhật Label tháng năm
+            if (lblThangNam != null)
+                lblThangNam.Text = $"Tháng {currentViewMonth.Month}/{currentViewMonth.Year}";
+
             LoadData();
         }
 
-        //  LOAD DATA
+        //  LOAD DATA 
         private void LoadData()
         {
             using (AppDatabaseDataContext db = new AppDatabaseDataContext())
@@ -88,30 +99,23 @@ namespace Project_FinancePersonalManagement
                     if (cbo_TaiKhoan.DataSource == null)
                     {
                         var tkList = db.Accounts.Where(a => a.UserID == currentUserID).ToList();
-
-                        // Nạp cho ô "Tài khoản" (nguồn)
                         cbo_TaiKhoan.DataSource = tkList;
                         cbo_TaiKhoan.DisplayMember = "AccountName";
                         cbo_TaiKhoan.ValueMember = "AccountID";
 
-                        // Nạp cho ô "Chuyển đến tài khoản" (đích) - Phải tạo một List copy (ToList) để không bị đụng chạm với list trên
                         var tkListDest = db.Accounts.Where(a => a.UserID == currentUserID).ToList();
                         cbo_ChuyenDenTK.DataSource = tkListDest;
                         cbo_ChuyenDenTK.DisplayMember = "AccountName";
                         cbo_ChuyenDenTK.ValueMember = "AccountID";
 
-                        // Hiển thị số dư mặc định cho tài khoản đầu tiên (nếu có)
                         if (tkList.Any())
                         {
-                            // Chọn tài khoản đầu tiên để UI show mặc định
                             cbo_TaiKhoan.SelectedIndex = 0;
-
                             var firstAcc = tkList[0];
                             txt_SoDu.Text = (firstAcc.Balance.HasValue ? firstAcc.Balance.Value.ToString("N0") : "0") + " VNĐ";
                         }
                     }
 
-                    // Transaction types
                     if (cbo_LoaiGD.Items.Count == 0)
                     {
                         cbo_LoaiGD.Items.Add("Chi tiêu");
@@ -120,14 +124,14 @@ namespace Project_FinancePersonalManagement
                         cbo_LoaiGD.SelectedIndex = 0;
                     }
 
-                    // Đổ dữ liệu Giao dịch lên DataGridView
+                    // Đổ dữ liệu Giao dịch lên DataGridView (Lọc theo tháng hiện tại)
                     var dsGiaoDich = (from t in db.Transactions
                                       join a in db.Accounts on t.AccountID equals a.AccountID
-                                      // Dùng LEFT JOIN cho Category để không bị mất các giao dịch Chuyển tiền (vì nó NULL danh mục)
                                       join c in db.Categories on t.CategoryID equals c.CategoryID into cGroup
                                       from c in cGroup.DefaultIfEmpty()
                                       where t.UserID == currentUserID
-                                      // ĐỔI SẮP XẾP: Xếp theo Mã giao dịch (TNX) giảm dần để cái mới nhất lên đầu
+                                         && t.TransDate.Value.Month == currentViewMonth.Month
+                                         && t.TransDate.Value.Year == currentViewMonth.Year
                                       orderby t.TransID descending
                                       select new
                                       {
@@ -146,7 +150,6 @@ namespace Project_FinancePersonalManagement
 
                     if (dgvGiaoDich.Columns.Count > 0)
                     {
-                        // dgvGiaoDich.Columns["MaGD"].Visible = false;
                         dgvGiaoDich.Columns["MaGD"].HeaderText = "Mã GD";
                         dgvGiaoDich.Columns["TenTK"].HeaderText = "Tài khoản";
                         dgvGiaoDich.Columns["TenDM"].HeaderText = "Danh mục";
@@ -159,11 +162,9 @@ namespace Project_FinancePersonalManagement
                         dgvGiaoDich.Columns["GhiChu"].HeaderText = "Ghi chú";
                         dgvGiaoDich.Columns["TenTK"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-                        // Color rows by type
                         ColorGridRows();
                     }
 
-                    // Summary totals
                     decimal tongThu = dsGiaoDich.Where(x => x.Loai == "Income").Sum(x => (decimal?)x.SoTien) ?? 0;
                     decimal tongChi = dsGiaoDich.Where(x => x.Loai == "Expense").Sum(x => (decimal?)x.SoTien) ?? 0;
                     int cntThu = dsGiaoDich.Count(x => x.Loai == "Income");
@@ -176,25 +177,20 @@ namespace Project_FinancePersonalManagement
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message, "Lỗi",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
-        // Color each row green/red/blue based on transaction type
         private void ColorGridRows()
         {
             foreach (DataGridViewRow row in dgvGiaoDich.Rows)
             {
                 if (row.Cells["Loai"].Value == null) continue;
                 string loai = row.Cells["Loai"].Value.ToString();
-                if (loai == "Income")
-                    row.DefaultCellStyle.ForeColor = C_Green;
-                else if (loai == "Expense")
-                    row.DefaultCellStyle.ForeColor = C_Red;
-                else
-                    row.DefaultCellStyle.ForeColor = C_Blue;
+                if (loai == "Income") row.DefaultCellStyle.ForeColor = C_Green;
+                else if (loai == "Expense") row.DefaultCellStyle.ForeColor = C_Red;
+                else row.DefaultCellStyle.ForeColor = C_Blue;
             }
         }
 
@@ -214,27 +210,23 @@ namespace Project_FinancePersonalManagement
         private void cbo_LoaiGD_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbo_LoaiGD.SelectedItem == null) return;
-            string loaiGD = cbo_LoaiGD.SelectedItem.ToString(); // Thu, Chi, hoặc Chuyển tiền
+            string loaiGD = cbo_LoaiGD.SelectedItem.ToString();
 
             using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 if (loaiGD == "Chuyển tiền")
                 {
-                    // Mở ô Chuyển đến
                     cbo_ChuyenDenTK.Visible = true;
                     lbl_ChuyenDenTK.Visible = true;
-
-                    // Khóa và xóa rỗng ô Danh mục (vì chuyển tiền không cần danh mục)
                     cbo_DanhMuc.DataSource = null;
                     cbo_DanhMuc.Enabled = false;
+                    if (txt_ConLai != null) txt_ConLai.Text = "";
                 }
                 else
                 {
-                    // Khóa ô Chuyển đến (vì chỉ nhập thu/chi bình thường)
                     cbo_ChuyenDenTK.Visible = false;
                     lbl_ChuyenDenTK.Visible = false;
                     cbo_DanhMuc.Enabled = true;
-
 
                     string dbType = (loaiGD == "Thu nhập") ? "Income" : "Expense";
                     var danhMucList = db.Categories.Where(c => c.CategoryType == dbType).ToList();
@@ -243,9 +235,78 @@ namespace Project_FinancePersonalManagement
                     cbo_DanhMuc.ValueMember = "CategoryID";
                 }
             }
+            UpdateRemainingBudgetDisplay();
         }
 
-        //  CRUD BUTTONS
+        // TÍNH TOÁN NGÂN SÁCH CÒN LẠI
+        // TÍNH TOÁN NGÂN SÁCH CÒN LẠI (ĐÃ FIX LỖI)
+        private void UpdateRemainingBudgetDisplay()
+        {
+            try
+            {
+                if (txt_ConLai == null) return;
+
+                // 1. Chỉ tính nếu là "Chi tiêu" và đã chọn Danh mục
+                if (cbo_LoaiGD.SelectedItem == null || cbo_LoaiGD.SelectedItem.ToString() != "Chi tiêu" || cbo_DanhMuc.SelectedValue == null)
+                {
+                    txt_ConLai.Text = "";
+                    return;
+                }
+
+                string categoryId = cbo_DanhMuc.SelectedValue.ToString();
+
+                // LẤY THÁNG/NĂM TỪ DATETIMEPICKER (Đây là mấu chốt)
+                int month = dtp_NgayGD.Value.Month;
+                int year = dtp_NgayGD.Value.Year;
+
+                using (AppDatabaseDataContext db = new AppDatabaseDataContext())
+                {
+                    // 2. Tìm ngân sách của tháng/năm ĐANG CHỌN trên dtp_NgayGD
+                    var budgetRecord = db.Budgets.FirstOrDefault(b => b.UserID == currentUserID
+                                                                   && b.CategoryID == categoryId
+                                                                   && b.Month == month
+                                                                   && b.Year == year);
+
+                    if (budgetRecord == null)
+                    {
+                        // Nếu hiện cái này, nghĩa là bạn chưa vào Form Ngân Sách để lưu hạn mức cho tháng này
+                        txt_ConLai.Text = "Chưa thiết lập NS";
+                        return;
+                    }
+
+                    decimal budgetLimit = (decimal)budgetRecord.Amount;
+
+                    // 3. Tính tổng các giao dịch đã thực hiện TRONG THÁNG ĐANG CHỌN
+                    decimal alreadySpent = db.Transactions
+                        .Where(t => t.UserID == currentUserID
+                                 && t.CategoryID == categoryId
+                                 && t.TransDate.Value.Month == month
+                                 && t.TransDate.Value.Year == year
+                                 && t.TransType == "Expense")
+                        .Select(t => (decimal?)t.Amount).Sum() ?? 0m;
+
+                    // 4. Hiển thị kết quả
+                    decimal remaining = budgetLimit - alreadySpent;
+                    txt_ConLai.Text = remaining.ToString("N0");
+                }
+            }
+            catch (Exception)
+            {
+                txt_ConLai.Text = "Lỗi tính toán";
+            }
+        }
+
+        private void cbo_DanhMuc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateRemainingBudgetDisplay();
+        }
+
+        private void dtp_NgayGD_ValueChanged(object sender, EventArgs e)
+        {
+            UpdateRemainingBudgetDisplay();
+        }
+
+        //  CRUD BUTTONS (Đã khôi phục đầy đủ)
         private void btn_Them_Click(object sender, EventArgs e)
         {
             if (!decimal.TryParse(txt_Tien.Text.Trim(), out decimal soTien) || soTien <= 0)
@@ -266,7 +327,18 @@ namespace Project_FinancePersonalManagement
             DateTime ngayGD = dtp_NgayGD.Value.Date;
             string ghiChu = txt_Note.Text.Trim();
 
-            // Logic chặn lỗi khi Chuyển tiền
+            // Cảnh báo ngân sách
+            if (loaiGD == "Chi tiêu" && txt_ConLai != null && !string.IsNullOrEmpty(txt_ConLai.Text) &&txt_ConLai.Text != "Chưa thiết lập NS")
+            {
+                decimal.TryParse(txt_ConLai.Text.Replace(",", "").Replace(".", ""), out decimal remaining);
+                if (soTien > remaining)
+                {
+                    var result = MessageBox.Show($"Số tiền bạn nhập ({soTien:N0}) đang vượt quá hạn mức ngân sách còn lại của tháng này ({remaining:N0}).\nBạn có chắc chắn muốn ghi nhận khoản chi này không?",
+                                                 "Cảnh báo vượt hạn mức", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.No) return;
+                }
+            }
+
             string maTaiKhoanDich = "";
             if (loaiGD == "Chuyển tiền")
             {
@@ -280,41 +352,34 @@ namespace Project_FinancePersonalManagement
                 }
             }
 
-            // XỬ LÝ DATABASE
             using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
                 try
                 {
-                    // Tự động sinh Mã Giao Dịch (TXN0001, TXN0002...)
-                    string newTransID = "TXN0001"; // Mặc định là 4 số 0
+                    string newTransID = "TXN0001";
                     var lastTrans = db.Transactions.OrderByDescending(t => t.TransID).FirstOrDefault();
                     if (lastTrans != null)
                     {
-                        // Cắt 3 chữ cái đầu "TNX", lấy phần số đằng sau cộng lên 1
                         int lastNum = int.Parse(lastTrans.TransID.Substring(3));
-                        newTransID = "TXN" + (lastNum + 1).ToString("D4"); // D4 sẽ format thành 4 chữ số (VD: 0002)
+                        newTransID = "TXN" + (lastNum + 1).ToString("D4");
                     }
 
-                    // Lấy Ví tiền (Account) ra để chuẩn bị cộng/trừ tiền
                     var viNguon = db.Accounts.SingleOrDefault(a => a.AccountID == maTaiKhoanNguon);
                     if (viNguon == null) return;
 
-                    // Kiểm tra có vượt quá số dư không (CHI & CHUYỂN TIỀN)
                     if ((loaiGD == "Chi tiêu" || loaiGD == "Chuyển tiền") && soTien > viNguon.Balance)
                     {
                         MessageBox.Show($"Tài khoản này chỉ còn {viNguon.Balance.Value:N0} VNĐ.\nBạn không thể giao dịch số tiền lớn hơn số dư hiện có!",
                                         "Thiếu tiền", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         txt_Tien.Focus();
-                        return; // Dừng lại ngay, không cho ghi database
+                        return;
                     }
 
-                    // THU HOẶC CHI
                     if (loaiGD == "Thu nhập" || loaiGD == "Chi tiêu")
                     {
                         string dbType = (loaiGD == "Thu nhập") ? "Income" : "Expense";
                         string danhMucID = cbo_DanhMuc.SelectedValue.ToString();
 
-                        // Tạo lịch sử giao dịch
                         Transaction t = new Transaction();
                         t.TransID = newTransID;
                         t.UserID = currentUserID;
@@ -327,23 +392,17 @@ namespace Project_FinancePersonalManagement
 
                         db.Transactions.InsertOnSubmit(t);
 
-                        // Hạch toán: Cộng/Trừ tiền vào Ví
-                        if (loaiGD == "Thu nhập")
-                            viNguon.Balance += soTien;
-                        else
-                            viNguon.Balance -= soTien;
+                        if (loaiGD == "Thu nhập") viNguon.Balance += soTien;
+                        else viNguon.Balance -= soTien;
                     }
-                    // CHUYỂN TIỀN
                     else if (loaiGD == "Chuyển tiền")
                     {
                         var viDich = db.Accounts.SingleOrDefault(a => a.AccountID == maTaiKhoanDich);
                         if (viDich == null) return;
 
-                        // Trừ tiền ví A, Cộng tiền ví B
                         viNguon.Balance -= soTien;
                         viDich.Balance += soTien;
 
-                        // Ghi lại lịch sử
                         Transaction t = new Transaction();
                         t.TransID = newTransID;
                         t.UserID = currentUserID;
@@ -356,20 +415,15 @@ namespace Project_FinancePersonalManagement
                         db.Transactions.InsertOnSubmit(t);
                     }
 
-                    //LÀM MỚI GIAO DIỆN
-                    db.SubmitChanges(); // Đẩy toàn bộ thay đổi xuống SQL
-
+                    db.SubmitChanges();
                     MessageBox.Show("Ghi chép giao dịch thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Xóa rỗng các ô nhập liệu
-                    txt_Note.Clear();
                     txt_Note.Clear();
                     txt_Tien.Focus();
                     txt_SoDu.Text = viNguon.Balance.Value.ToString("N0") + " VNĐ";
 
-                    // Load lại bảng dữ liệu
+                    UpdateRemainingBudgetDisplay();
                     LoadData();
-                    // LoadTongThuChi(); 
                 }
                 catch (Exception ex)
                 {
@@ -397,7 +451,6 @@ namespace Project_FinancePersonalManagement
                 var t = db.Transactions.SingleOrDefault(x => x.TransID == currentTransID);
                 if (t != null)
                 {
-                    // Hoàn trả lại tiền của giao dịch CŨ
                     var oldAcc = db.Accounts.SingleOrDefault(a => a.AccountID == t.AccountID);
                     if (oldAcc != null)
                     {
@@ -405,7 +458,6 @@ namespace Project_FinancePersonalManagement
                         else if (t.TransType == "Expense") oldAcc.Balance += t.Amount;
                     }
 
-                    // Tính toán trừ/cộng cho số tiền MỚI và ví MỚI
                     string newAccID = cbo_TaiKhoan.SelectedValue.ToString();
                     var newAcc = db.Accounts.SingleOrDefault(a => a.AccountID == newAccID);
                     if (newAcc != null)
@@ -422,7 +474,6 @@ namespace Project_FinancePersonalManagement
                         }
                     }
 
-                    // Cập nhật thông tin lưu vào CSDL
                     t.AccountID = newAccID;
                     t.CategoryID = cbo_DanhMuc.SelectedValue?.ToString();
                     t.TransType = (loaiGD == "Thu nhập") ? "Income" : "Expense";
@@ -431,8 +482,7 @@ namespace Project_FinancePersonalManagement
                     t.Note = txt_Note.Text.Trim();
 
                     db.SubmitChanges();
-                    MessageBox.Show("Cập nhật giao dịch thành công!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Cập nhật giao dịch thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     currentTransID = "";
                     LoadData();
@@ -445,8 +495,7 @@ namespace Project_FinancePersonalManagement
         {
             if (string.IsNullOrEmpty(currentTransID))
             {
-                MessageBox.Show("Vui lòng click chọn một giao dịch trong bảng để Xóa!", "Cảnh báo", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng click chọn một giao dịch trong bảng để Xóa!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -458,7 +507,6 @@ namespace Project_FinancePersonalManagement
                     var t = db.Transactions.SingleOrDefault(x => x.TransID == currentTransID);
                     if (t != null)
                     {
-                        // Tìm ví tiền tương ứng để HOÀN TIỀN
                         var acc = db.Accounts.SingleOrDefault(a => a.AccountID == t.AccountID);
                         if (acc != null)
                         {
@@ -466,17 +514,14 @@ namespace Project_FinancePersonalManagement
                             else if (t.TransType == "Expense") acc.Balance += t.Amount;
                             else
                             {
-                                MessageBox.Show("Không xóa được giao dịch chuyển tiền!", "Thông báo",
-                                    MessageBoxButtons.OK);
+                                MessageBox.Show("Không xóa được giao dịch chuyển tiền!", "Thông báo", MessageBoxButtons.OK);
                                 return;
                             }
                         }
 
-                        // Xóa lịch sử và Lưu lại
                         db.Transactions.DeleteOnSubmit(t);
                         db.SubmitChanges();
-                        MessageBox.Show("Đã xóa và hoàn tiền vào ví thành công!", "Thông báo",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Đã xóa và hoàn tiền vào ví thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         currentTransID = "";
                         LoadData();
@@ -492,42 +537,34 @@ namespace Project_FinancePersonalManagement
             txt_Tien.Clear();
             txt_Note.Clear();
             txt_SoDu.Clear();
+            if (txt_ConLai != null) txt_ConLai.Clear();
+
             DateTime today = DateTime.Now;
             dtp_NgayGD.Value = DateTime.Now;
             dtp_DenNgay.Value = DateTime.Now;
             dtp_TuNgay.Value = new DateTime(today.Year, today.Month, 1);
-            if (cbo_LoaiGD.Items.Count > 0)
-                cbo_LoaiGD.SelectedIndex = 0;
-            if (cbo_TaiKhoan.Items.Count > 0)
-                cbo_TaiKhoan.SelectedIndex = 0;
 
-            // Visual feedback: briefly highlight the Them button
+            if (cbo_LoaiGD.Items.Count > 0) cbo_LoaiGD.SelectedIndex = 0;
+            if (cbo_TaiKhoan.Items.Count > 0) cbo_TaiKhoan.SelectedIndex = 0;
+
             btn_Them.BackColor = C_Green;
         }
 
         private void btn_Thoat_Click(object sender, EventArgs e)
         {
             FrmMainMenu frmMenu = Application.OpenForms.OfType<FrmMainMenu>().FirstOrDefault();
-            if (frmMenu != null)
-            {
-                frmMenu.RefreshMenu();
-            }
+            if (frmMenu != null) frmMenu.RefreshMenu();
 
             FrmTaiKhoan frmTaiKhoan = Application.OpenForms.OfType<FrmTaiKhoan>().FirstOrDefault();
-            if (frmTaiKhoan != null)
-            {
-                frmTaiKhoan.RefreshTaiKhoan();
-            }
+            if (frmTaiKhoan != null) frmTaiKhoan.RefreshTaiKhoan();
 
             FrmThongKe frmThongKe = Application.OpenForms.OfType<FrmThongKe>().FirstOrDefault();
-            if (frmThongKe != null)
-            {
-                frmThongKe.RefreshThongKe();
-            }
+            if (frmThongKe != null) frmThongKe.RefreshThongKe();
+
             this.Close();
         }
 
-        //  FILTER
+        // LỌC DỮ LIỆU
         private void btn_Loc_Click(object sender, EventArgs e)
         {
             using (AppDatabaseDataContext db = new AppDatabaseDataContext())
@@ -569,14 +606,12 @@ namespace Project_FinancePersonalManagement
             }
         }
 
-        //  GRID CELL CLICK – populate form fields
         private void dgvGiaoDich_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
             var row = dgvGiaoDich.Rows[e.RowIndex];
             currentTransID = row.Cells["MaGD"].Value.ToString();
 
-            // Populate account
             string tenTK = row.Cells["TenTK"].Value.ToString();
             foreach (dynamic item in cbo_TaiKhoan.Items)
                 if (item.AccountName == tenTK) { cbo_TaiKhoan.SelectedItem = item; break; }
@@ -594,10 +629,50 @@ namespace Project_FinancePersonalManagement
                 cbo_DanhMuc.Text = row.Cells["TenDM"].Value.ToString();
         }
 
-        //  PUBLIC REFRESH
         public void RefreshGiaoDich()
         {
             LoadData();
+        }
+
+        // ==========================================
+        // CÁC TÍNH NĂNG MỚI (CHUYỂN THÁNG, EXCEL)
+        // ==========================================
+
+        private void btnThangTruoc_Click(object sender, EventArgs e)
+        {
+            currentViewMonth = currentViewMonth.AddMonths(-1);
+            if (lblThangNam != null) lblThangNam.Text = $"Tháng {currentViewMonth.Month}/{currentViewMonth.Year}";
+            LoadData();
+        }
+
+        private void btnThangSau_Click(object sender, EventArgs e)
+        {
+            currentViewMonth = currentViewMonth.AddMonths(1);
+            if (lblThangNam != null) lblThangNam.Text = $"Tháng {currentViewMonth.Month}/{currentViewMonth.Year}";
+            LoadData();
+        }
+
+        private void btnXuatExcel_Click(object sender, EventArgs e)
+        {
+            if (dgvGiaoDich.Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Excel Files (*.xlsx)|*.xlsx";
+            sfd.FileName = $"GiaoDich_Thang_{currentViewMonth.Month}_{currentViewMonth.Year}.xlsx";
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                MessageBox.Show("Đã thiết lập khung code Excel. Vui lòng cài gói EPPlus từ NuGet để chạy thực tế.", "Info");
+            }
+        }
+
+        private void btnInBaoCao_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Đã chuẩn bị sẵn logic gọi Report.\nBạn hãy thiết kế file .rpt và truyền DataSource từ danh sách hiện tại của dgvGiaoDich vào nhé!", "Crystal Reports");
         }
     }
 }
