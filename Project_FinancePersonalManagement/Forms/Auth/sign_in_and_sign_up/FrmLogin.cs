@@ -34,7 +34,7 @@ namespace Project_FinancePersonalManagement
 
             // --- SETUP BÊN ĐĂNG NHẬP ---
             txt_Name_Login.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) txt_Pass_Login.Focus(); };
-            txt_Pass_Login.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) btn_Accept_Click(s, e); };
+            //txt_Pass_Login.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) btn_Accept_Click(s, e); };
 
             // --- SETUP BÊN ĐĂNG KÝ ---
             txt_Name_Reg.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) txt_Pass_Reg.Focus(); };
@@ -44,17 +44,17 @@ namespace Project_FinancePersonalManagement
 
 
 
-
-        // Đăng nhập 
+        /*
+        // Đăng nhập cũ
         private void btn_Accept_Click(object sender, EventArgs e)
         {
-
-            //default để test (bỏ qua phần đăng nhập tạm thời)
-            LoggedInUserID = "USER001";
-            LoggedInUserName = "chien";
-            this.DialogResult = DialogResult.OK;
-            this.Close();
             /*
+            ////default để test (bỏ qua phần đăng nhập tạm thời)
+            //LoggedInUserID = "USER001";
+            //LoggedInUserName = "chien";
+            //this.DialogResult = DialogResult.OK;
+            //this.Close();
+            
             string username = txt_Name.Text.Trim();
             string passwordHash = txt_Pass.Text.Trim();
             if (isLoginMode)
@@ -102,8 +102,8 @@ namespace Project_FinancePersonalManagement
             {
                 MessageBox.Show("Lỗi hệ thống: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            */
         }
+        */
 
         // --- LOGIC ĐĂNG KÝ ---
         private void PerformRegister()
