@@ -33,5 +33,41 @@ namespace Project_FinancePersonalManagement.Properties {
                 return ((string)(this["PersonalFinanceDBConnectionString"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string UserSaved {
+            get {
+                return ((string)(this["UserSaved"]));
+            }
+            set {
+                this["UserSaved"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PassSaved {
+            get {
+                return ((string)(this["PassSaved"]));
+            }
+            set {
+                this["PassSaved"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsRemembered {
+            get {
+                return ((bool)(this["IsRemembered"]));
+            }
+            set {
+                this["IsRemembered"] = value;
+            }
+        }
     }
 }

@@ -1769,6 +1769,10 @@ namespace Project_FinancePersonalManagement.Data
 		
 		private string _PasswordHash;
 		
+		private string _Email;
+		
+		private string _PhoneNumber;
+		
 		private EntitySet<Account> _Accounts;
 		
 		private EntitySet<Budget> _Budgets;
@@ -1789,6 +1793,10 @@ namespace Project_FinancePersonalManagement.Data
     partial void OnUsernameChanged();
     partial void OnPasswordHashChanging(string value);
     partial void OnPasswordHashChanged();
+    partial void OnEmailChanging(string value);
+    partial void OnEmailChanged();
+    partial void OnPhoneNumberChanging(string value);
+    partial void OnPhoneNumberChanged();
     #endregion
 		
 		public User()
@@ -1857,6 +1865,46 @@ namespace Project_FinancePersonalManagement.Data
 					this._PasswordHash = value;
 					this.SendPropertyChanged("PasswordHash");
 					this.OnPasswordHashChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Email", DbType="NVarChar(100)")]
+		public string Email
+		{
+			get
+			{
+				return this._Email;
+			}
+			set
+			{
+				if ((this._Email != value))
+				{
+					this.OnEmailChanging(value);
+					this.SendPropertyChanging();
+					this._Email = value;
+					this.SendPropertyChanged("Email");
+					this.OnEmailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PhoneNumber", DbType="VarChar(15)")]
+		public string PhoneNumber
+		{
+			get
+			{
+				return this._PhoneNumber;
+			}
+			set
+			{
+				if ((this._PhoneNumber != value))
+				{
+					this.OnPhoneNumberChanging(value);
+					this.SendPropertyChanging();
+					this._PhoneNumber = value;
+					this.SendPropertyChanged("PhoneNumber");
+					this.OnPhoneNumberChanged();
 				}
 			}
 		}

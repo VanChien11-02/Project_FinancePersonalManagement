@@ -324,10 +324,10 @@ namespace Project_FinancePersonalManagement
             }
         }
 
-        private void btnNav_DangKy_Click(object sender, EventArgs e)
-        {
-            new FrmRegister().ShowDialog();
-        }
+        //private void btnNav_DangKy_Click(object sender, EventArgs e)
+        //{
+        //    new FrmRegister().ShowDialog();
+        //}
 
         private void btnNav_DangXuat_Click(object sender, EventArgs e)
         {
