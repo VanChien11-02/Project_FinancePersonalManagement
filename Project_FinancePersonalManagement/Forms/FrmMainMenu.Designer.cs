@@ -16,12 +16,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.btnNav_Settings = new System.Windows.Forms.Button();
             this.pnlSidebarBottom = new System.Windows.Forms.Panel();
@@ -59,7 +59,6 @@
             this.lblTotalBalance = new System.Windows.Forms.Label();
             this.lblTitleBalance = new System.Windows.Forms.Label();
             this.pnlTopbar = new System.Windows.Forms.Panel();
-            this.btn_MonthYear = new System.Windows.Forms.Label();
             this.btnNextMonth = new System.Windows.Forms.Button();
             this.btnPrevMonth = new System.Windows.Forms.Button();
             this.pnlUserChip = new System.Windows.Forms.Panel();
@@ -376,29 +375,29 @@
             // 
             this.dgv_Accounts.AllowUserToAddRows = false;
             this.dgv_Accounts.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
-            this.dgv_Accounts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
+            this.dgv_Accounts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle16;
             this.dgv_Accounts.BackgroundColor = System.Drawing.Color.White;
             this.dgv_Accounts.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgv_Accounts.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgv_Accounts.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(246)))), ((int)(((byte)(248)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv_Accounts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(246)))), ((int)(((byte)(248)))));
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_Accounts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
             this.dgv_Accounts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(252)))));
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(95)))), ((int)(((byte)(165)))));
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv_Accounts.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle18.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(252)))));
+            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(95)))), ((int)(((byte)(165)))));
+            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv_Accounts.DefaultCellStyle = dataGridViewCellStyle18;
             this.dgv_Accounts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_Accounts.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dgv_Accounts.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
@@ -440,24 +439,24 @@
             // chartChiTieu
             // 
             this.chartChiTieu.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.BackColor = System.Drawing.Color.Transparent;
-            chartArea1.BorderWidth = 0;
-            chartArea1.Name = "ChartArea1";
-            this.chartChiTieu.ChartAreas.Add(chartArea1);
+            chartArea6.BackColor = System.Drawing.Color.Transparent;
+            chartArea6.BorderWidth = 0;
+            chartArea6.Name = "ChartArea1";
+            this.chartChiTieu.ChartAreas.Add(chartArea6);
             this.chartChiTieu.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.BackColor = System.Drawing.Color.Transparent;
-            legend1.BorderColor = System.Drawing.Color.Transparent;
-            legend1.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            legend1.IsTextAutoFit = false;
-            legend1.Name = "Legend1";
-            this.chartChiTieu.Legends.Add(legend1);
+            legend6.BackColor = System.Drawing.Color.Transparent;
+            legend6.BorderColor = System.Drawing.Color.Transparent;
+            legend6.Font = new System.Drawing.Font("Segoe UI", 8.5F);
+            legend6.IsTextAutoFit = false;
+            legend6.Name = "Legend1";
+            this.chartChiTieu.Legends.Add(legend6);
             this.chartChiTieu.Location = new System.Drawing.Point(12, 27);
             this.chartChiTieu.Name = "chartChiTieu";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chartChiTieu.Series.Add(series1);
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
+            series6.Legend = "Legend1";
+            series6.Name = "Series1";
+            this.chartChiTieu.Series.Add(series6);
             this.chartChiTieu.Size = new System.Drawing.Size(316, 381);
             this.chartChiTieu.TabIndex = 0;
             // 
@@ -628,7 +627,6 @@
             // pnlTopbar
             // 
             this.pnlTopbar.BackColor = System.Drawing.Color.Transparent;
-            this.pnlTopbar.Controls.Add(this.btn_MonthYear);
             this.pnlTopbar.Controls.Add(this.btnNextMonth);
             this.pnlTopbar.Controls.Add(this.btnPrevMonth);
             this.pnlTopbar.Controls.Add(this.pnlUserChip);
@@ -640,22 +638,13 @@
             this.pnlTopbar.Size = new System.Drawing.Size(850, 54);
             this.pnlTopbar.TabIndex = 2;
             // 
-            // btn_MonthYear
-            // 
-            this.btn_MonthYear.AutoSize = true;
-            this.btn_MonthYear.Location = new System.Drawing.Point(366, 20);
-            this.btn_MonthYear.Name = "btn_MonthYear";
-            this.btn_MonthYear.Size = new System.Drawing.Size(41, 15);
-            this.btn_MonthYear.TabIndex = 5;
-            this.btn_MonthYear.Text = "Tháng";
-            // 
             // btnNextMonth
             // 
             this.btnNextMonth.Location = new System.Drawing.Point(468, 16);
             this.btnNextMonth.Name = "btnNextMonth";
             this.btnNextMonth.Size = new System.Drawing.Size(75, 23);
             this.btnNextMonth.TabIndex = 4;
-            this.btnNextMonth.Text = "sau";
+            this.btnNextMonth.Text = ">";
             this.btnNextMonth.UseVisualStyleBackColor = true;
             this.btnNextMonth.Click += new System.EventHandler(this.btnNextMonth_Click);
             // 
@@ -665,7 +654,7 @@
             this.btnPrevMonth.Name = "btnPrevMonth";
             this.btnPrevMonth.Size = new System.Drawing.Size(75, 23);
             this.btnPrevMonth.TabIndex = 3;
-            this.btnPrevMonth.Text = "trước";
+            this.btnPrevMonth.Text = "<";
             this.btnPrevMonth.UseVisualStyleBackColor = true;
             this.btnPrevMonth.Click += new System.EventHandler(this.btnPrevMonth_Click);
             // 
@@ -718,7 +707,7 @@
             this.lblMonthYear.AutoSize = true;
             this.lblMonthYear.Font = new System.Drawing.Font("Segoe UI", 8.5F);
             this.lblMonthYear.ForeColor = System.Drawing.Color.DimGray;
-            this.lblMonthYear.Location = new System.Drawing.Point(2, 32);
+            this.lblMonthYear.Location = new System.Drawing.Point(367, 21);
             this.lblMonthYear.Name = "lblMonthYear";
             this.lblMonthYear.Size = new System.Drawing.Size(83, 15);
             this.lblMonthYear.TabIndex = 1;
@@ -757,6 +746,10 @@
             this.lblStatus.TabIndex = 0;
             this.lblStatus.Text = "Sẵn sàng - chưa đăng nhập";
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // time_clock
+            // 
+            this.time_clock.Tick += new System.EventHandler(this.time_clock_Tick);
             // 
             // FrmMainMenu
             // 
@@ -845,7 +838,6 @@
         private System.Windows.Forms.Panel pnlStatusBar;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Label lblUser;
-        private System.Windows.Forms.Label btn_MonthYear;
         private System.Windows.Forms.Button btnNextMonth;
         private System.Windows.Forms.Button btnPrevMonth;
         private System.Windows.Forms.Timer time_clock;

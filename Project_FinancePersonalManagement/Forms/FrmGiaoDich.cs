@@ -238,7 +238,6 @@ namespace Project_FinancePersonalManagement
             UpdateRemainingBudgetDisplay();
         }
 
-        // TÍNH TOÁN NGÂN SÁCH CÒN LẠI
         // TÍNH TOÁN NGÂN SÁCH CÒN LẠI (ĐÃ FIX LỖI)
         private void UpdateRemainingBudgetDisplay()
         {

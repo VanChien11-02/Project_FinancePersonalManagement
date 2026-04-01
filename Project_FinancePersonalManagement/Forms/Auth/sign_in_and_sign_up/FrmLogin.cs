@@ -42,69 +42,6 @@ namespace Project_FinancePersonalManagement
             txt_PassConfirm_Reg.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) btn_Register_Click(s, e); };
         }
 
-
-
-        /*
-        // Đăng nhập cũ
-        private void btn_Accept_Click(object sender, EventArgs e)
-        {
-            /*
-            ////default để test (bỏ qua phần đăng nhập tạm thời)
-            //LoggedInUserID = "USER001";
-            //LoggedInUserName = "chien";
-            //this.DialogResult = DialogResult.OK;
-            //this.Close();
-            
-            string username = txt_Name.Text.Trim();
-            string passwordHash = txt_Pass.Text.Trim();
-            if (isLoginMode)
-                PerformLogin();
-            else
-                PerformRegister();
-        }
-
-        // --- LOGIC ĐĂNG NHẬP ---
-        private void PerformLogin()
-        {
-            string username = txt_Name_Login.Text.Trim();
-            string passwordHash = txt_Pass_Login.Text.Trim();
-
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(passwordHash))
-            {
-                MessageBox.Show("Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                using (AppDatabaseDataContext db = new AppDatabaseDataContext())
-                {
-                    var user = db.Users.FirstOrDefault(u => u.Username == username && u.PasswordHash == passwordHash);
-
-                    if (user != null)
-                    {
-                        // Đăng nhập thành công! Gán dữ liệu vào 2 biến public
-                        LoggedInUserID = user.UserID;
-                        LoggedInUserName = user.Username;
-
-                        this.DialogResult = DialogResult.OK;
-                        this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Tên đăng nhập hoặc mật khẩu không chính xác.", "Lỗi đăng nhập", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        txt_Pass_Login.Clear();
-                        txt_Name_Login.Focus();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi hệ thống: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-        */
-
         // --- LOGIC ĐĂNG KÝ ---
         private void PerformRegister()
         {
@@ -303,11 +240,6 @@ namespace Project_FinancePersonalManagement
 
         }
 
-       
-       
-
-        
-
         private void btn_Register_Click(object sender, EventArgs e)
         {
             string username = txt_Name_Reg.Text.Trim();
@@ -429,60 +361,36 @@ namespace Project_FinancePersonalManagement
             }
         }
 
-      
+        private void TogglePasswordVisibility(Guna.UI2.WinForms.Guna2TextBox txtbox)
+        {
+            // Đảo ngược trạng thái ẩn/hiện (true thành false và ngược lại)
+            txtbox.UseSystemPasswordChar = !txtbox.UseSystemPasswordChar;
 
-       
+            // Cập nhật icon tương ứng
+            txtbox.IconRight = txtbox.UseSystemPasswordChar
+                               ? Properties.Resources.mat_close
+                               : Properties.Resources.mat_open;
+        }
 
-        
-
+        // 1. Cho bên Đăng nhập
         private void txt_Pass_Login_IconRightClick(object sender, EventArgs e)
-        {
-            if (txt_Pass_Login.UseSystemPasswordChar)
-            {
-                // Đang che -> Mở ra
-                txt_Pass_Login.UseSystemPasswordChar = false;
-                txt_Pass_Login.PasswordChar = '\0';
-                txt_Pass_Login.IconRight = Project_FinancePersonalManagement.Properties.Resources.mat_open;
-            }
-            else
-            {
-                // Đang hiện -> Che lại
-                txt_Pass_Login.UseSystemPasswordChar = true;
-                txt_Pass_Login.IconRight = Project_FinancePersonalManagement.Properties.Resources.mat_close;
-            }
-        }
+            => TogglePasswordVisibility(txt_Pass_Login);
 
+        // 2. Cho bên Đăng ký (Mật khẩu)
         private void txt_Pass_Reg_IconRightClick(object sender, EventArgs e)
-        {
-            if (txt_Pass_Reg.UseSystemPasswordChar)
-            {
-                txt_Pass_Reg.UseSystemPasswordChar = false;
-                txt_Pass_Reg.PasswordChar = '\0';
-                txt_Pass_Reg.IconRight = Project_FinancePersonalManagement.Properties.Resources.mat_open;
-            }
-            else
-            {
-                txt_Pass_Reg.UseSystemPasswordChar = true;
-                txt_Pass_Reg.IconRight = Project_FinancePersonalManagement.Properties.Resources.mat_close;
-            }
-        }
+            => TogglePasswordVisibility(txt_Pass_Reg);
 
+        // 3. Cho bên Đăng ký (Xác nhận mật khẩu)
         private void txt_PassConfirm_Reg_IconRightClick(object sender, EventArgs e)
-        {
-            if (txt_PassConfirm_Reg.UseSystemPasswordChar)
-            {
-                txt_PassConfirm_Reg.UseSystemPasswordChar = false;
-                txt_PassConfirm_Reg.PasswordChar = '\0';
-                txt_PassConfirm_Reg.IconRight = Project_FinancePersonalManagement.Properties.Resources.mat_open;
-            }
-            else
-            {
-                txt_PassConfirm_Reg.UseSystemPasswordChar = true;
-                txt_PassConfirm_Reg.IconRight = Project_FinancePersonalManagement.Properties.Resources.mat_close;
-            }
-        }
+            => TogglePasswordVisibility(txt_PassConfirm_Reg);
 
-       
+        // 4. Cho bên Quên mật khẩu (Mật khẩu mới)
+        private void txt_NewPass_IconRightClick(object sender, EventArgs e)
+            => TogglePasswordVisibility(txt_NewPass);
+
+        // 5. Cho bên Quên mật khẩu (Xác nhận mật khẩu mới)
+        private void txt_ConfirmNewPass_IconRightClick(object sender, EventArgs e)
+            => TogglePasswordVisibility(txt_ConfirmNewPass);
 
         private void txt_PassConfirm_Reg_TextChanged(object sender, EventArgs e)
         {
@@ -613,36 +521,6 @@ namespace Project_FinancePersonalManagement
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi: " + ex.Message);
-            }
-        }
-
-        private void txt_NewPass_IconRightClick(object sender, EventArgs e)
-        {
-            if (txt_NewPass.UseSystemPasswordChar)
-            {
-                txt_NewPass.UseSystemPasswordChar = false;
-                txt_NewPass.PasswordChar = '\0';
-                txt_NewPass.IconRight = Project_FinancePersonalManagement.Properties.Resources.mat_open;
-            }
-            else
-            {
-                txt_NewPass.UseSystemPasswordChar = true;
-                txt_NewPass.IconRight = Project_FinancePersonalManagement.Properties.Resources.mat_close;
-            }
-        }
-
-        private void txt_ConfirmNewPass_IconRightClick(object sender, EventArgs e)
-        {
-            if (txt_ConfirmNewPass.UseSystemPasswordChar)
-            {
-                txt_ConfirmNewPass.UseSystemPasswordChar = false;
-                txt_ConfirmNewPass.PasswordChar = '\0';
-                txt_ConfirmNewPass.IconRight = Project_FinancePersonalManagement.Properties.Resources.mat_open;
-            }
-            else
-            {
-                txt_ConfirmNewPass.UseSystemPasswordChar = true;
-                txt_ConfirmNewPass.IconRight = Project_FinancePersonalManagement.Properties.Resources.mat_close;
             }
         }
 
