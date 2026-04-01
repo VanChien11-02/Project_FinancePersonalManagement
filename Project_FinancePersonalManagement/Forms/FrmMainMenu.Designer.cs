@@ -360,10 +360,10 @@
             // 
             this.lblAppSub.AutoSize = true;
             this.lblAppSub.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblAppSub.ForeColor = System.Drawing.Color.Gray;
+            this.lblAppSub.ForeColor = System.Drawing.Color.DimGray;
             this.lblAppSub.Location = new System.Drawing.Point(18, 36);
             this.lblAppSub.Name = "lblAppSub";
-            this.lblAppSub.Size = new System.Drawing.Size(138, 13);
+            this.lblAppSub.Size = new System.Drawing.Size(185, 21);
             this.lblAppSub.TabIndex = 0;
             this.lblAppSub.Text = "Quản lý tài chính cá nhân";
             // 
@@ -374,7 +374,7 @@
             this.lblAppName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblAppName.Location = new System.Drawing.Point(16, 12);
             this.lblAppName.Name = "lblAppName";
-            this.lblAppName.Size = new System.Drawing.Size(93, 20);
+            this.lblAppName.Size = new System.Drawing.Size(137, 30);
             this.lblAppName.TabIndex = 1;
             this.lblAppName.Text = "PFinanceVN";
             // 
@@ -447,14 +447,14 @@
             this.dgv_Accounts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_Accounts.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dgv_Accounts.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.dgv_Accounts.Location = new System.Drawing.Point(12, 27);
+            this.dgv_Accounts.Location = new System.Drawing.Point(12, 36);
             this.dgv_Accounts.Name = "dgv_Accounts";
             this.dgv_Accounts.ReadOnly = true;
             this.dgv_Accounts.RowHeadersVisible = false;
             this.dgv_Accounts.RowHeadersWidth = 62;
             this.dgv_Accounts.RowTemplate.Height = 32;
             this.dgv_Accounts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Accounts.Size = new System.Drawing.Size(486, 381);
+            this.dgv_Accounts.Size = new System.Drawing.Size(486, 372);
             this.dgv_Accounts.TabIndex = 0;
             // 
             // lblCardAccTitle
@@ -465,7 +465,7 @@
             this.lblCardAccTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblCardAccTitle.Location = new System.Drawing.Point(12, 8);
             this.lblCardAccTitle.Name = "lblCardAccTitle";
-            this.lblCardAccTitle.Size = new System.Drawing.Size(142, 19);
+            this.lblCardAccTitle.Size = new System.Drawing.Size(205, 28);
             this.lblCardAccTitle.TabIndex = 1;
             this.lblCardAccTitle.Text = "Danh sách tài khoản";
             // 
@@ -496,14 +496,14 @@
             legend1.IsTextAutoFit = false;
             legend1.Name = "Legend1";
             this.chartChiTieu.Legends.Add(legend1);
-            this.chartChiTieu.Location = new System.Drawing.Point(12, 27);
+            this.chartChiTieu.Location = new System.Drawing.Point(12, 36);
             this.chartChiTieu.Name = "chartChiTieu";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.chartChiTieu.Series.Add(series1);
-            this.chartChiTieu.Size = new System.Drawing.Size(316, 381);
+            this.chartChiTieu.Size = new System.Drawing.Size(316, 372);
             this.chartChiTieu.TabIndex = 0;
             // 
             // lblCardChartTitle
@@ -514,7 +514,7 @@
             this.lblCardChartTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblCardChartTitle.Location = new System.Drawing.Point(12, 8);
             this.lblCardChartTitle.Name = "lblCardChartTitle";
-            this.lblCardChartTitle.Size = new System.Drawing.Size(176, 19);
+            this.lblCardChartTitle.Size = new System.Drawing.Size(254, 28);
             this.lblCardChartTitle.TabIndex = 1;
             this.lblCardChartTitle.Text = "Cơ cấu chi tiêu tháng này";
             // 
@@ -549,10 +549,10 @@
             // 
             this.lblChangeExpense.AutoSize = true;
             this.lblChangeExpense.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblChangeExpense.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.lblChangeExpense.ForeColor = System.Drawing.Color.Black;
             this.lblChangeExpense.Location = new System.Drawing.Point(16, 56);
             this.lblChangeExpense.Name = "lblChangeExpense";
-            this.lblChangeExpense.Size = new System.Drawing.Size(0, 13);
+            this.lblChangeExpense.Size = new System.Drawing.Size(0, 21);
             this.lblChangeExpense.TabIndex = 0;
             // 
             // lblTotalExpense
@@ -562,18 +562,18 @@
             this.lblTotalExpense.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(163)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.lblTotalExpense.Location = new System.Drawing.Point(14, 28);
             this.lblTotalExpense.Name = "lblTotalExpense";
-            this.lblTotalExpense.Size = new System.Drawing.Size(59, 25);
+            this.lblTotalExpense.Size = new System.Drawing.Size(94, 36);
             this.lblTotalExpense.TabIndex = 1;
-            this.lblTotalExpense.Text = "0 vnđ";
+            this.lblTotalExpense.Text = "0 VNĐ";
             // 
             // lblTitleExpense
             // 
             this.lblTitleExpense.AutoSize = true;
             this.lblTitleExpense.Font = new System.Drawing.Font("Segoe UI", 7.5F);
-            this.lblTitleExpense.ForeColor = System.Drawing.Color.Gray;
+            this.lblTitleExpense.ForeColor = System.Drawing.Color.Black;
             this.lblTitleExpense.Location = new System.Drawing.Point(16, 10);
             this.lblTitleExpense.Name = "lblTitleExpense";
-            this.lblTitleExpense.Size = new System.Drawing.Size(79, 12);
+            this.lblTitleExpense.Size = new System.Drawing.Size(121, 20);
             this.lblTitleExpense.TabIndex = 2;
             this.lblTitleExpense.Text = "CHI TIÊU THÁNG";
             // 
@@ -595,31 +595,31 @@
             // 
             this.lblChangeIncome.AutoSize = true;
             this.lblChangeIncome.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblChangeIncome.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.lblChangeIncome.ForeColor = System.Drawing.Color.Black;
             this.lblChangeIncome.Location = new System.Drawing.Point(16, 56);
             this.lblChangeIncome.Name = "lblChangeIncome";
-            this.lblChangeIncome.Size = new System.Drawing.Size(0, 13);
+            this.lblChangeIncome.Size = new System.Drawing.Size(0, 21);
             this.lblChangeIncome.TabIndex = 0;
             // 
             // lblTotalIncome
             // 
             this.lblTotalIncome.AutoSize = true;
             this.lblTotalIncome.Font = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblTotalIncome.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(95)))), ((int)(((byte)(165)))));
+            this.lblTotalIncome.ForeColor = System.Drawing.Color.Black;
             this.lblTotalIncome.Location = new System.Drawing.Point(14, 28);
             this.lblTotalIncome.Name = "lblTotalIncome";
-            this.lblTotalIncome.Size = new System.Drawing.Size(59, 25);
+            this.lblTotalIncome.Size = new System.Drawing.Size(94, 36);
             this.lblTotalIncome.TabIndex = 1;
-            this.lblTotalIncome.Text = "0 vnđ";
+            this.lblTotalIncome.Text = "0 VNĐ";
             // 
             // lblTitleIncome
             // 
             this.lblTitleIncome.AutoSize = true;
             this.lblTitleIncome.Font = new System.Drawing.Font("Segoe UI", 7.5F);
-            this.lblTitleIncome.ForeColor = System.Drawing.Color.Gray;
+            this.lblTitleIncome.ForeColor = System.Drawing.Color.Black;
             this.lblTitleIncome.Location = new System.Drawing.Point(16, 10);
             this.lblTitleIncome.Name = "lblTitleIncome";
-            this.lblTitleIncome.Size = new System.Drawing.Size(88, 12);
+            this.lblTitleIncome.Size = new System.Drawing.Size(136, 20);
             this.lblTitleIncome.TabIndex = 2;
             this.lblTitleIncome.Text = "THU NHẬP THÁNG";
             // 
@@ -641,10 +641,10 @@
             // 
             this.lblChangeBalance.AutoSize = true;
             this.lblChangeBalance.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.lblChangeBalance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.lblChangeBalance.ForeColor = System.Drawing.Color.Black;
             this.lblChangeBalance.Location = new System.Drawing.Point(16, 56);
             this.lblChangeBalance.Name = "lblChangeBalance";
-            this.lblChangeBalance.Size = new System.Drawing.Size(94, 13);
+            this.lblChangeBalance.Size = new System.Drawing.Size(124, 21);
             this.lblChangeBalance.TabIndex = 0;
             this.lblChangeBalance.Text = "Chưa đăng nhập";
             // 
@@ -655,18 +655,18 @@
             this.lblTotalBalance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(110)))), ((int)(((byte)(80)))));
             this.lblTotalBalance.Location = new System.Drawing.Point(14, 28);
             this.lblTotalBalance.Name = "lblTotalBalance";
-            this.lblTotalBalance.Size = new System.Drawing.Size(59, 25);
+            this.lblTotalBalance.Size = new System.Drawing.Size(94, 36);
             this.lblTotalBalance.TabIndex = 1;
-            this.lblTotalBalance.Text = "0 vnđ";
+            this.lblTotalBalance.Text = "0 VNĐ";
             // 
             // lblTitleBalance
             // 
             this.lblTitleBalance.AutoSize = true;
             this.lblTitleBalance.Font = new System.Drawing.Font("Segoe UI", 7.5F);
-            this.lblTitleBalance.ForeColor = System.Drawing.Color.Gray;
+            this.lblTitleBalance.ForeColor = System.Drawing.Color.Black;
             this.lblTitleBalance.Location = new System.Drawing.Point(16, 10);
             this.lblTitleBalance.Name = "lblTitleBalance";
-            this.lblTitleBalance.Size = new System.Drawing.Size(65, 12);
+            this.lblTitleBalance.Size = new System.Drawing.Size(98, 20);
             this.lblTitleBalance.TabIndex = 2;
             this.lblTitleBalance.Text = "TỒNG SỐ DƯ";
             // 
@@ -730,12 +730,12 @@
             // 
             this.lblMonthYear.AutoSize = true;
             this.lblMonthYear.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblMonthYear.ForeColor = System.Drawing.Color.Gray;
+            this.lblMonthYear.ForeColor = System.Drawing.Color.DimGray;
             this.lblMonthYear.Location = new System.Drawing.Point(2, 32);
             this.lblMonthYear.Name = "lblMonthYear";
-            this.lblMonthYear.Size = new System.Drawing.Size(85, 15);
+            this.lblMonthYear.Size = new System.Drawing.Size(120, 23);
             this.lblMonthYear.TabIndex = 1;
-            this.lblMonthYear.Text = "Tháng 04/2026";
+            this.lblMonthYear.Text = "Tháng --/2026";
             // 
             // lblPageTitle
             // 
@@ -744,7 +744,7 @@
             this.lblPageTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblPageTitle.Location = new System.Drawing.Point(0, 6);
             this.lblPageTitle.Name = "lblPageTitle";
-            this.lblPageTitle.Size = new System.Drawing.Size(104, 25);
+            this.lblPageTitle.Size = new System.Drawing.Size(147, 36);
             this.lblPageTitle.TabIndex = 2;
             this.lblPageTitle.Text = "Tổng quan";
             // 
@@ -773,7 +773,7 @@
             // 
             // FrmMainMenu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1100, 620);
@@ -782,6 +782,7 @@
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.MinimumSize = new System.Drawing.Size(900, 550);
             this.Name = "FrmMainMenu";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PFinanceVN - Quản lý tài chính cá nhân";
             this.Load += new System.EventHandler(this.Form_Menu_Load);
             this.Resize += new System.EventHandler(this.Form_Menu_Resize);

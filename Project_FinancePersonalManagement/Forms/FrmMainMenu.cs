@@ -99,12 +99,12 @@ namespace Project_FinancePersonalManagement
                 {
                     int m = DateTime.Now.Month, y = DateTime.Now.Year;
 
-                    // TÍNH TỔNG SỐ DƯ (Tất cả các ví/tài khoản của user này)
+                    //Tổng số dư
                     decimal totalBalance = db.Accounts
                         .Where(a => a.UserID == currentUserID)
                         .Sum(a => (decimal?)a.Balance) ?? 0;
 
-                    // TÍNH TỔNG THU
+                    //tổng thu nhập tháng hiện tại
                     decimal totalIncome = db.Transactions
                         .Where(t => t.UserID == currentUserID
                                  && t.TransType == "Income"
@@ -112,7 +112,7 @@ namespace Project_FinancePersonalManagement
                                  && t.TransDate.Value.Year == y)
                         .Sum(t => (decimal?)t.Amount) ?? 0;
 
-                    // TÍNH TỔNG CHI
+                    // tông chi tiêu tháng hiện tại
                     decimal totalExpense = db.Transactions
                         .Where(t => t.UserID == currentUserID
                                  && t.TransType == "Expense"
@@ -133,8 +133,8 @@ namespace Project_FinancePersonalManagement
                         && t.TransDate.Value.Month == m && t.TransDate.Value.Year == y);
 
                     lblChangeBalance.Text = totalBalance > 0 ? "Tổng số dư hiện tại" : "Chưa có tài khoản";
-                    lblChangeIncome.Text = incomeCount > 0 ? incomeCount + " giao dịch thu tháng" + m : "Chưa có thu nhập";
-                    lblChangeExpense.Text = expenseCount > 0 ? expenseCount + " giao dịch chi tháng" + m: "Chưa có chi tiêu";
+                    lblChangeIncome.Text = incomeCount > 0 ? incomeCount + " giao dịch thu tháng " + m : "Chưa có thu nhập";
+                    lblChangeExpense.Text = expenseCount > 0 ? expenseCount + " giao dịch chi tháng " + m: "Chưa có chi tiêu";
 
                     var accountList = db.Accounts
                         .Where(a => a.UserID == currentUserID)
@@ -178,7 +178,6 @@ namespace Project_FinancePersonalManagement
                 {
                     int m = DateTime.Now.Month, y = DateTime.Now.Year;
 
-                    //  Dùng LINQ kết hợp (JOIN) bảng Transactions và Categories, sau đó Gom nhóm (GROUP BY)
                     var expenseData = (from t in db.Transactions
                                        join c in db.Categories on t.CategoryID equals c.CategoryID
                                        where t.UserID == currentUserID
@@ -192,14 +191,12 @@ namespace Project_FinancePersonalManagement
                                            TongTien = g.Sum(x => x.Amount)
                                        }).ToList();
 
-                    // Cấu hình xóa dữ liệu cũ của biểu đồ (nếu có)
                     chartChiTieu.Series.Clear();
                     chartChiTieu.Titles.Clear();
                     chartChiTieu.ChartAreas[0].BackColor = Color.Transparent;
                     chartChiTieu.BackColor = Color.Transparent;
                     chartChiTieu.Legends[0].BackColor = Color.Transparent;
                     chartChiTieu.Legends[0].BorderColor = Color.Transparent;
-
 
                     Series series = chartChiTieu.Series.Add("ChiTieuSeries");
                     series.ChartType = SeriesChartType.Doughnut;
@@ -235,7 +232,7 @@ namespace Project_FinancePersonalManagement
             }
         }
 
-        //  NAV BUTTON CLICK HANDLERS (Tổng quan)
+        //  NAV BUTTON CLICK HANDLERS
         private void btnNav_Overview_Click(object sender, EventArgs e)
         {
             SetActiveNav(btnNav_Overview);
@@ -284,9 +281,9 @@ namespace Project_FinancePersonalManagement
                 ToggleSidebarFeatures(false);
                 SetActiveNav(btnNav_Overview);
 
-                lblTotalBalance.Text = "0 VNĐ";
-                lblTotalIncome.Text = "0 VNĐ";
-                lblTotalExpense.Text = "0 VNĐ";
+                lblTotalBalance.Text = "0 vnđ";
+                lblTotalIncome.Text = "0 vnđ";
+                lblTotalExpense.Text = "0 vnđ";
                 lblChangeBalance.Text = "";
                 lblChangeIncome.Text = "";
                 lblChangeExpense.Text = "";
@@ -362,7 +359,7 @@ namespace Project_FinancePersonalManagement
             LoadDashboard();
         }
 
-        //  HELPERS (hiển thị tên viết tắt trên avatar)
+        //  HELPERS
         private static string GetInitials(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return "--";
