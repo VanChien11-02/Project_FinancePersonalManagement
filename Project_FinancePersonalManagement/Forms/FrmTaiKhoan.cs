@@ -195,7 +195,7 @@ namespace Project_FinancePersonalManagement
                 }
 
                 txt_SoDu.Enabled = false;
-                btn_Them.Enabled = false;
+                btn_Them.Enabled = true;
             }    
         }
 
