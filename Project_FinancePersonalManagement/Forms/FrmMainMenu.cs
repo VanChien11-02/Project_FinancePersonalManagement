@@ -36,6 +36,13 @@ namespace Project_FinancePersonalManagement
             btnNav_Settings.ImageAlign = ContentAlignment.MiddleLeft;
 
             btnNav_Settings.Padding = new Padding(10, 0, 0, 0);
+
+            if (Properties.Resources.Refresh != null) 
+            {
+                Bitmap bmp = new Bitmap(Properties.Resources.Refresh);
+                btnRefresh.Image = new Bitmap(bmp, new Size(30, 30));
+                btnRefresh.ImageAlign = ContentAlignment.MiddleCenter;
+            }
         }
 
         //  LOAD / RESIZE
@@ -397,6 +404,7 @@ namespace Project_FinancePersonalManagement
             SetActiveNav(btnNav_NganSach);
             new FrmNganSach(currentUserID).ShowDialog();
             SetActiveNav(btnNav_Overview);
+            LoadDashboard();
         }
 
         private void btnNav_KhoanVay_Click(object sender, EventArgs e)
@@ -404,6 +412,7 @@ namespace Project_FinancePersonalManagement
             SetActiveNav(btnNav_KhoanVay);
             new FrmVayNo(currentUserID).ShowDialog();
             SetActiveNav(btnNav_Overview);
+            LoadDashboard();
         }
 
         // NEW: Thiết lập menu cho nút Settings
@@ -521,6 +530,11 @@ namespace Project_FinancePersonalManagement
                 // Tắt luôn toàn bộ app
                 Application.Exit();
             }
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            LoadDashboard();
         }
     }
 }

@@ -16,12 +16,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend8 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.btnNav_Settings = new System.Windows.Forms.Button();
             this.pnlSidebarBottom = new System.Windows.Forms.Panel();
@@ -70,6 +70,7 @@
             this.pnlStatusBar = new System.Windows.Forms.Panel();
             this.lblStatus = new System.Windows.Forms.Label();
             this.time_clock = new System.Windows.Forms.Timer(this.components);
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.pnlSidebar.SuspendLayout();
             this.pnlSidebarBottom.SuspendLayout();
             this.pnlLogo.SuspendLayout();
@@ -107,11 +108,12 @@
             // 
             // btnNav_Settings
             // 
+            this.btnNav_Settings.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnNav_Settings.FlatAppearance.BorderSize = 0;
             this.btnNav_Settings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNav_Settings.Location = new System.Drawing.Point(38, 387);
+            this.btnNav_Settings.Location = new System.Drawing.Point(37, 387);
             this.btnNav_Settings.Name = "btnNav_Settings";
-            this.btnNav_Settings.Size = new System.Drawing.Size(50, 47);
+            this.btnNav_Settings.Size = new System.Drawing.Size(51, 47);
             this.btnNav_Settings.TabIndex = 4;
             this.btnNav_Settings.UseVisualStyleBackColor = true;
             // 
@@ -317,7 +319,7 @@
             this.lblAppSub.ForeColor = System.Drawing.Color.DimGray;
             this.lblAppSub.Location = new System.Drawing.Point(18, 36);
             this.lblAppSub.Name = "lblAppSub";
-            this.lblAppSub.Size = new System.Drawing.Size(165, 19);
+            this.lblAppSub.Size = new System.Drawing.Size(138, 13);
             this.lblAppSub.TabIndex = 0;
             this.lblAppSub.Text = "Quản lý tài chính cá nhân";
             // 
@@ -328,7 +330,7 @@
             this.lblAppName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblAppName.Location = new System.Drawing.Point(16, 12);
             this.lblAppName.Name = "lblAppName";
-            this.lblAppName.Size = new System.Drawing.Size(120, 25);
+            this.lblAppName.Size = new System.Drawing.Size(93, 20);
             this.lblAppName.TabIndex = 1;
             this.lblAppName.Text = "PFinanceVN";
             // 
@@ -375,40 +377,40 @@
             // 
             this.dgv_Accounts.AllowUserToAddRows = false;
             this.dgv_Accounts.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
-            this.dgv_Accounts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
+            this.dgv_Accounts.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle22;
             this.dgv_Accounts.BackgroundColor = System.Drawing.Color.White;
             this.dgv_Accounts.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgv_Accounts.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgv_Accounts.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(246)))), ((int)(((byte)(248)))));
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv_Accounts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle23.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(246)))), ((int)(((byte)(248)))));
+            dataGridViewCellStyle23.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle23.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
+            dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv_Accounts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle23;
             this.dgv_Accounts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(252)))));
-            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(95)))), ((int)(((byte)(165)))));
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv_Accounts.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle24.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle24.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(236)))), ((int)(((byte)(252)))));
+            dataGridViewCellStyle24.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(95)))), ((int)(((byte)(165)))));
+            dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv_Accounts.DefaultCellStyle = dataGridViewCellStyle24;
             this.dgv_Accounts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_Accounts.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dgv_Accounts.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(235)))), ((int)(((byte)(235)))));
-            this.dgv_Accounts.Location = new System.Drawing.Point(12, 31);
+            this.dgv_Accounts.Location = new System.Drawing.Point(12, 27);
             this.dgv_Accounts.Name = "dgv_Accounts";
             this.dgv_Accounts.ReadOnly = true;
             this.dgv_Accounts.RowHeadersVisible = false;
             this.dgv_Accounts.RowHeadersWidth = 62;
             this.dgv_Accounts.RowTemplate.Height = 32;
             this.dgv_Accounts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_Accounts.Size = new System.Drawing.Size(486, 377);
+            this.dgv_Accounts.Size = new System.Drawing.Size(486, 381);
             this.dgv_Accounts.TabIndex = 0;
             // 
             // lblCardAccTitle
@@ -419,7 +421,7 @@
             this.lblCardAccTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblCardAccTitle.Location = new System.Drawing.Point(12, 8);
             this.lblCardAccTitle.Name = "lblCardAccTitle";
-            this.lblCardAccTitle.Size = new System.Drawing.Size(171, 23);
+            this.lblCardAccTitle.Size = new System.Drawing.Size(142, 19);
             this.lblCardAccTitle.TabIndex = 1;
             this.lblCardAccTitle.Text = "Danh sách tài khoản";
             // 
@@ -439,25 +441,25 @@
             // chartChiTieu
             // 
             this.chartChiTieu.BackColor = System.Drawing.Color.Transparent;
-            chartArea5.BackColor = System.Drawing.Color.Transparent;
-            chartArea5.BorderWidth = 0;
-            chartArea5.Name = "ChartArea1";
-            this.chartChiTieu.ChartAreas.Add(chartArea5);
+            chartArea8.BackColor = System.Drawing.Color.Transparent;
+            chartArea8.BorderWidth = 0;
+            chartArea8.Name = "ChartArea1";
+            this.chartChiTieu.ChartAreas.Add(chartArea8);
             this.chartChiTieu.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend5.BackColor = System.Drawing.Color.Transparent;
-            legend5.BorderColor = System.Drawing.Color.Transparent;
-            legend5.Font = new System.Drawing.Font("Segoe UI", 8.5F);
-            legend5.IsTextAutoFit = false;
-            legend5.Name = "Legend1";
-            this.chartChiTieu.Legends.Add(legend5);
-            this.chartChiTieu.Location = new System.Drawing.Point(12, 31);
+            legend8.BackColor = System.Drawing.Color.Transparent;
+            legend8.BorderColor = System.Drawing.Color.Transparent;
+            legend8.Font = new System.Drawing.Font("Segoe UI", 8.5F);
+            legend8.IsTextAutoFit = false;
+            legend8.Name = "Legend1";
+            this.chartChiTieu.Legends.Add(legend8);
+            this.chartChiTieu.Location = new System.Drawing.Point(12, 27);
             this.chartChiTieu.Name = "chartChiTieu";
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            this.chartChiTieu.Series.Add(series5);
-            this.chartChiTieu.Size = new System.Drawing.Size(316, 377);
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Doughnut;
+            series8.Legend = "Legend1";
+            series8.Name = "Series1";
+            this.chartChiTieu.Series.Add(series8);
+            this.chartChiTieu.Size = new System.Drawing.Size(316, 381);
             this.chartChiTieu.TabIndex = 0;
             // 
             // lblCardChartTitle
@@ -468,7 +470,7 @@
             this.lblCardChartTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.lblCardChartTitle.Location = new System.Drawing.Point(12, 8);
             this.lblCardChartTitle.Name = "lblCardChartTitle";
-            this.lblCardChartTitle.Size = new System.Drawing.Size(213, 23);
+            this.lblCardChartTitle.Size = new System.Drawing.Size(176, 19);
             this.lblCardChartTitle.TabIndex = 1;
             this.lblCardChartTitle.Text = "Cơ cấu chi tiêu tháng này";
             // 
@@ -506,7 +508,7 @@
             this.lblChangeExpense.ForeColor = System.Drawing.Color.Black;
             this.lblChangeExpense.Location = new System.Drawing.Point(16, 56);
             this.lblChangeExpense.Name = "lblChangeExpense";
-            this.lblChangeExpense.Size = new System.Drawing.Size(0, 19);
+            this.lblChangeExpense.Size = new System.Drawing.Size(0, 13);
             this.lblChangeExpense.TabIndex = 0;
             // 
             // lblTotalExpense
@@ -516,7 +518,7 @@
             this.lblTotalExpense.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(163)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.lblTotalExpense.Location = new System.Drawing.Point(14, 28);
             this.lblTotalExpense.Name = "lblTotalExpense";
-            this.lblTotalExpense.Size = new System.Drawing.Size(80, 30);
+            this.lblTotalExpense.Size = new System.Drawing.Size(66, 25);
             this.lblTotalExpense.TabIndex = 1;
             this.lblTotalExpense.Text = "0 VNĐ";
             // 
@@ -527,7 +529,7 @@
             this.lblTitleExpense.ForeColor = System.Drawing.Color.Black;
             this.lblTitleExpense.Location = new System.Drawing.Point(16, 10);
             this.lblTitleExpense.Name = "lblTitleExpense";
-            this.lblTitleExpense.Size = new System.Drawing.Size(105, 17);
+            this.lblTitleExpense.Size = new System.Drawing.Size(79, 12);
             this.lblTitleExpense.TabIndex = 2;
             this.lblTitleExpense.Text = "CHI TIÊU THÁNG";
             // 
@@ -552,7 +554,7 @@
             this.lblChangeIncome.ForeColor = System.Drawing.Color.Black;
             this.lblChangeIncome.Location = new System.Drawing.Point(16, 56);
             this.lblChangeIncome.Name = "lblChangeIncome";
-            this.lblChangeIncome.Size = new System.Drawing.Size(0, 19);
+            this.lblChangeIncome.Size = new System.Drawing.Size(0, 13);
             this.lblChangeIncome.TabIndex = 0;
             // 
             // lblTotalIncome
@@ -562,7 +564,7 @@
             this.lblTotalIncome.ForeColor = System.Drawing.Color.Black;
             this.lblTotalIncome.Location = new System.Drawing.Point(14, 28);
             this.lblTotalIncome.Name = "lblTotalIncome";
-            this.lblTotalIncome.Size = new System.Drawing.Size(80, 30);
+            this.lblTotalIncome.Size = new System.Drawing.Size(66, 25);
             this.lblTotalIncome.TabIndex = 1;
             this.lblTotalIncome.Text = "0 VNĐ";
             // 
@@ -573,7 +575,7 @@
             this.lblTitleIncome.ForeColor = System.Drawing.Color.Black;
             this.lblTitleIncome.Location = new System.Drawing.Point(16, 10);
             this.lblTitleIncome.Name = "lblTitleIncome";
-            this.lblTitleIncome.Size = new System.Drawing.Size(118, 17);
+            this.lblTitleIncome.Size = new System.Drawing.Size(88, 12);
             this.lblTitleIncome.TabIndex = 2;
             this.lblTitleIncome.Text = "THU NHẬP THÁNG";
             // 
@@ -598,7 +600,7 @@
             this.lblChangeBalance.ForeColor = System.Drawing.Color.Black;
             this.lblChangeBalance.Location = new System.Drawing.Point(16, 56);
             this.lblChangeBalance.Name = "lblChangeBalance";
-            this.lblChangeBalance.Size = new System.Drawing.Size(111, 19);
+            this.lblChangeBalance.Size = new System.Drawing.Size(94, 13);
             this.lblChangeBalance.TabIndex = 0;
             this.lblChangeBalance.Text = "Chưa đăng nhập";
             // 
@@ -609,7 +611,7 @@
             this.lblTotalBalance.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(110)))), ((int)(((byte)(80)))));
             this.lblTotalBalance.Location = new System.Drawing.Point(14, 28);
             this.lblTotalBalance.Name = "lblTotalBalance";
-            this.lblTotalBalance.Size = new System.Drawing.Size(80, 30);
+            this.lblTotalBalance.Size = new System.Drawing.Size(66, 25);
             this.lblTotalBalance.TabIndex = 1;
             this.lblTotalBalance.Text = "0 VNĐ";
             // 
@@ -620,7 +622,7 @@
             this.lblTitleBalance.ForeColor = System.Drawing.Color.Black;
             this.lblTitleBalance.Location = new System.Drawing.Point(16, 10);
             this.lblTitleBalance.Name = "lblTitleBalance";
-            this.lblTitleBalance.Size = new System.Drawing.Size(87, 17);
+            this.lblTitleBalance.Size = new System.Drawing.Size(65, 12);
             this.lblTitleBalance.TabIndex = 2;
             this.lblTitleBalance.Text = "TỒNG SỐ DƯ";
             // 
@@ -662,6 +664,7 @@
             // 
             this.pnlUserChip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlUserChip.BackColor = System.Drawing.Color.Transparent;
+            this.pnlUserChip.Controls.Add(this.btnRefresh);
             this.pnlUserChip.Controls.Add(this.lblTime);
             this.pnlUserChip.Controls.Add(this.lblUserName);
             this.pnlUserChip.Controls.Add(this.lblAvatarInitials);
@@ -709,7 +712,7 @@
             this.lblMonthYear.ForeColor = System.Drawing.Color.DimGray;
             this.lblMonthYear.Location = new System.Drawing.Point(367, 21);
             this.lblMonthYear.Name = "lblMonthYear";
-            this.lblMonthYear.Size = new System.Drawing.Size(104, 20);
+            this.lblMonthYear.Size = new System.Drawing.Size(83, 15);
             this.lblMonthYear.TabIndex = 1;
             this.lblMonthYear.Text = "Tháng --/2026";
             // 
@@ -720,7 +723,7 @@
             this.lblPageTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(25)))), ((int)(((byte)(25)))));
             this.lblPageTitle.Location = new System.Drawing.Point(0, 6);
             this.lblPageTitle.Name = "lblPageTitle";
-            this.lblPageTitle.Size = new System.Drawing.Size(124, 30);
+            this.lblPageTitle.Size = new System.Drawing.Size(104, 25);
             this.lblPageTitle.TabIndex = 2;
             this.lblPageTitle.Text = "Tổng quan";
             // 
@@ -751,9 +754,23 @@
             // 
             this.time_clock.Tick += new System.EventHandler(this.time_clock_Tick);
             // 
+            // btnRefresh
+            // 
+            this.btnRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnRefresh.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRefresh.FlatAppearance.BorderSize = 0;
+            this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRefresh.Image = global::Project_FinancePersonalManagement.Properties.Resources.Refresh;
+            this.btnRefresh.Location = new System.Drawing.Point(183, 0);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(57, 35);
+            this.btnRefresh.TabIndex = 5;
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // FrmMainMenu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1100, 620);
@@ -842,5 +859,6 @@
         private System.Windows.Forms.Button btnPrevMonth;
         private System.Windows.Forms.Timer time_clock;
         private System.Windows.Forms.Button btnNav_Settings;
+        private System.Windows.Forms.Button btnRefresh;
     }
 }
