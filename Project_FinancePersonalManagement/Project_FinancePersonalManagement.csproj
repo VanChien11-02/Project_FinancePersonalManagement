@@ -173,6 +173,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="DatabaseScripts\01_InitialSchema.sql" />
+    <None Include="Resources\pngtree-red-and-yellow-wave-banner-background-vector-picture-image_16134476.jpg" />
+    <None Include="Resources\efc7330853d812942240449e8615010f.jpg" />
     <Content Include="Resources\ic_settings.png" />
     <None Include="Resources\mat_open.png" />
     <None Include="Resources\mat_close.png" />
