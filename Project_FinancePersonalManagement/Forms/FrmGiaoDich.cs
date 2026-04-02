@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Printing;
+using System.IO;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.IO;
-using Project_FinancePersonalManagement.Data;
 using ClosedXML.Excel;
-using System.IO;
-using System.Drawing.Printing;
-using System.Diagnostics;
+using Project_FinancePersonalManagement.Data;
 
 namespace Project_FinancePersonalManagement
 {
@@ -751,52 +752,245 @@ namespace Project_FinancePersonalManagement
             }
         }
 
+        private enum LineType { Title, GroupHeader, SubGroupHeader, DataRowHeader, DataRow, SubGroupTotal, GroupTotal, EmptyLine }
+
+        private class PrintLine
+        {
+            public LineType Type { get; set; }
+            public string[] Texts { get; set; }
+            public Brush TextColor { get; set; } = Brushes.Black;
+        }
+
+        private List<PrintLine> _printLines = new List<PrintLine>();
+        private int _currentPrintLineIndex = 0;
+
         private void btnInBaoCao_Click(object sender, EventArgs e)
         {
+            if (dgvGiaoDich.Rows.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu để in!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // 1. Chuẩn bị dữ liệu và tính toán Hạn mức (Budget) trước khi in
+            PreparePrintData();
+
+            // 2. Cấu hình PrintDocument
             PrintDocument pd = new PrintDocument();
+            pd.DefaultPageSettings.Landscape = false; // In khổ dọc
+            pd.DefaultPageSettings.Margins = new Margins(50, 50, 50, 50); // Căn lề
             pd.PrintPage += new PrintPageEventHandler(this.PrintBaoCao_Page);
 
             PrintPreviewDialog ppd = new PrintPreviewDialog();
             ppd.Document = pd;
+            ppd.WindowState = FormWindowState.Maximized; // Mở full màn hình cho dễ xem
             ppd.ShowDialog();
         }
 
-        // Hàm vẽ nội dung báo cáo
+        private void PreparePrintData()
+        {
+            _printLines.Clear();
+            _currentPrintLineIndex = 0;
+
+            // Lấy toàn bộ dữ liệu thô từ Grid
+            var rawData = new List<dynamic>();
+            foreach (DataGridViewRow row in dgvGiaoDich.Rows)
+            {
+                if (row.IsNewRow || row.Cells["MaGD"].Value == null) continue;
+                rawData.Add(new
+                {
+                    MaGD = row.Cells["MaGD"].Value.ToString(),
+                    TenTK = row.Cells["TenTK"].Value.ToString(),
+                    TenDM = row.Cells["TenDM"].Value.ToString(),
+                    Loai = row.Cells["Loai"].Value.ToString(),
+                    SoTien = Convert.ToDecimal(row.Cells["SoTien"].Value),
+                    Ngay = Convert.ToDateTime(row.Cells["Ngay"].Value),
+                    GhiChu = row.Cells["GhiChu"].Value?.ToString() ?? ""
+                });
+            }
+
+            // Kết nối DB để kiểm tra Hạn mức (Budget) cho các khoản Expense
+            using (AppDatabaseDataContext db = new AppDatabaseDataContext())
+            {
+                var allBudgets = db.Budgets.Where(b => b.UserID == currentUserID).ToList();
+                var allCategories = db.Categories.Where(c => c.UserID == currentUserID).ToList();
+                var allMonthExpenses = db.Transactions.Where(t => t.UserID == currentUserID && t.TransType == "Expense").ToList();
+
+                _printLines.Add(new PrintLine { Type = LineType.Title, Texts = new[] { "BÁO CÁO GIAO DỊCH TÀI CHÍNH" } });
+                _printLines.Add(new PrintLine { Type = LineType.EmptyLine });
+
+                // Gom nhóm theo LOẠI GIAO DỊCH (Income, Expense, Transfer)
+                var groupedByLoai = rawData.GroupBy(r => r.Loai).OrderBy(g => g.Key);
+
+                foreach (var gLoai in groupedByLoai)
+                {
+                    string loaiText = gLoai.Key == "Income" ? "THU NHẬP" : (gLoai.Key == "Expense" ? "CHI TIÊU" : "CHUYỂN TIỀN");
+                    _printLines.Add(new PrintLine { Type = LineType.GroupHeader, Texts = new[] { $"[+] {loaiText.ToUpper()}" } });
+
+                    decimal totalLoai = 0;
+                    // Gom nhóm tiếp theo DANH MỤC
+                    var groupedByDM = gLoai.GroupBy(r => r.TenDM).OrderBy(g => g.Key);
+
+                    foreach (var gDM in groupedByDM)
+                    {
+                        _printLines.Add(new PrintLine { Type = LineType.SubGroupHeader, Texts = new[] { $"  - Danh mục: {gDM.Key}" } });
+                        _printLines.Add(new PrintLine { Type = LineType.DataRowHeader, Texts = new[] { "Ngày GD", "Mã GD", "Tài khoản", "Số tiền", "Ghi chú" } });
+
+                        decimal totalDM = 0;
+                        foreach (var item in gDM)
+                        {
+                            bool isOverBudget = false;
+
+                            // KIỂM TRA VƯỢT HẠN MỨC (Chỉ áp dụng cho Chi tiêu)
+                            if (item.Loai == "Expense")
+                            {
+                                int m = item.Ngay.Month;
+                                int y = item.Ngay.Year;
+                                var cat = allCategories.FirstOrDefault(c => c.CategoryName == item.TenDM && c.CategoryType == "Expense");
+
+                                if (cat != null)
+                                {
+                                    var budget = allBudgets.FirstOrDefault(b => b.CategoryID == cat.CategoryID && b.Month == m && b.Year == y);
+                                    if (budget != null)
+                                    {
+                                        decimal totalSpentInMonth = allMonthExpenses
+                                            .Where(t => t.CategoryID == cat.CategoryID && t.TransDate.Value.Month == m && t.TransDate.Value.Year == y)
+                                            .Sum(t => (decimal?)t.Amount) ?? 0;
+
+                                        if (totalSpentInMonth > budget.Amount) isOverBudget = true; // Bị lố ngân sách!
+                                    }
+                                }
+                            }
+
+                            // Thêm dòng dữ liệu (Tô đỏ nếu lố ngân sách)
+                            _printLines.Add(new PrintLine
+                            {
+                                Type = LineType.DataRow,
+                                Texts = new string[] {
+        ((DateTime)item.Ngay).ToString("dd/MM/yyyy"),
+        item.MaGD.ToString(),
+        item.TenTK.ToString(),
+        ((decimal)item.SoTien).ToString("N0"),
+        (item.GhiChu ?? "").ToString()
+    },
+                                TextColor = isOverBudget ? Brushes.Red : Brushes.Black
+                            });
+                            totalDM += item.SoTien;
+                        }
+
+                        totalLoai += totalDM;
+                        _printLines.Add(new PrintLine { Type = LineType.SubGroupTotal, Texts = new[] { $"    >> Tổng {gDM.Key}: {totalDM:N0} VNĐ" } });
+                        _printLines.Add(new PrintLine { Type = LineType.EmptyLine });
+                    }
+
+                    _printLines.Add(new PrintLine { Type = LineType.GroupTotal, Texts = new[] { $">> TỔNG CỘNG {loaiText}: {totalLoai:N0} VNĐ" } });
+                    _printLines.Add(new PrintLine { Type = LineType.EmptyLine });
+                    _printLines.Add(new PrintLine { Type = LineType.EmptyLine });
+                }
+            }
+        }
+
         private void PrintBaoCao_Page(object sender, PrintPageEventArgs e)
         {
             Graphics g = e.Graphics;
-            Font fontTitle = new Font("Arial", 18, FontStyle.Bold);
-            Font fontHeader = new Font("Arial", 10, FontStyle.Bold);
-            Font fontBody = new Font("Arial", 10);
+            Font fTitle = new Font("Arial", 18, FontStyle.Bold);
+            Font fGroup = new Font("Arial", 12, FontStyle.Bold);
+            Font fSubGroup = new Font("Arial", 11, FontStyle.Bold | FontStyle.Italic);
+            Font fDataHead = new Font("Arial", 10, FontStyle.Bold);
+            Font fData = new Font("Arial", 10);
+            Font fTotal = new Font("Arial", 10, FontStyle.Bold | FontStyle.Italic);
 
-            float y = 50;
-            g.DrawString("BÁO CÁO GIAO DỊCH TÀI CHÍNH", fontTitle, Brushes.Black, new PointF(200, y));
-            y += 50;
+            float y = e.MarginBounds.Top;
+            float left = e.MarginBounds.Left;
+            float width = e.MarginBounds.Width;
 
-            // Vẽ Header bảng
-            float x = 50;
-            foreach (DataGridViewColumn col in dgvGiaoDich.Columns)
+            // CHIA TỶ LỆ CỘT ĐỘNG (Total = 100% width)
+            // Ngày (15%), Mã GD (15%), TK (20%), Số tiền (20%), Ghi chú (30%)
+            float[] colX = { left + 30, left + 30 + width * 0.15f, left + 30 + width * 0.30f, left + 30 + width * 0.50f, left + 30 + width * 0.70f };
+            float[] colW = { width * 0.15f, width * 0.15f, width * 0.20f, width * 0.20f, width * 0.28f };
+
+            while (_currentPrintLineIndex < _printLines.Count)
             {
-                g.DrawString(col.HeaderText, fontHeader, Brushes.Black, new PointF(x, y));
-                x += 100; // Khoảng cách cột
-            }
-            y += 30;
-            g.DrawLine(Pens.Black, 50, y, 750, y);
-            y += 10;
+                var line = _printLines[_currentPrintLineIndex];
+                float lineHeight = 25; // Chiều cao mặc định mỗi dòng
 
-            // Vẽ dữ liệu dòng
-            foreach (DataGridViewRow row in dgvGiaoDich.Rows)
-            {
-                if (row.IsNewRow) continue;
-                x = 50;
-                foreach (DataGridViewCell cell in row.Cells)
+                if (line.Type == LineType.Title)
                 {
-                    g.DrawString(cell.Value?.ToString() ?? "", fontBody, Brushes.Black, new PointF(x, y));
-                    x += 100;
+                    SizeF size = g.MeasureString(line.Texts[0], fTitle);
+                    g.DrawString(line.Texts[0], fTitle, Brushes.Black, left + (width - size.Width) / 2, y);
+                    lineHeight = 45;
                 }
-                y += 25;
-                if (y > e.PageSettings.PrintableArea.Height - 50) break; // Sang trang mới nếu quá dài
+                else if (line.Type == LineType.GroupHeader)
+                {
+                    g.DrawString(line.Texts[0], fGroup, new SolidBrush(Color.FromArgb(24, 95, 165)), left, y);
+                    lineHeight = 30;
+                }
+                else if (line.Type == LineType.SubGroupHeader)
+                {
+                    g.DrawString(line.Texts[0], fSubGroup, Brushes.Black, left, y);
+                    lineHeight = 25;
+                }
+                else if (line.Type == LineType.DataRowHeader)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        if (i == 3) // Cột Số tiền căn phải
+                        {
+                            StringFormat sf = new StringFormat() { Alignment = StringAlignment.Far };
+                            g.DrawString(line.Texts[i], fDataHead, Brushes.Black, colX[i] + colW[i] - 10, y, sf);
+                        }
+                        else g.DrawString(line.Texts[i], fDataHead, Brushes.Black, colX[i], y);
+                    }
+                    g.DrawLine(Pens.Black, left + 30, y + 20, left + width, y + 20); // Dòng kẻ ngang
+                    lineHeight = 25;
+                }
+                else if (line.Type == LineType.DataRow)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        if (i == 3) // Cột Số tiền căn phải để thẳng hàng dấu phẩy
+                        {
+                            StringFormat sf = new StringFormat() { Alignment = StringAlignment.Far };
+                            g.DrawString(line.Texts[i], fData, line.TextColor, colX[i] + colW[i] - 10, y, sf);
+                        }
+                        else
+                        {
+                            // Tự động cắt chuỗi nếu Ghi chú quá dài (Hiện dấu ...)
+                            RectangleF rect = new RectangleF(colX[i], y, colW[i], 20);
+                            StringFormat sf = new StringFormat() { Trimming = StringTrimming.EllipsisCharacter, FormatFlags = StringFormatFlags.NoWrap };
+                            g.DrawString(line.Texts[i], fData, line.TextColor, rect, sf);
+                        }
+                    }
+                    lineHeight = 25;
+                }
+                else if (line.Type == LineType.SubGroupTotal)
+                {
+                    g.DrawString(line.Texts[0], fTotal, Brushes.DimGray, left + 30, y);
+                    lineHeight = 25;
+                }
+                else if (line.Type == LineType.GroupTotal)
+                {
+                    g.DrawString(line.Texts[0], fGroup, new SolidBrush(Color.FromArgb(163, 45, 45)), left, y);
+                    lineHeight = 30;
+                }
+                else if (line.Type == LineType.EmptyLine)
+                {
+                    lineHeight = 15;
+                }
+
+                y += lineHeight;
+                _currentPrintLineIndex++;
+
+                // NẾU CHẠY HẾT TRANG -> Bật cờ HasMorePages và thoát hàm để Windows nạp trang mới
+                if (y > e.MarginBounds.Bottom - 30)
+                {
+                    e.HasMorePages = true;
+                    return;
+                }
             }
+
+            // Nếu in hết List thì tắt cờ sang trang
+            e.HasMorePages = false;
         }
 
 
