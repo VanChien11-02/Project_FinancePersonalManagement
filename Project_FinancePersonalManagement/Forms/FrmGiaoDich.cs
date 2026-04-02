@@ -417,9 +417,11 @@ namespace Project_FinancePersonalManagement
                     db.SubmitChanges();
                     MessageBox.Show("Ghi chép giao dịch thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                    
                     txt_Note.Clear();
                     txt_Tien.Focus();
                     txt_SoDu.Text = viNguon.Balance.Value.ToString("N0") + " VNĐ";
+                    btn_Reset.PerformClick();
 
                     UpdateRemainingBudgetDisplay();
                     LoadData();
@@ -509,6 +511,11 @@ namespace Project_FinancePersonalManagement
                         var acc = db.Accounts.SingleOrDefault(a => a.AccountID == t.AccountID);
                         if (acc != null)
                         {
+                            if (t.DebtID != null)
+                            {
+                                MessageBox.Show("Không xóa được giao dịch có liên quan đến khoản vay!", "Thông báo", MessageBoxButtons.OK);
+                                return;
+                            }
                             if (t.TransType == "Income") acc.Balance -= t.Amount;
                             else if (t.TransType == "Expense") acc.Balance += t.Amount;
                             else
