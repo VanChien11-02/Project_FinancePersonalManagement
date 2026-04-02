@@ -99,6 +99,14 @@ namespace Project_FinancePersonalManagement
         {
             using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
+                // NẠP COMBOBOX TÀI KHOẢN
+                if (cbo_TaiKhoan.DataSource == null)
+                {
+                    var tkList = db.Accounts.Where(a => a.UserID == currentUserID).ToList();
+                    cbo_TaiKhoan.DataSource = tkList;
+                    cbo_TaiKhoan.DisplayMember = "AccountName";
+                    cbo_TaiKhoan.ValueMember = "AccountID";
+                }
                 try
                 {
                     var query = from d in db.Debts
@@ -149,14 +157,41 @@ namespace Project_FinancePersonalManagement
 
                     if (dgv_dsVayMuon.Columns.Count > 0)
                     {
-                        // ... (Các thiết lập Header cũ của bạn) ...
-
-                        // Thiết lập cho cột mới
+                        //dgv_dsVayMuon.Columns["MaVay"].Visible = false;
+                        dgv_dsVayMuon.Columns["MaVay"].HeaderText = "Mã khoản vay";
+                        dgv_dsVayMuon.Columns["Loai"].HeaderText = "Loại";
+                        dgv_dsVayMuon.Columns["Ten"].HeaderText = "Đối tác";
+                        dgv_dsVayMuon.Columns["SoTien"].HeaderText = "Số tiền";
+                        dgv_dsVayMuon.Columns["SoTien"].DefaultCellStyle.Format = "N0";
+                        dgv_dsVayMuon.Columns["SoTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                        dgv_dsVayMuon.Columns["LaiSuat"].HeaderText = "Lãi suất (%)";
+                        dgv_dsVayMuon.Columns["TienDaTra"].HeaderText = "Số tiền đã trả";
+                        dgv_dsVayMuon.Columns["TienDaTra"].DefaultCellStyle.Format = "N0";
+                        dgv_dsVayMuon.Columns["TienDaTra"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                        dgv_dsVayMuon.Columns["NgayVay"].HeaderText = "Ngày vay";
+                        dgv_dsVayMuon.Columns["NgayVay"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                        dgv_dsVayMuon.Columns["HanTra"].HeaderText = "Hạn trả";
+                        dgv_dsVayMuon.Columns["HanTra"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                        dgv_dsVayMuon.Columns["TrangThai"].HeaderText = "Trạng thái";
+                        dgv_dsVayMuon.Columns["TaiKhoan"].HeaderText = "Tài khoản";
                         dgv_dsVayMuon.Columns["NgayConLai"].HeaderText = "Còn lại";
                         dgv_dsVayMuon.Columns["NgayConLai"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
                         dgv_dsVayMuon.Columns["GhiChu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     }
+
+                    // TÍNH TỔNG TIỀN (Chỉ tính những khoản 'Active')
+                    var listActive = db.Debts.Where(d => d.UserID == currentUserID && d.Status == "Active").ToList();
+                    decimal tongNo = listActive.Where(d => d.DebtType == "Đi vay").Sum(d => d.Amount);
+                    decimal tongChoMuon = listActive.Where(d => d.DebtType == "Cho mượn").Sum(d => d.Amount);
+
+                    int cntNo = listActive.Count(d => d.DebtType == "Đi vay");
+                    int cntChoMuon = listActive.Count(d => d.DebtType == "Cho mượn");
+
+                    lblTotal_No.Text = tongNo.ToString("N0") + " VNĐ";
+                    lblTotal_ChoMuon.Text = tongChoMuon.ToString("N0") + " VNĐ";
+                    lblSubNo.Text = cntNo + " khoản nợ đang hoạt động";
+                    lblSubChoMuon.Text = cntChoMuon + " khoản cho vay đang hoạt động";
                 }
                 catch (Exception ex) { MessageBox.Show("Lỗi: " + ex.Message); }
             }
