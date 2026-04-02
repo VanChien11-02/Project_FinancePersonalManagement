@@ -20,9 +20,9 @@ namespace Project_FinancePersonalManagement
 
         private void form_ThongKe_Load(object sender, EventArgs e)
         {
-            // Thiết lập ngày mặc định
+            // Thiết lập ngày mặc định (Đầu năm đến hiện tại)
             DateTime today = DateTime.Today;
-            dtpTuNgay.Value = new DateTime(today.Year, today.Month, 1);
+            dtpTuNgay.Value = new DateTime(today.Year, 1, 1);
             dtpDenNgay.Value = today;
 
             // Tự động nhấn nút Lọc khi form bật lên
@@ -42,7 +42,6 @@ namespace Project_FinancePersonalManagement
                               .Where(t => t.UserID == currentUserID && t.TransDate >= tuNgay && t.TransDate <= denNgay)
                               .ToList();
 
-                    // BIỂU ĐỒ THU NHẬP VÀ CHI TIÊU (Spline Chart)
                     var dailyStats = transList
                         .GroupBy(t => t.TransDate.Value.Date)
                         .Select(g => new
@@ -57,16 +56,16 @@ namespace Project_FinancePersonalManagement
                     chartThuChi.ChartAreas[0].AxisX.Interval = 1;
 
                     Series sThu = chartThuChi.Series.Add("Thu Nhập");
-                    sThu.ChartType = SeriesChartType.Spline;
+                    sThu.ChartType = SeriesChartType.Line; // Đổi thành đường thẳng
                     sThu.BorderWidth = 3;
-                    sThu.Color = Color.FromArgb(46, 204, 113); // Màu xanh lá (#2ECC71)
+                    sThu.Color = Color.FromArgb(46, 204, 113); // Xanh lá
                     sThu.MarkerStyle = MarkerStyle.Circle;
                     sThu.MarkerSize = 7;
 
                     Series sChi = chartThuChi.Series.Add("Chi Tiêu");
-                    sChi.ChartType = SeriesChartType.Spline;
+                    sChi.ChartType = SeriesChartType.Line; // Đổi thành đường thẳng
                     sChi.BorderWidth = 3;
-                    sChi.Color = Color.FromArgb(231, 76, 60); // Màu đỏ (#E74C3C)
+                    sChi.Color = Color.FromArgb(231, 76, 60); // Đỏ
                     sChi.MarkerStyle = MarkerStyle.Circle;
                     sChi.MarkerSize = 7;
 
@@ -76,27 +75,42 @@ namespace Project_FinancePersonalManagement
                         sChi.Points.AddXY(item.NgayHienThi, item.Chi);
                     }
 
-                    // BIỂU ĐỒ THU NHẬP THEO THÁNG (Column Chart)
-                    chartThuNhapThang.Legends[0].Enabled = false; // Ẩn chú thích (vì chỉ có 1 cột thu nhập)
-                    var monthlyIncome = transList
-                        .Where(t => t.TransType == "Income")
-                        .GroupBy(t => new { t.TransDate.Value.Year, t.TransDate.Value.Month })
-                        .Select(g => new
-                        {
-                            Thang = $"T{g.Key.Month}/{g.Key.Year}",
-                            Thu = g.Sum(x => x.Amount)
-                        }).OrderBy(x => x.Thang).ToList();
-
+                    // BIỂU ĐỒ NGÂN SÁCH VS ĐÃ CHI (Thay cho Thu nhập tháng)
+                    chartThuNhapThang.Legends[0].Enabled = true; // Bật chú thích để phân biệt 2 cột
                     chartThuNhapThang.Series.Clear();
-                    Series sThuThang = chartThuNhapThang.Series.Add("Thu Nhập Tháng");
-                    sThuThang.ChartType = SeriesChartType.Column;
-                    sThuThang.Color = Color.FromArgb(52, 152, 219); // Xanh dương tươi
-                    sThuThang["PixelPointWidth"] = "45"; // Tránh cột bị phình to
 
-                    foreach (var item in monthlyIncome)
+                    // Lấy tháng và năm của mốc "Từ ngày" để lọc ngân sách
+                    int selectedMonth = tuNgay.Month;
+                    int selectedYear = tuNgay.Year;
+                    lbl_DanhMuc.Text = $"Ngân sách và chi tiêu trong tháng {selectedMonth}/{selectedYear}";
+
+                    var budgets = db.Budgets
+                        .Where(b => b.UserID == currentUserID && b.Month == selectedMonth && b.Year == selectedYear)
+                        .ToList();
+
+                    // Lọc sẵn các giao dịch là Chi Tiêu
+                    var spentTransactions = transList.Where(t => t.TransType == "Expense").ToList();
+
+                    Series sBudget = chartThuNhapThang.Series.Add("Ngân sách");
+                    sBudget.ChartType = SeriesChartType.Column;
+                    sBudget.Color = Color.LightBlue;
+                    sBudget["PixelPointWidth"] = "35";
+
+                    Series sSpent = chartThuNhapThang.Series.Add("Chi tiêu");
+                    sSpent.ChartType = SeriesChartType.Column;
+                    sSpent.Color = Color.FromArgb(231, 76, 60); // Màu đỏ cảnh báo
+                    sSpent["PixelPointWidth"] = "35";
+
+                    foreach (var budget in budgets)
                     {
-                        int pIndex = sThuThang.Points.AddXY(item.Thang, item.Thu);
-                        sThuThang.Points[pIndex].ToolTip = $"{item.Thang}: {item.Thu:N0} VNĐ";
+                        string catName = db.Categories.FirstOrDefault(c => c.CategoryID == budget.CategoryID)?.CategoryName ?? "Khác";
+                        decimal totalSpent = spentTransactions.Where(t => t.CategoryID == budget.CategoryID).Sum(t => t.Amount);
+
+                        int pIndexB = sBudget.Points.AddXY(catName, budget.Amount);
+                        sBudget.Points[pIndexB].ToolTip = $"Ngân sách: {budget.Amount:N0} VNĐ";
+
+                        int pIndexS = sSpent.Points.AddXY(catName, totalSpent);
+                        sSpent.Points[pIndexS].ToolTip = $"Chi tiêu: {totalSpent:N0} VNĐ";
                     }
 
                     // BIỂU ĐỒ NỢ / VAY (Doughnut Chart)
@@ -115,7 +129,7 @@ namespace Project_FinancePersonalManagement
                     seriesNoVay["PieLabelStyle"] = "Inside";
                     seriesNoVay.Font = new Font("Segoe UI", 10, FontStyle.Bold);
                     seriesNoVay.LabelForeColor = Color.White;
-                    seriesNoVay.LegendText = "#VALX"; // Hiện tên ở phần chú thích
+                    seriesNoVay.LegendText = "#VALX";
 
                     foreach (var item in debtStats)
                     {
