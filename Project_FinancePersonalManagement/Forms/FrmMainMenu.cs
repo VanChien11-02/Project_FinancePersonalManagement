@@ -24,6 +24,7 @@ namespace Project_FinancePersonalManagement
         public FrmMainMenu()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen;
             Image originalImage = Properties.Resources.ic_settings;
 
             Bitmap resizedImage = new Bitmap(originalImage, new Size(30, 30));
@@ -52,6 +53,9 @@ namespace Project_FinancePersonalManagement
 
             // KHỞI TẠO menu cho nút Thiết lập (btnNav_Settings phải do bạn thêm trong Designer)
             SetupSettingsMenu();
+
+            // CHỐT CHẶN: Gọi form đăng nhập lên ngay lập tức!
+            MoFormDangNhap();
         }
 
         private void Form_Menu_Resize(object sender, EventArgs e)
@@ -337,6 +341,7 @@ namespace Project_FinancePersonalManagement
 
             if (result == DialogResult.Yes)
             {
+                // Xóa sạch thông tin phiên đăng nhập
                 currentUserID = null;
                 currentUserName = null;
                 isLoggedIn = false;
@@ -346,17 +351,9 @@ namespace Project_FinancePersonalManagement
                 lblStatus.Text = "Sẵn sàng  -  Đã đăng xuất";
 
                 ToggleSidebarFeatures(false);
-                SetActiveNav(btnNav_Overview);
 
-                lblTotalBalance.Text = "0 VNĐ";
-                lblTotalIncome.Text = "0 VNĐ";
-                lblTotalExpense.Text = "0 VNĐ";
-                lblChangeBalance.Text = "";
-                lblChangeIncome.Text = "";
-                lblChangeExpense.Text = "";
-                dgv_Accounts.DataSource = null;
-                chartChiTieu.Series.Clear();
-                chartChiTieu.Titles.Clear();
+                // GỌI LẠI HÀM ĐĂNG NHẬP: MainMenu sẽ ẩn đi và Login hiện lên
+                MoFormDangNhap();
             }
         }
 
@@ -486,6 +483,44 @@ namespace Project_FinancePersonalManagement
         {
             currentViewDate = currentViewDate.AddMonths(1);
             LoadDashboardData(currentViewDate);
+        }
+
+
+        //Form load dang nhap
+        private void MoFormDangNhap()
+        {
+            this.Hide(); // Ẩn giao diện MainMenu đi
+
+            FrmLogin formLogin = new FrmLogin();
+
+            // Mở form Login lên và chờ người dùng thao tác
+            if (formLogin.ShowDialog() == DialogResult.OK)
+            {
+                // --- NẾU ĐĂNG NHẬP THÀNH CÔNG ---
+                currentUserID = formLogin.LoggedInUserID;
+                currentUserName = formLogin.LoggedInUserName;
+                isLoggedIn = true;
+
+                lblAvatarInitials.Text = GetInitials(currentUserName);
+                lblUserName.Text = currentUserName;
+                lblStatus.Text = "Đã đăng nhập  -  " + currentUserID;
+
+                ToggleSidebarFeatures(true);
+                SetActiveNav(btnNav_Overview);
+
+                // Nạp dữ liệu
+                currentViewDate = DateTime.Now;
+                LoadDashboardData(currentViewDate);
+
+                // Hiện MainMenu lên
+                this.Show();
+            }
+            else
+            {
+                // --- NẾU BẤM DẤU X TẮT FORM LOGIN MÀ KHÔNG ĐĂNG NHẬP ---
+                // Tắt luôn toàn bộ app
+                Application.Exit();
+            }
         }
     }
 }
