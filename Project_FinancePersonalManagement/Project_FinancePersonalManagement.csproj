@@ -212,6 +212,8 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\pngtree-red-and-yellow-wave-banner-background-vector-picture-image_16134476.jpg" />
+    <None Include="Resources\efc7330853d812942240449e8615010f.jpg" />
     <Content Include="Database\01_InitialSchema.sql" />
     <Content Include="Database\02_InitialDataAndSchema.sql" />
     <Content Include="Resources\ic_settings.png" />

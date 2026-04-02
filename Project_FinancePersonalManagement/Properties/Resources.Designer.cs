@@ -93,6 +93,16 @@ namespace Project_FinancePersonalManagement.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap efc7330853d812942240449e8615010f {
+            get {
+                object obj = ResourceManager.GetObject("efc7330853d812942240449e8615010f", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ic_settings {
             get {
                 object obj = ResourceManager.GetObject("ic_settings", resourceCulture);
@@ -146,6 +156,16 @@ namespace Project_FinancePersonalManagement.Properties {
         internal static System.Drawing.Bitmap pngtree_poster_background_light_orange_png_image_6470624 {
             get {
                 object obj = ResourceManager.GetObject("pngtree-poster-background-light-orange-png-image_6470624", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pngtree_red_and_yellow_wave_banner_background_vector_picture_image_16134476 {
+            get {
+                object obj = ResourceManager.GetObject("pngtree-red-and-yellow-wave-banner-background-vector-picture-image_16134476", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

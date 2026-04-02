@@ -144,5 +144,10 @@ namespace Project_FinancePersonalManagement
         {
             btn_Filter.PerformClick();
         }
+
+        private void chartThuNhapThang_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -103,7 +103,7 @@
             this.dtpDenNgay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpDenNgay.Location = new System.Drawing.Point(410, 11);
             this.dtpDenNgay.Name = "dtpDenNgay";
-            this.dtpDenNgay.Size = new System.Drawing.Size(164, 33);
+            this.dtpDenNgay.Size = new System.Drawing.Size(164, 29);
             this.dtpDenNgay.TabIndex = 3;
             // 
             // label2
@@ -111,7 +111,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(308, 15);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(96, 25);
+            this.label2.Size = new System.Drawing.Size(79, 21);
             this.label2.TabIndex = 2;
             this.label2.Text = "Đến ngày:";
             // 
@@ -121,7 +121,7 @@
             this.dtpTuNgay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpTuNgay.Location = new System.Drawing.Point(103, 11);
             this.dtpTuNgay.Name = "dtpTuNgay";
-            this.dtpTuNgay.Size = new System.Drawing.Size(178, 33);
+            this.dtpTuNgay.Size = new System.Drawing.Size(178, 29);
             this.dtpTuNgay.TabIndex = 1;
             // 
             // label1
@@ -129,7 +129,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(14, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(83, 25);
+            this.label1.Size = new System.Drawing.Size(68, 21);
             this.label1.TabIndex = 0;
             this.label1.Text = "Từ ngày:";
             // 
@@ -152,7 +152,7 @@
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.label3.Location = new System.Drawing.Point(13, 11);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(353, 32);
+            this.label3.Size = new System.Drawing.Size(296, 28);
             this.label3.TabIndex = 1;
             this.label3.Text = "Thống kê thu nhập và chi tiêu";
             // 
@@ -214,7 +214,7 @@
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.label4.Location = new System.Drawing.Point(13, 15);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(252, 32);
+            this.label4.Size = new System.Drawing.Size(211, 28);
             this.label4.TabIndex = 1;
             this.label4.Text = "Thu nhập theo tháng";
             // 
@@ -245,6 +245,7 @@
             this.chartThuNhapThang.Size = new System.Drawing.Size(414, 221);
             this.chartThuNhapThang.TabIndex = 0;
             this.chartThuNhapThang.Text = "chart2";
+            this.chartThuNhapThang.Click += new System.EventHandler(this.chartThuNhapThang_Click);
             // 
             // PanelChart3
             // 
@@ -266,7 +267,7 @@
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.label5.Location = new System.Drawing.Point(13, 15);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(212, 32);
+            this.label5.Size = new System.Drawing.Size(177, 28);
             this.label5.TabIndex = 1;
             this.label5.Text = "Thống kê Nợ/Vay";
             // 
@@ -297,9 +298,9 @@
             this.chartNoVay.TabIndex = 0;
             this.chartNoVay.Text = "chart3";
             // 
-            // form_ThongKe
+            // FrmThongKe
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
             this.ClientSize = new System.Drawing.Size(888, 597);
@@ -308,7 +309,7 @@
             this.Controls.Add(this.PanelChart1);
             this.Controls.Add(this.panel_Filter);
             this.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "form_ThongKe";
+            this.Name = "FrmThongKe";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Thống kê tài chính";
             this.Load += new System.EventHandler(this.form_ThongKe_Load);
