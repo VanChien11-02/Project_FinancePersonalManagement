@@ -3,8 +3,11 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.IO;
-// using OfficeOpenXml; // Cài thư viện EPPlus từ NuGet rồi bỏ comment dòng này để xuất Excel
 using Project_FinancePersonalManagement.Data;
+using ClosedXML.Excel;
+using System.IO;
+using System.Drawing.Printing;
+using System.Diagnostics;
 
 namespace Project_FinancePersonalManagement
 {
@@ -238,7 +241,7 @@ namespace Project_FinancePersonalManagement
             UpdateRemainingBudgetDisplay();
         }
 
-        // TÍNH TOÁN NGÂN SÁCH CÒN LẠI (ĐÃ FIX LỖI)
+        // TÍNH TOÁN NGÂN SÁCH CÒN LẠI 
         private void UpdateRemainingBudgetDisplay()
         {
             try
@@ -305,7 +308,7 @@ namespace Project_FinancePersonalManagement
             UpdateRemainingBudgetDisplay();
         }
 
-        //  CRUD BUTTONS (Đã khôi phục đầy đủ)
+        //  CRUD BUTTONS 
         private void btn_Them_Click(object sender, EventArgs e)
         {
             if (!decimal.TryParse(txt_Tien.Text.Trim(), out decimal soTien) || soTien <= 0)
@@ -633,9 +636,7 @@ namespace Project_FinancePersonalManagement
             LoadData();
         }
 
-        // ==========================================
-        // CÁC TÍNH NĂNG MỚI (CHUYỂN THÁNG, EXCEL)
-        // ==========================================
+        // CÁC TÍNH NĂNG CHUYỂN THÁNG, EXCEL
 
         private void btnThangTruoc_Click(object sender, EventArgs e)
         {
@@ -653,25 +654,144 @@ namespace Project_FinancePersonalManagement
 
         private void btnXuatExcel_Click(object sender, EventArgs e)
         {
-            if (dgvGiaoDich.Rows.Count == 0)
+            using (SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xlsx" })
             {
-                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+                sfd.FileName = $"BaoCaoGiaoDich_{DateTime.Now:ddMMyyyy}.xlsx";
 
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Excel Files (*.xlsx)|*.xlsx";
-            sfd.FileName = $"GiaoDich_Thang_{currentViewMonth.Month}_{currentViewMonth.Year}.xlsx";
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        using (var workbook = new XLWorkbook())
+                        {
+                            var worksheet = workbook.Worksheets.Add("GiaoDich");
 
-            if (sfd.ShowDialog() == DialogResult.OK)
-            {
-                MessageBox.Show("Đã thiết lập khung code Excel. Vui lòng cài gói EPPlus từ NuGet để chạy thực tế.", "Info");
+                            // 1. CHÈN LOGO GÓC TRÁI (A1)
+                            string logoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "logo.png");
+                            if (File.Exists(logoPath))
+                            {
+                                var picture = worksheet.AddPicture(logoPath);
+                                picture.MoveTo(worksheet.Cell("A1"));
+                                picture.Scale(0.8); // Chỉnh tỷ lệ to/nhỏ của logo (0.8 = 80%)
+                            }
+
+                            //TẠO TIÊU ĐỀ VÀ THỜI GIAN (D2, D3)
+                            // Dịch sang cột C để không bị đè bởi Logo
+                            worksheet.Cell("D2").Value = "BÁO CÁO GIAO DỊCH TÀI CHÍNH";
+                            worksheet.Cell("D2").Style.Font.Bold = true;
+                            worksheet.Cell("D2").Style.Font.FontSize = 16;
+                            worksheet.Cell("D2").Style.Font.FontColor = XLColor.FromHtml("#185FA5"); // Màu xanh đặc trưng của bạn
+
+                            // Lấy ngày từ DateTimePicker có sẵn trên Form của bạn
+                            string textThoiGian = $"Từ ngày {dtp_TuNgay.Value:dd/MM/yyyy} đến ngày {dtp_DenNgay.Value:dd/MM/yyyy}";
+                            worksheet.Cell("D3").Value = textThoiGian;
+                            worksheet.Cell("D3").Style.Font.Italic = true;
+
+                            // ĐỔ DỮ LIỆU BẢNG (Bắt đầu từ dòng 6)
+                            int startRow = 6;
+
+                            // Header bảng
+                            for (int i = 0; i < dgvGiaoDich.Columns.Count; i++)
+                            {
+                                var cell = worksheet.Cell(startRow, i + 1);
+                                cell.Value = dgvGiaoDich.Columns[i].HeaderText;
+                                cell.Style.Font.Bold = true;
+                                cell.Style.Fill.BackgroundColor = XLColor.LightGray;
+                                cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                                cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                            }
+
+                            // Dữ liệu bảng
+                            int currentRow = startRow + 1;
+                            foreach (DataGridViewRow row in dgvGiaoDich.Rows)
+                            {
+                                if (row.IsNewRow) continue;
+                                for (int j = 0; j < dgvGiaoDich.Columns.Count; j++)
+                                {
+                                    var cell = worksheet.Cell(currentRow, j + 1);
+                                    cell.Value = row.Cells[j].Value?.ToString() ?? "";
+                                    cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                                }
+                                currentRow++;
+                            }
+
+                            worksheet.Columns().AdjustToContents(); // Tự động dãn cột cho đẹp
+                            workbook.SaveAs(sfd.FileName);
+                        }
+
+                        //HỎI NGƯỜI DÙNG CÓ MUỐN MỞ FILE KHÔNG?
+                        var result = MessageBox.Show(
+                            "Đã xuất file Excel thành công!\nBạn có muốn mở file lên để xem ngay không?",
+                            "Hoàn tất",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+
+                        if (result == DialogResult.Yes)
+                        {
+                            // Lệnh mở file bằng ứng dụng mặc định của Windows (Excel)
+                            Process.Start(new ProcessStartInfo()
+                            {
+                                FileName = sfd.FileName,
+                                UseShellExecute = true // Bắt buộc = true để Windows tự tìm Excel mở file
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi khi xuất Excel: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
 
         private void btnInBaoCao_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Đã chuẩn bị sẵn logic gọi Report.\nBạn hãy thiết kế file .rpt và truyền DataSource từ danh sách hiện tại của dgvGiaoDich vào nhé!", "Crystal Reports");
+            PrintDocument pd = new PrintDocument();
+            pd.PrintPage += new PrintPageEventHandler(this.PrintBaoCao_Page);
+
+            PrintPreviewDialog ppd = new PrintPreviewDialog();
+            ppd.Document = pd;
+            ppd.ShowDialog();
         }
+
+        // Hàm vẽ nội dung báo cáo
+        private void PrintBaoCao_Page(object sender, PrintPageEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            Font fontTitle = new Font("Arial", 18, FontStyle.Bold);
+            Font fontHeader = new Font("Arial", 10, FontStyle.Bold);
+            Font fontBody = new Font("Arial", 10);
+
+            float y = 50;
+            g.DrawString("BÁO CÁO GIAO DỊCH TÀI CHÍNH", fontTitle, Brushes.Black, new PointF(200, y));
+            y += 50;
+
+            // Vẽ Header bảng
+            float x = 50;
+            foreach (DataGridViewColumn col in dgvGiaoDich.Columns)
+            {
+                g.DrawString(col.HeaderText, fontHeader, Brushes.Black, new PointF(x, y));
+                x += 100; // Khoảng cách cột
+            }
+            y += 30;
+            g.DrawLine(Pens.Black, 50, y, 750, y);
+            y += 10;
+
+            // Vẽ dữ liệu dòng
+            foreach (DataGridViewRow row in dgvGiaoDich.Rows)
+            {
+                if (row.IsNewRow) continue;
+                x = 50;
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    g.DrawString(cell.Value?.ToString() ?? "", fontBody, Brushes.Black, new PointF(x, y));
+                    x += 100;
+                }
+                y += 25;
+                if (y > e.PageSettings.PrintableArea.Height - 50) break; // Sang trang mới nếu quá dài
+            }
+        }
+
+
     }
 }
