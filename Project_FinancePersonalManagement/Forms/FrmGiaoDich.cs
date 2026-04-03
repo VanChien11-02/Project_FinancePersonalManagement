@@ -233,7 +233,7 @@ namespace Project_FinancePersonalManagement
                     cbo_DanhMuc.Enabled = true;
 
                     string dbType = (loaiGD == "Thu nhập") ? "Income" : "Expense";
-                    var danhMucList = db.Categories.Where(c => c.CategoryType == dbType).ToList();
+                    var danhMucList = db.Categories.Where(c => c.CategoryType == dbType && c.UserID == currentUserID).ToList();
                     cbo_DanhMuc.DataSource = danhMucList;
                     cbo_DanhMuc.DisplayMember = "CategoryName";
                     cbo_DanhMuc.ValueMember = "CategoryID";
