@@ -260,7 +260,7 @@ namespace Project_FinancePersonalManagement
 
             currentDebtlID = row.Cells["MaVay"].Value.ToString();
             txt_Ten.Text = row.Cells["Ten"].Value.ToString();
-            txt_Tien.Text = row.Cells["SoTien"].Value.ToString();
+            txt_Tien.Text = Convert.ToDecimal(row.Cells["SoTien"].Value).ToString("0");
             txt_LaiSuat.Text = row.Cells["LaiSuat"].Value.ToString();
             dtp_TuNgay.Value = Convert.ToDateTime(row.Cells["NgayVay"].Value);
             if (row.Cells["HanTra"].Value != null) dtp_DenNgay.Value = Convert.ToDateTime(row.Cells["HanTra"].Value);
@@ -302,12 +302,13 @@ namespace Project_FinancePersonalManagement
         //  CRUD BUTTONS
         private void btn_Them_Click(object sender, EventArgs e)
         {
+            string Tien = txt_Tien.Text.Replace(",", "").Replace(".", "").Replace(" ", "").Trim();
             if (string.IsNullOrEmpty(txt_Ten.Text.Trim()))
             {
                 MessageBox.Show("Vui lòng nhập Tên!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (!decimal.TryParse(txt_Tien.Text.Trim(), out decimal soTien) || soTien <= 0)
+            if (!decimal.TryParse(Tien, out decimal soTien) || soTien <= 0)
             {
                 MessageBox.Show("Số tiền phải là số hợp lệ và lớn hơn 0!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -442,8 +443,9 @@ namespace Project_FinancePersonalManagement
 
         private void btn_Sua_Click(object sender, EventArgs e)
         {
+            string Tien = txt_Tien.Text.Replace(",", "").Replace(".", "").Replace(" ", "").Trim();
             if (string.IsNullOrEmpty(currentDebtlID)) return;
-            if (!decimal.TryParse(txt_Tien.Text.Trim(), out decimal soTien) || soTien <= 0) return;
+            if (!decimal.TryParse(Tien, out decimal soTien) || soTien <= 0) return;
             float.TryParse(txt_LaiSuat.Text.Trim(), out float laiSuat);
 
             string maTKMoi = cbo_TaiKhoan.SelectedValue.ToString();

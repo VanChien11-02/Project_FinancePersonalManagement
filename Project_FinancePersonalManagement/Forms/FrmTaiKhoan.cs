@@ -272,7 +272,8 @@ namespace Project_FinancePersonalManagement
                 return;
             }
 
-            if (!decimal.TryParse(txt_SoDu.Text.Trim(), out decimal soDu))
+            string Tien = txt_SoDu.Text.Replace(",", "").Replace(".", "").Replace(" ", "").Trim();
+            if (!decimal.TryParse(Tien, out decimal soDu))
             {
                 MessageBox.Show("Số dư phải là một con số hợp lệ!", "Cảnh báo", 
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);

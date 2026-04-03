@@ -270,12 +270,13 @@ namespace Project_FinancePersonalManagement
         // THÊM
         private void btn_them_Click(object sender, EventArgs e)
         {
+            string Tien = txt_soTien.Text.Replace(",", "").Replace(".", "").Replace(" ", "").Trim();
             if (cbo_DanhMuc.SelectedValue == null)
             {
                 MessageBox.Show("Vui lòng chọn Danh mục!", "Cảnh báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning); return;
             }
-            if (!decimal.TryParse(txt_soTien.Text.Trim(), out decimal soTien) || soTien <= 0)
+            if (!decimal.TryParse(Tien, out decimal soTien) || soTien <= 0)
             {
                 MessageBox.Show("Số tiền phải lớn hơn 0!", "Cảnh báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning); return;
@@ -333,8 +334,9 @@ namespace Project_FinancePersonalManagement
         // SỬA 
         private void btn_sua_Click(object sender, EventArgs e)
         {
+            string Tien = txt_soTien.Text.Replace(",", "").Replace(".", "").Replace(" ", "").Trim();
             if (string.IsNullOrEmpty(currentBudgetID)) return;
-            if (!decimal.TryParse(txt_soTien.Text.Trim(), out decimal soTien) || soTien <= 0) return;
+            if (!decimal.TryParse(Tien, out decimal soTien) || soTien <= 0) return;
             if (!int.TryParse(txt_thang.Text.Trim(), out int thang) || thang < 1 || thang > 12) return;
             if (!int.TryParse(txt_nam.Text.Trim(), out int nam) || nam < 2000) return;
 

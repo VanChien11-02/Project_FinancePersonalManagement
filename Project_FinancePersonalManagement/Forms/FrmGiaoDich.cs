@@ -312,7 +312,8 @@ namespace Project_FinancePersonalManagement
         //  CRUD BUTTONS 
         private void btn_Them_Click(object sender, EventArgs e)
         {
-            if (!decimal.TryParse(txt_Tien.Text.Trim(), out decimal soTien) || soTien <= 0)
+            string Tien = txt_Tien.Text.Replace(",", "").Replace(".", "").Replace(" ", "").Trim();
+            if (!decimal.TryParse(Tien, out decimal soTien) || soTien <= 0)
             {
                 MessageBox.Show("Số tiền phải là một con số lớn hơn 0!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txt_Tien.Focus();
@@ -449,7 +450,8 @@ namespace Project_FinancePersonalManagement
                 return;
             }
 
-            if (!decimal.TryParse(txt_Tien.Text.Trim(), out decimal soTien) || soTien <= 0) return;
+            string Tien = txt_Tien.Text.Replace(",", "").Replace(".", "").Replace(" ", "").Trim();
+            if (!decimal.TryParse(Tien, out decimal soTien) || soTien <= 0) return;
 
             using (AppDatabaseDataContext db = new AppDatabaseDataContext())
             {
